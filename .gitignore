@@ -1,0 +1,9 @@
+.Rhistory
+.cproject
+.project
+.settings/
+R/.Rhistory
+mk_repo.sh
+src/.Rhistory
+.Rdata
+.Ruserdata
