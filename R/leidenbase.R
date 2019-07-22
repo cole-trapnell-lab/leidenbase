@@ -27,7 +27,7 @@
 #'Scientific Reports (2019)
 #'DOI: 10.1038/s41598-019-41695-z.
 #'
-#;
+#'
 #' Notes from leidenalg/src/VertexPartition.py
 #' \itemize{
 #'   \item \emph{ CPMVertexPartition }

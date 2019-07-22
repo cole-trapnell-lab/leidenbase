@@ -1,9 +1,10 @@
-.Rhistory
 .cproject
 .project
-.settings/
-R/.Rhistory
-mk_repo.sh
-src/.Rhistory
 .Rdata
+.Rhistory
 .Ruserdata
+.settings/
+mk_repo.sh
+R/.Rhistory
+src/.Rhistory
+src/leidenbase.so
