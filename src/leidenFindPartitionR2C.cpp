@@ -35,7 +35,10 @@
  *  @param[in]   resolution_parameter   Numeric resolution parameter (numeric value > 0.0)
  *  @param[in]   num_iter               Numeric number of iterations (numeric value >= 0)
  *  @return A named list consisting of a numeric vector of the node memberships (1-based indices),
- *    a numeric vector of individual community modularities, and a numeric quality value.
+ *    a numeric quality value, a numeric vector of edge weights within each community,
+ *    a numeric vector of edge weights from each community, a numeric vector of edge weights to
+ *    each community, total edge weight, and a numeric vector of individual community
+ *    modularities.
  *
  *  @note Find additional information in the Leidenalg distribution source files.
  *
@@ -87,6 +90,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   size_t i;
   size_t numVertex, numEdge;
   double cresolutionParameter;
+  double cweightTotal;
   double cquality;
   char *pcpartitionType;
 
@@ -94,6 +98,9 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   std::vector < double > *pcedgeWeights;
   std::vector < size_t > *pcnodeSizes;
   std::vector < size_t >  cmembership;
+  std::vector < double >  cweightInCommunity;
+  std::vector < double >  cweightFromCommunity;
+  std::vector < double >  cweightToCommunity;
   std::vector < double >  ccommunityModularity;
 
   igraph_t igraphGraph;
@@ -170,7 +177,13 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    leidenFindPartition( &igraphGraph, partitionType,
                         pcinitialMembership, pcedgeWeights, pcnodeSizes,
                         (size_t)cseed, cresolutionParameter, cnumIter,
-                        &cmembership, &ccommunityModularity, &cquality,
+                        &cmembership,
+                        &cweightInCommunity,
+                        &cweightFromCommunity,
+                        &cweightToCommunity,
+                        &cweightTotal,
+                        &ccommunityModularity,
+                        &cquality,
                         &status );
   if( status != 0 )
   {
@@ -185,8 +198,9 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Notes:
    *   o  C-based leiden has 0-based vectors whereas R has 1-based.
    *      Return membership in a 1-based vector.
-   *   o  return named list of (1) membership, (2) individual community
-   *      modularity values, and (3) the quality
+   *   o  return named list of (1) membership, (2) within community edge weight,
+   *      (3) from community edge weight, (4) to community edge weight,
+   *      (5) individual community modularity values, and (6) the quality
    *   o  rmembership: return integer vector if length <= MAX32_INT
    *      else return real.
    */
@@ -221,25 +235,52 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
 
   size_t numCommunity;
   numCommunity = ccommunityModularity.size();
-  SEXP rcommunityModularity = PROTECT( allocVector( REALSXP, numCommunity ) );
   double *pdval;
+
+  SEXP rweightInCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  pdval = REAL( rweightInCommunity );
+  for( i = 0; i < numCommunity; ++i )
+  {
+    pdval[i] = cweightInCommunity[i];
+  }
+
+  SEXP rweightFromCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  pdval = REAL( rweightFromCommunity );
+  for( i = 0; i < numCommunity; ++i )
+  {
+    pdval[i] = cweightFromCommunity[i];
+  }
+
+  SEXP rweightToCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  pdval = REAL( rweightToCommunity );
+  for( i = 0; i < numCommunity; ++i )
+  {
+    pdval[i] = cweightToCommunity[i];
+  }
+
+  SEXP rcommunityModularity = PROTECT( allocVector( REALSXP, numCommunity ) );
   pdval = REAL( rcommunityModularity );
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = ccommunityModularity[i];
   }
 
+
   /*
    * Notes:
    *   o  notice the terminating empty string in lstNames.
    */
-  const char *lstNames[] = { "membership", "community_modularity", "quality", "" };
+  const char *lstNames[] = { "membership", "quality", "edge_weight_within_community", "edge_weight_from_community", "edge_weight_to_community", "total_edge_weight", "community_modularity", "" };
   SEXP rresult = PROTECT( mkNamed( VECSXP, lstNames ) );
   SET_VECTOR_ELT( rresult, 0, rmembership );
-  SET_VECTOR_ELT( rresult, 1, rcommunityModularity );
-  SET_VECTOR_ELT( rresult, 2, ScalarReal( cquality ) );
+  SET_VECTOR_ELT( rresult, 1, ScalarReal( cquality ) );
+  SET_VECTOR_ELT( rresult, 2, rweightInCommunity );
+  SET_VECTOR_ELT( rresult, 3, rweightFromCommunity );
+  SET_VECTOR_ELT( rresult, 4, rweightToCommunity );
+  SET_VECTOR_ELT( rresult, 5, ScalarReal( cweightTotal ) );
+  SET_VECTOR_ELT( rresult, 6, rcommunityModularity );
 
-  UNPROTECT( 3 );
+  UNPROTECT( 6 );
 
   return ( rresult );
 }

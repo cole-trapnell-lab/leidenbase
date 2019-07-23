@@ -96,13 +96,14 @@ Graph*
 xmakeGraph( igraph_t *pigraph, std::vector < double > const *pedgeWeights,
              std::vector < size_t > const *pnodeSizes, int correctSelfLoops,
              int *pstatus );
+
 MutableVertexPartition*
 xmakePartition( Graph *pGraph, std::string const partitionType,
                  std::vector < size_t > const *pinitialMembership,
                  double resolutionParameter, int *pstatus );
 int xgetQuality( MutableVertexPartition *ppartition, std::string const partitionType, double resolutionParameter, double *pquality, int *pstatus );
 
-int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pcommunityModularity, int *pstatus );
+int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, std::vector < double > *pcommunityModularity, int *pstatus );
 
 
 int leidenFindPartition( igraph_t *pigraph,
@@ -114,6 +115,10 @@ int leidenFindPartition( igraph_t *pigraph,
                            double resolutionParameter,
                            std::int32_t numIter,
                            std::vector < size_t > *pmembership,
+                           std::vector < double > *pweightInCommunity,
+                           std::vector < double > *pweightFromCommunity,
+                           std::vector < double > *pweightToCommunity,
+                           double *pweightTotal,
                            std::vector < double > *pcommunityModularity,
                            double *pquality,
                            int *pstatus )
@@ -230,7 +235,7 @@ int leidenFindPartition( igraph_t *pigraph,
   /*
    * Get modularity values by individual community.
    */
-  xgetCommunityModularity( ppartition, pGraph, pcommunityModularity, &status );
+  xgetCommunityModularity( ppartition, pGraph, pweightInCommunity, pweightFromCommunity, pweightToCommunity, pweightTotal, pcommunityModularity, &status );
   if( status != 0 )
   {
     *pstatus = -1;
@@ -548,7 +553,7 @@ int xgetQuality( MutableVertexPartition *ppartition, std::string const partition
  * Calculate configuration modularity by community using
  * the code from Leidenalg/src/RBConfigurationVertexPartition.cpp quality()
  */
-int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pcommunityModularity, int *pstatus )
+int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, std::vector < double > *pcommunityModularity, int *pstatus )
 {
   double mod;
   double m;
@@ -569,12 +574,17 @@ int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, 
     m = 2 * pGraph->total_weight();
   }
 
+  *pweightTotal = m;
+
   if( m == 0 )
   {
     *pstatus = -1;
     return( 0 );
   }
 
+  pweightInCommunity->resize( numCommunity );
+  pweightFromCommunity->resize( numCommunity );
+  pweightToCommunity->resize( numCommunity );
   pcommunityModularity->resize( numCommunity );
 
   for( icomm = 0; icomm < numCommunity; ++icomm )
@@ -583,7 +593,10 @@ int xgetCommunityModularity( MutableVertexPartition *ppartition, Graph *pGraph, 
     w_out = ppartition->total_weight_from_comm( icomm );
     w_in  = ppartition->total_weight_to_comm( icomm );
     mod   = w - w_out * w_in / ( ( pGraph->is_directed() ? 1.0 : 4.0 ) * pGraph->total_weight() );
-    ( *pcommunityModularity )[icomm] = mod / ( 2 * m );
+    ( *pweightInCommunity )[icomm]   = w;
+    ( *pweightFromCommunity )[icomm] = w_out;
+    ( *pweightToCommunity )[icomm]   = w_in;
+    ( *pcommunityModularity )[icomm] = mod / m;
   }
 
   *pstatus = 0;

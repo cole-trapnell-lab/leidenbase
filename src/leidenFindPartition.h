@@ -23,17 +23,21 @@
 
 #include <string>
 
-int leidenFindPartition( igraph_t *igraph,
-                           std::string partition_type,
-                           std::vector<size_t> const* pinitialMembership,
-                           std::vector<double> const* pedgeWeights,
-                           std::vector<size_t> const* pnodeSizes,
+int leidenFindPartition( igraph_t *pigraph,
+                           std::string const partitionType,
+                           std::vector < size_t > const *pinitialMembership,
+                           std::vector < double > const *pedgeWeights,
+                           std::vector < size_t > const *pnodeSizes,
                            size_t seed,
                            double resolutionParameter,
-                           int numIter,
-                           std::vector<size_t> *pmembership,
+                           std::int32_t numIter,
+                           std::vector < size_t > *pmembership,
+                           std::vector < double > *pweightInCommunity,
+                           std::vector < double > *pweightFromCommunity,
+                           std::vector < double > *pweightToCommunity,
+                           double *pweightTotal,
                            std::vector < double > *pcommunityModularity,
                            double *pquality,
-                           int *fstatus );
+                           int *pstatus );
 
 #endif /* LEIDENFINDPARTITION_H_ */

@@ -36,9 +36,12 @@ must be greater than 0.0. Default is 0.5.}
 \item{num_iter}{Numeric number of iterations. Default is 2.}
 }
 \value{
-A named list consisting of an numeric vector of the node
- memberships (1-based indices), a numeric vector of individual
- community modularities, and a numeric quality value.
+A named list consisting of a numeric vector of the node
+ memberships (1-based indices), a numeric quality value, a numeric
+ vector of edge weights within each community, a numeric vector of
+ edge weights from each community, a numeric vector of edge weights
+ to each community, total edge weight, and a numeric vector of
+ individual community modularities.
 }
 \description{
 R to C wrapper that runs the basic Leiden community detection algorithm,
@@ -50,6 +53,7 @@ From Louvain to Leiden: guaranteeing well-connected communities.
 V. A. Traag and L. Waltman and N. J. van Eck
 Scientific Reports (2019)
 DOI: 10.1038/s41598-019-41695-z.
+
 
 Notes from leidenalg/src/VertexPartition.py
 \itemize{

@@ -69,9 +69,12 @@
 #'  either NULL for random seed values or greater than 0 for a fixed seed
 #'  value. Default is NULL.
 #'
-#'@return A named list consisting of an numeric vector of the node
-#'  memberships (1-based indices), a numeric vector of individual
-#'  community modularities, and a numeric quality value.
+#'@return A named list consisting of a numeric vector of the node
+#'  memberships (1-based indices), a numeric quality value, a numeric
+#'  vector of edge weights within each community, a numeric vector of
+#'  edge weights from each community, a numeric vector of edge weights
+#'  to each community, total edge weight, and a numeric vector of
+#'  individual community modularities.
 #'
 #'@references V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
 #'  to Leiden: guaranteeing well-connected communities.
@@ -156,4 +159,9 @@ leiden_find_partition <- function( igraph, partition_type = c( 'RBConfigurationV
   result = .Call( '_leiden_find_partition', igraph, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )
 
   return( result )
+}
+
+.onUnload <- function (libpath)
+{
+  library.dynam.unload("leidenbase", libpath)
 }
