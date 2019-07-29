@@ -9,7 +9,8 @@ leiden_find_partition(igraph,
   "CPMVertexPartition", "ModularityVertexPartition", "RBERVertexPartition",
   "SignificanceVertexPartition", "SurpriseVertexPartition"),
   initial_membership = NULL, edge_weights = NULL, node_sizes = NULL,
-  seed = NULL, resolution_parameter = 0.5, num_iter = 2)
+  seed = NULL, resolution_parameter = 0.5, num_iter = 2,
+  verbose = FALSE)
 }
 \arguments{
 \item{igraph}{R igraph graph.}
@@ -34,6 +35,9 @@ value. Default is NULL.}
 must be greater than 0.0. Default is 0.5.}
 
 \item{num_iter}{Numeric number of iterations. Default is 2.}
+
+\item{verbose}{A logic flag to determine whether or not we should print
+run diagnostics.}
 }
 \value{
 A named list consisting of a numeric vector of the node
