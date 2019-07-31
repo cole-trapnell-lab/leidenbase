@@ -176,6 +176,7 @@ int leidenFindPartition( igraph_t *pigraph,
                                 resolutionParameter, &status );
   if( status != 0 )
   {
+    delete pGraph;
     *pstatus = -1;
     return ( 0 );
   }
@@ -220,6 +221,8 @@ int leidenFindPartition( igraph_t *pigraph,
   xgetQuality( ppartition, partitionType, resolutionParameter, pquality, &status );
   if( status != 0 )
   {
+    delete pGraph;
+    delete ppartition;
     *pstatus = -1;
     return ( 0 );
   }
@@ -238,10 +241,14 @@ int leidenFindPartition( igraph_t *pigraph,
   xgetCommunityModularity( ppartition, pGraph, pweightInCommunity, pweightFromCommunity, pweightToCommunity, pweightTotal, pcommunityModularity, &status );
   if( status != 0 )
   {
+    delete pGraph;
+    delete ppartition;
     *pstatus = -1;
     return ( 0 );
   }
 
+  delete pGraph;
+  delete ppartition;
   *pstatus = 0;
 
   return ( 0 );

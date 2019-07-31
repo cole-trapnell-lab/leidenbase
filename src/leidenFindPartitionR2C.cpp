@@ -161,12 +161,18 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   pcedgeWeights = xsetEdgeWeights( edge_weights, numEdge, &status );
   if( status != 0 )
   {
+    if( pcinitialMembership != NULL )
+      delete pcinitialMembership;
     return ( R_NilValue );
   }
 
   pcnodeSizes = xsetNodeSizes( node_sizes, numVertex, &status );
   if( status != 0 )
   {
+    if( pcinitialMembership != NULL )
+      delete pcinitialMembership;
+    if( pcedgeWeights != NULL )
+      delete pcedgeWeights;
     return ( R_NilValue );
   }
 
@@ -187,10 +193,22 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
                         &status );
   if( status != 0 )
   {
+    if( pcinitialMembership != NULL )
+      delete pcinitialMembership;
+    if( pcedgeWeights != NULL )
+      delete pcedgeWeights;
+    if( pcnodeSizes != NULL )
+      delete pcnodeSizes;
     error( "_leiden_find_partition: bad status: leiden_find_partition" );
     return ( R_NilValue );
   }
 
+  if( pcinitialMembership != NULL )
+    delete pcinitialMembership;
+  if( pcedgeWeights != NULL )
+    delete pcedgeWeights;
+  if( pcnodeSizes != NULL )
+    delete pcnodeSizes;
 
   /*
    * Set up to return community membership vector, community modularities, and community quality and
@@ -264,7 +282,6 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   {
     pdval[i] = ccommunityModularity[i];
   }
-
 
   /*
    * Notes:
