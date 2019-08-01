@@ -21,7 +21,6 @@
 #ifndef LEIDENFINDPARTITION_H_
 #define LEIDENFINDPARTITION_H_
 
-#include <string>
 
 int leidenFindPartition( igraph_t *pigraph,
                            std::string const partitionType,

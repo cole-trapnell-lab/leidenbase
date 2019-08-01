@@ -1,3 +1,0 @@
-PKG_CPPFLAGS=-I. -I/usr/local/include/igraph
-PKG_CXXFLAGS=-I. -I/usr/local/include/igraph
-PKG_LIBS=-L/usr/local/lib -ligraph -L.

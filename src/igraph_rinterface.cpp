@@ -24,7 +24,7 @@
 
 #include <R.h>
 #include <Rinternals.h>
-#include <igraph/igraph.h>
+#include <igraph.h>
 #include <igraph_rinterface.h>
 
 
