@@ -20,7 +20,7 @@
 #ifndef GRAPHHELPER_INCLUDED
 #define GRAPHHELPER_INCLUDED
 
-#include <igraph.h>
+#include <../cigraph/igraph.h>
 #include <vector>
 #include <set>
 #include <exception>

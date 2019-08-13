@@ -60,7 +60,7 @@
 #include <cstdint>
 #include <R.h>
 #include <Rinternals.h>
-#include <igraph.h>
+#include <cigraph/igraph.h>
 #include <igraph_rinterface.h>
 #include "leidenFindPartition.h"
 

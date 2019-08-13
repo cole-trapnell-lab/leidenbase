@@ -61,7 +61,7 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdint>
-#include <igraph.h>
+#include <cigraph/igraph.h>
 
 #include "GraphHelper.h"
 #include "CPMVertexPartition.h"
