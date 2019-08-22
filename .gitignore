@@ -2,6 +2,7 @@ autom4te.cache/
 clean.sh
 .cproject
 DESCRIPTION
+igraph_pbmc_edgelist.txt
 leidenbase_0.1.0.tar.gz
 leidenbase
 mk_repo.sh
