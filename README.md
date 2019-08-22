@@ -1,6 +1,6 @@
 # Leidenbase
 
-An R to C interface that runs the Leiden community detection algorithm to find a basic partition. It is the equivalent of the find_partition() function that is given in the Leidenalg distribution file 'leiden/src/functions.py' and includes the underlying Leidenalg C++ source code files of Leidenalg release version 0.7.0. The Leiden algorithm is described in
+An R to C interface that runs the Leiden community detection algorithm to find a basic partition. It is the equivalent of the find_partition() function given in the Leidenalg distribution file *leiden/src/functions.py* and includes the underlying Leidenalg C++ source code files of Leidenalg release version 0.7.0. The Leiden algorithm is described in
 
 > *From Louvain to Leiden: guaranteeing well-connected communities.*  
    V. A. Traag, L. Waltman, and N. J. van Eck,  
@@ -11,26 +11,24 @@ An R to C interface that runs the Leiden community detection algorithm to find a
 
 ### Prerequisites
 
-This distribution requires software development tools including C, C++, and FORTRAN compilers. These compilers are provided often with your operating system or as packages. The R Project distributes [FORTRAN compilers for MacOS](https://cran.r-project.org/bin/macosx/tools/).
+This distribution requires software development tools including C, C++, and FORTRAN compilers. These compilers are provided often with your operating system or as packages. The R Project distributes C, C++, and FORTRAN [development tools](https://cran.r-project.org/bin/macosx/tools/) for MacOS.
 
 ### Installing
   
-#### Installing from R
-  
-Use devtools::install_github()
+Use the devtools::install_github() command
 
 ```
 devtools::install_github('https://github.com/cole-trapnell-lab/leidenbase.git')
-``` 
+```
 
 ### Leidenbase functions
 
 The R wrapper for running the Leiden algorithm find partition function is  
 
     leiden_find_partition <- function( igraph,
-                               partition_type = c( 'RBConfigurationVertexPartition',
-                                                   'CPMVertexPartition',
+                               partition_type = c( 'CPMVertexPartition',
                                                    'ModularityVertexPartition',
+                                                   'RBConfigurationVertexPartition',
                                                    'RBERVertexPartition',
                                                    'SignificanceVertexPartition',
                                                    'SurpriseVertexPartition' ),
@@ -38,12 +36,11 @@ The R wrapper for running the Leiden algorithm find partition function is
                                edge_weights = NULL,
                                node_sizes = NULL,
                                seed = NULL,
-                               resolution_parameter = 0.5,
+                               resolution_parameter = 0.1,
                                num_iter = 2 )
 
 The C++ wrapper for running the Leiden algorithm find partition function
 is  
-
 
     int leidenFindPartition( igraph_t *pigraph,
                              std::string const partitionType,
@@ -54,10 +51,14 @@ is
                              double resolutionParameter,
                              int numIter,
                              std::vector < size_t > *pmembership,
-                             std::vector < double > *pcommunityModularity,
+                             std::vector < double > *pweightInCommunity,
+                             std::vector < double > *pweightFromCommunity,
+                             std::vector < double > *pweightToCommunity,
+                             double *pweightTotal,
                              double *pquality,
+                             double *pmodularity,
+                             double *psignificance,
                              int *pstatus )`
-
 
 ## Licenses
 
