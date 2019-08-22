@@ -4,18 +4,18 @@
 \alias{leiden_find_partition}
 \title{Leiden find partition community detection function}
 \usage{
-leiden_find_partition(igraph,
-  partition_type = c("RBConfigurationVertexPartition",
-  "CPMVertexPartition", "ModularityVertexPartition", "RBERVertexPartition",
-  "SignificanceVertexPartition", "SurpriseVertexPartition"),
-  initial_membership = NULL, edge_weights = NULL, node_sizes = NULL,
-  seed = NULL, resolution_parameter = 0.5, num_iter = 2,
-  verbose = FALSE)
+leiden_find_partition(igraph, partition_type = c("CPMVertexPartition",
+  "ModularityVertexPartition", "RBConfigurationVertexPartition",
+  "RBERVertexPartition", "SignificanceVertexPartition",
+  "SurpriseVertexPartition"), initial_membership = NULL,
+  edge_weights = NULL, node_sizes = NULL, seed = NULL,
+  resolution_parameter = 0.1, num_iter = 2, verbose = FALSE)
 }
 \arguments{
 \item{igraph}{R igraph graph.}
 
-\item{partition_type}{String partition type name.}
+\item{partition_type}{String partition type name. Default is
+CPMVertexParition.}
 
 \item{initial_membership}{Numeric vector of initial membership
 assignments of nodes. These are 1-based indices. Default is one
@@ -32,7 +32,7 @@ either NULL for random seed values or greater than 0 for a fixed seed
 value. Default is NULL.}
 
 \item{resolution_parameter}{Numeric resolution parameter. The value
-must be greater than 0.0. Default is 0.5.}
+must be greater than 0.0. Default is 0.1.}
 
 \item{num_iter}{Numeric number of iterations. Default is 2.}
 
@@ -42,10 +42,10 @@ run diagnostics.}
 \value{
 A named list consisting of a numeric vector of the node
  memberships (1-based indices), a numeric quality value, a numeric
- vector of edge weights within each community, a numeric vector of
- edge weights from each community, a numeric vector of edge weights
- to each community, total edge weight, and a numeric vector of
- individual community modularities.
+ modularity, a numeric significance, a numeric vector of edge weights
+ within each community, a numeric vector of edge weights from each
+ community, a numeric vector of edge weights to each community, and
+ total edge weight.
 }
 \description{
 R to C wrapper that runs the basic Leiden community detection algorithm,
@@ -53,29 +53,34 @@ which is similar to the find_partition() function in the python Leidenalg distri
 }
 \details{
 The Leiden algorithm is described in
-From Louvain to Leiden: guaranteeing well-connected communities.
-V. A. Traag and L. Waltman and N. J. van Eck
-Scientific Reports (2019)
-DOI: 10.1038/s41598-019-41695-z.
+ From Louvain to Leiden: guaranteeing well-connected communities.
+ V. A. Traag and L. Waltman and N. J. van Eck
+ Scientific Reports, 9(1) (2019)
+ DOI: 10.1038/s41598-019-41695-z.
 
+Significance is described in
+ Significant Scales in Community Structure
+ V. A. Traag, G. Krings, and P. Van Dooren
+ Scientific Reports, 3(1) (2013)
+ DOI: 10.1038/srep02930
 
-Notes from leidenalg/src/VertexPartition.py
+Notes excerpted from leidenalg/src/VertexPartition.py
 \itemize{
   \item \emph{ CPMVertexPartition }
-        Implements CPM. 
-        This quality function is well-defined for both positive and negative edge weights.
-        This quality function uses a linear resolution parameter.
+        Implements Constant Potts Model. 
+        This quality function uses a linear resolution parameter and
+        is well-defined for both positive and negative edge weights.
   \item \emph{ ModularityVertexPartition }
         Implements modularity. 
         This quality function is well-defined only for positive edge weights.
   \item\emph{  RBConfigurationVertexPartition }
         Implements Reichardt and Bornholdt’s Potts model with a configuration null model. 
-        This quality function is well-defined only for positive edge weights.
-        This quality function uses a linear resolution parameter.
+        This quality function uses a linear resolution parameter and is well-defined only
+        for positive edge weights.
   \item \emph{ RBERVertexPartition }
         Implements Reichardt and Bornholdt’s Potts model with an Erdos-Renyi null model.
-        This quality function is well-defined only for positive edge weights.
-        This quality function uses a linear resolution parameter.
+        This quality function uses a linear resolution parameter and is well-defined only
+        for positive edge weights.
   \item \emph{ SignificanceVertexPartition }
         Implements Significance. 
         This quality function is well-defined only for unweighted graphs.
@@ -88,5 +93,10 @@ Notes from leidenalg/src/VertexPartition.py
 V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
  to Leiden: guaranteeing well-connected communities.
  Scientific Reports, 9(1).
- doi: 10.1038/s41598-019-41695-z
+ DOI: 10.1038/s41598-019-41695-z
+
+Significant Scales in Community Structure
+ V. A. Traag, G. Krings, and P. Van Dooren
+ Scientific Reports, 3(1) (2013)
+ DOI: 10.1038/srep02930
 }

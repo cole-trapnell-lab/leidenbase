@@ -35,7 +35,8 @@
  *  @param[in]   resolution_parameter   Numeric resolution parameter (numeric value > 0.0)
  *  @param[in]   num_iter               Numeric number of iterations (numeric value >= 0)
  *  @return A named list consisting of a numeric vector of the node memberships (1-based indices),
- *    a numeric quality value, a numeric vector of edge weights within each community,
+ *    a numeric quality value, a numeric modularity, a numeric significance,
+ *    a numeric vector of edge weights within each community,
  *    a numeric vector of edge weights from each community, a numeric vector of edge weights to
  *    each community, and total edge weight.
  *
@@ -91,6 +92,8 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   double cresolutionParameter;
   double cweightTotal;
   double cquality;
+  double cmodularity;
+  double csignificance;
   char *pcpartitionType;
 
   std::vector < size_t > *pcinitialMembership;
@@ -187,7 +190,8 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
                         &cweightToCommunity,
                         &cweightTotal,
                         &cquality,
-                        NULL,
+                        &cmodularity,
+                        &csignificance,
                         &status );
   if( status != 0 )
   {
@@ -214,9 +218,9 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Notes:
    *   o  C-based leiden has 0-based vectors whereas R has 1-based.
    *      Return membership in a 1-based vector.
-   *   o  return named list of (1) membership, (2) within community edge weight,
-   *      (3) from community edge weight, (4) to community edge weight,
-   *      (5) the quality, and (6) total weight
+   *   o  return named list of (1) membership, (2) quality, (3) significance,
+   *      (4) within community edge weight, (5) from community edge weight,
+   *      (6) to community edge weight, and (7) total weight
    *   o  rmembership: return integer vector if length <= MAX32_INT
    *      else return real.
    */
@@ -278,14 +282,16 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Notes:
    *   o  notice the terminating empty string in lstNames.
    */
-  const char *lstNames[] = { "membership", "quality", "edge_weight_within_community", "edge_weight_from_community", "edge_weight_to_community", "total_edge_weight", "" };
+  const char *lstNames[] = { "membership", "quality", "modularity", "significance", "edge_weight_within_community", "edge_weight_from_community", "edge_weight_to_community", "total_edge_weight", "" };
   SEXP rresult = PROTECT( mkNamed( VECSXP, lstNames ) );
   SET_VECTOR_ELT( rresult, 0, rmembership );
   SET_VECTOR_ELT( rresult, 1, ScalarReal( cquality ) );
-  SET_VECTOR_ELT( rresult, 2, rweightInCommunity );
-  SET_VECTOR_ELT( rresult, 3, rweightFromCommunity );
-  SET_VECTOR_ELT( rresult, 4, rweightToCommunity );
-  SET_VECTOR_ELT( rresult, 5, ScalarReal( cweightTotal ) );
+  SET_VECTOR_ELT( rresult, 2, ScalarReal( cmodularity ) );
+  SET_VECTOR_ELT( rresult, 3, ScalarReal( csignificance ) );
+  SET_VECTOR_ELT( rresult, 4, rweightInCommunity );
+  SET_VECTOR_ELT( rresult, 5, rweightFromCommunity );
+  SET_VECTOR_ELT( rresult, 6, rweightToCommunity );
+  SET_VECTOR_ELT( rresult, 7, ScalarReal( cweightTotal ) );
 
   UNPROTECT( 5 );
 

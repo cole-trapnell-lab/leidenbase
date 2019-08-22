@@ -21,30 +21,36 @@
 #'@description R to C wrapper that runs the basic Leiden community detection algorithm,
 #'which is similar to the find_partition() function in the python Leidenalg distribution.
 #'
-#'@details The Leiden algorithm is described in
-#'From Louvain to Leiden: guaranteeing well-connected communities.
-#'V. A. Traag and L. Waltman and N. J. van Eck
-#'Scientific Reports (2019)
-#'DOI: 10.1038/s41598-019-41695-z.
+#'@details
+#'The Leiden algorithm is described in
+#'  From Louvain to Leiden: guaranteeing well-connected communities.
+#'  V. A. Traag and L. Waltman and N. J. van Eck
+#'  Scientific Reports, 9(1) (2019)
+#'  DOI: 10.1038/s41598-019-41695-z.
 #'
+#'Significance is described in
+#'  Significant Scales in Community Structure
+#'  V. A. Traag, G. Krings, and P. Van Dooren
+#'  Scientific Reports, 3(1) (2013)
+#'  DOI: 10.1038/srep02930
 #'
-#' Notes from leidenalg/src/VertexPartition.py
+#' Notes excerpted from leidenalg/src/VertexPartition.py
 #' \itemize{
 #'   \item \emph{ CPMVertexPartition }
-#'         Implements CPM. 
-#'         This quality function is well-defined for both positive and negative edge weights.
-#'         This quality function uses a linear resolution parameter.
+#'         Implements Constant Potts Model. 
+#'         This quality function uses a linear resolution parameter and
+#'         is well-defined for both positive and negative edge weights.
 #'   \item \emph{ ModularityVertexPartition }
 #'         Implements modularity. 
 #'         This quality function is well-defined only for positive edge weights.
 #'   \item\emph{  RBConfigurationVertexPartition }
 #'         Implements Reichardt and Bornholdt’s Potts model with a configuration null model. 
-#'         This quality function is well-defined only for positive edge weights.
-#'         This quality function uses a linear resolution parameter.
+#'         This quality function uses a linear resolution parameter and is well-defined only
+#'         for positive edge weights.
 #'   \item \emph{ RBERVertexPartition }
 #'         Implements Reichardt and Bornholdt’s Potts model with an Erdos-Renyi null model.
-#'         This quality function is well-defined only for positive edge weights.
-#'         This quality function uses a linear resolution parameter.
+#'         This quality function uses a linear resolution parameter and is well-defined only
+#'         for positive edge weights.
 #'   \item \emph{ SignificanceVertexPartition }
 #'         Implements Significance. 
 #'         This quality function is well-defined only for unweighted graphs.
@@ -52,7 +58,7 @@
 #'         Implements (asymptotic) Surprise.
 #'         This quality function is well-defined only for positive edge weights.
 #' }
-#'
+#' 
 #'@param igraph R igraph graph.
 #'@param partition_type String partition type name. Default is
 #'  CPMVertexParition.
@@ -74,20 +80,28 @@
 #'
 #'@return A named list consisting of a numeric vector of the node
 #'  memberships (1-based indices), a numeric quality value, a numeric
-#'  vector of edge weights within each community, a numeric vector of
-#'  edge weights from each community, a numeric vector of edge weights
-#'  to each community, and total edge weight.
+#'  modularity, a numeric significance, a numeric vector of edge weights
+#'  within each community, a numeric vector of edge weights from each
+#'  community, a numeric vector of edge weights to each community, and
+#'  total edge weight.
 #'
-#'@references V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
+#'@references
+#' V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
 #'  to Leiden: guaranteeing well-connected communities.
 #'  Scientific Reports, 9(1).
-#'  doi: 10.1038/s41598-019-41695-z
+#'  DOI: 10.1038/s41598-019-41695-z
+#' 
+#'Significant Scales in Community Structure
+#'  V. A. Traag, G. Krings, and P. Van Dooren
+#'  Scientific Reports, 3(1) (2013)
+#'  DOI: 10.1038/srep02930
+#'
 #'@useDynLib leidenbase _leiden_find_partition
 #'@import igraph
 #'@export
 leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartition', 'ModularityVertexPartition', 'RBConfigurationVertexPartition', 'RBERVertexPartition', 'SignificanceVertexPartition', 'SurpriseVertexPartition' ), initial_membership = NULL, edge_weights = NULL, node_sizes = NULL, seed = NULL, resolution_parameter = 0.1, num_iter = 2, verbose = FALSE )
 {
-	partition_type <- match.arg( partition_type )
+  partition_type <- match.arg( partition_type )
 	
   # Check input parameters
   err_string = ''

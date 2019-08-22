@@ -102,9 +102,8 @@ xmakePartition( Graph *pGraph, std::string const partitionType,
                  std::vector < size_t > const *pinitialMembership,
                  double resolutionParameter, int *pstatus );
 int xgetQuality( MutableVertexPartition *ppartition, std::string const partitionType, double resolutionParameter, double *pquality, int *pstatus );
-
-int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, int *pstatus );
-
+int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, double *pmodularity, int *pstatus );
+int xgetSignificance( MutableVertexPartition *ppartition, double *psignificance, int *pstatus );
 
 int leidenFindPartition( igraph_t *pigraph,
                            std::string const partitionType,
@@ -120,6 +119,7 @@ int leidenFindPartition( igraph_t *pigraph,
                            std::vector < double > *pweightToCommunity,
                            double *pweightTotal,
                            double *pquality,
+                           double *pmodularity,
                            double *psignificance,
                            int *pstatus )
 {
@@ -238,13 +238,28 @@ int leidenFindPartition( igraph_t *pigraph,
   /*
    * Get community values.
    */
-  xgetCommunityValues( ppartition, pGraph, pweightInCommunity, pweightFromCommunity, pweightToCommunity, pweightTotal, &status );
+  xgetCommunityValues( ppartition, pGraph, pweightInCommunity, pweightFromCommunity, pweightToCommunity, pweightTotal, pmodularity, &status );
   if( status != 0 )
   {
     delete pGraph;
     delete ppartition;
     *pstatus = -1;
     return ( 0 );
+  }
+
+  /*
+   * Get partition significance if psignificance is not NULL.
+   */
+  if( psignificance != NULL )
+  {
+    xgetSignificance( ppartition, psignificance, &status );
+    if( status != 0 )
+    {
+      delete pGraph;
+      delete ppartition;
+      *pstatus = -1;
+      return ( 0 );
+    }
   }
 
   delete pGraph;
@@ -559,19 +574,24 @@ int xgetQuality( MutableVertexPartition *ppartition, std::string const partition
 /*
  * Get some community values.
  */
-int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, int *pstatus )
+int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std::vector < double > *pweightInCommunity, std::vector < double > *pweightFromCommunity, std::vector < double > *pweightToCommunity, double *pweightTotal, double *pmodularity, int *pstatus )
 {
+  int is_directed;
   double mod;
+  double modularity;
   double m;
   double w;
   double w_in;
   double w_out;
+  double fac;
+  double q;
 
   size_t icomm, numCommunity;
 
+  is_directed = pGraph->is_directed();
   numCommunity = ppartition->n_communities();
 
-  if( pGraph->is_directed() )
+  if( is_directed )
   {
     m = pGraph->total_weight();
   }
@@ -592,6 +612,8 @@ int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std:
   pweightFromCommunity->resize( numCommunity );
   pweightToCommunity->resize( numCommunity );
 
+  fac = ( ( is_directed ? 1.0 : 4.0 ) * pGraph->total_weight() );
+  mod = 0.0;
   for( icomm = 0; icomm < numCommunity; ++icomm )
   {
     w     = ppartition->total_weight_in_comm( icomm );
@@ -600,10 +622,40 @@ int xgetCommunityValues( MutableVertexPartition *ppartition, Graph *pGraph, std:
     ( *pweightInCommunity )[icomm]   = w;
     ( *pweightFromCommunity )[icomm] = w_out;
     ( *pweightToCommunity )[icomm]   = w_in;
+    mod += w - w_out * w_in / fac;
   }
+  q = ( 2.0 - is_directed ) * mod;
+  modularity = q / m;
+
+  *pmodularity = modularity;
 
   *pstatus = 0;
 
+  return( 0 );
+}
+
+
+/*
+ * Get the significance value of the given partition.
+ * Significance is described in
+ * Significant Scales in Community Structure
+ * V. A. Traag, G. Krings, and P. Van Dooren
+ * Scientific Reports, 3, 2930 (2013)
+ * DOI: 10.1038/srep02930
+ */
+int xgetSignificance( MutableVertexPartition *ppartition, double *psignificance, int *pstatus )
+{
+  double significance;
+  SignificanceVertexPartition *psignificanceVertexPartition;
+
+  psignificanceVertexPartition = new SignificanceVertexPartition( ppartition->get_graph() );
+  psignificanceVertexPartition->from_partition( ppartition );
+  significance = psignificanceVertexPartition->quality();
+  delete psignificanceVertexPartition;
+
+  *psignificance = significance;
+
+  *pstatus = 0;
   return( 0 );
 }
 

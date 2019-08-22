@@ -148,14 +148,14 @@ test_that( 'SurpriseVertexPartition membership and quality',
 # Test resolution_parameter and num_iter.
 #
 res <- leiden_find_partition( igraph, partition_type = 'RBConfigurationVertexPartition', resolution_parameter = 1, seed = 123456 )
-test_that( 'resolution_parameter',
+test_that( 'resolution_parameter parameter',
 {
   expect_true( all.equal( rbconfiguration_res1_membership, res$membership ) )
   expect_true( all.equal( 47911.42, res$quality, tolerance = 1.0e-6 ) )
 })
 
 res <- leiden_find_partition( igraph, partition_type = 'RBConfigurationVertexPartition', num_iter = 5, seed = 123456, resolution_parameter = 0.5 )
-test_that( 'num_iter',
+test_that( 'num_iter parameter',
 {
   expect_true( all.equal( rbconfiguration_nit5_membership, res$membership ) )
   expect_true( all.equal( 52904.31, res$quality, tolerance = 1.0e-6 ) )
@@ -167,7 +167,7 @@ test_that( 'num_iter',
 #
 inimem <- as.integer( seq( 1, 1500 ) )
 res <- leiden_find_partition( igraph, partition_type = 'RBConfigurationVertexPartition', initial_membership = inimem, seed = 123456, resolution_parameter = 0.5 )
-test_that( 'RBConfigurationVertexPartition membership and quality',
+test_that( 'initial_membership parameter',
 {
   expect_true( all.equal( rbconfiguration_membership, res$membership ) )
   expect_true( all.equal( 52882.31, res$quality, tolerance = 1.0e-6 ) )
@@ -179,7 +179,7 @@ test_that( 'RBConfigurationVertexPartition membership and quality',
 #
 edgwgt <- as.double( rep( 1.0, 61636 ) )
 res <- leiden_find_partition( igraph, partition_type = 'RBConfigurationVertexPartition', edge_weights = edgwgt, seed = 123456, resolution_parameter = 0.5 )
-test_that( 'RBConfigurationVertexPartition membership and quality',
+test_that( 'edge_weights parameter',
 {
   expect_true( all.equal( rbconfiguration_membership, res$membership ) )
   expect_true( all.equal( 52882.31, res$quality, tolerance = 1.0e-6 ) )
@@ -191,46 +191,55 @@ test_that( 'RBConfigurationVertexPartition membership and quality',
 #
 nodsiz <- as.integer( rep( 1, 1500 ) )
 res <- leiden_find_partition( igraph, partition_type = 'RBConfigurationVertexPartition', node_sizes = nodsiz, seed = 123456, resolution_parameter = 0.5 )
-test_that( 'RBConfigurationVertexPartition membership and quality',
+test_that( 'node_sizes parameter',
 {
   expect_true( all.equal( rbconfiguration_membership, res$membership ) )
   expect_true( all.equal( 52882.31, res$quality, tolerance = 1.0e-6 ) )
 })
 
+#
+# Test modularity and significance return values.
+#
+res <- leiden_find_partition( igraph, partition_type = 'CPMVertexPartition', seed = 123456, resolution_parameter = 0.1 )
+test_that( 'modularity and significance return values',
+    {
+      expect_true( all.equal( 0.7041775, res$modularity, tolerance = 1.0e-6 ) )
+      expect_true( all.equal( 92461.67, res$significance, tolerance = 1.0e-6 ) )
+    })
 
 #
 # Test parameter errors
 #
 egraph <- ''
-test_that( 'igraph',
+test_that( 'igraph parameter error',
 {
   expect_error( leiden_find_partition( egraph ) )
 })
 
 inimem <- inimem <- as.integer( seq( 1, 1400 ) )
-test_that( 'initial_membership',
+test_that( 'initial_membership parameter error',
 {
   expect_error( leiden_find_partition( igraph, initial_membership = inimem, resolution_parameter = 0.5 ) )
 })
 
 edgwgt <- as.double( rep( 1.0, 61630 ) )
-test_that( 'edge_weights',
+test_that( 'edge_weights parameter error',
 {
   expect_error( leiden_find_partition( igraph, edge_weights = edgwgt, resolution_parameter = 0.5 ) )
 })
 
 nodsiz <- inimem <- as.integer( seq( 1, 1400 ) )
-test_that( 'node_sizes',
+test_that( 'node_sizes parameter error',
 {
   expect_error( leiden_find_partition( igraph, node_sizes = nodsiz, resolution_parameter = 0.5 ) )
 })
 
-test_that( 'resolution_parameter',
+test_that( 'resolution_parameter parameter error',
 {
   expect_error( leiden_find_partition( igraph, resolution_parameter = 0.0 ) )
 })
 
-test_that( 'num_iter',
+test_that( 'num_iter parameter error',
 {
   expect_error( leiden_find_partition( igraph, num_iter = 0, resolution_parameter = 0.5 ) )
 })

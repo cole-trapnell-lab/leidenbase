@@ -36,6 +36,7 @@ int leidenFindPartition( igraph_t *pigraph,
                            std::vector < double > *pweightToCommunity,
                            double *pweightTotal,
                            double *pquality,
+                           double *pmodularity,
                            double *psignificance,
                            int *pstatus );
 
