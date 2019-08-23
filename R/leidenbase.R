@@ -73,7 +73,9 @@
 #'  either NULL for random seed values or greater than 0 for a fixed seed
 #'  value. Default is NULL.
 #'@param resolution_parameter Numeric resolution parameter. The value
-#'  must be greater than 0.0. Default is 0.1.
+#'  must be greater than 0.0. Default is 0.1. The resolution_parameter is
+#'  ignored for the partition_types ModularityVertexPartition,
+#'  SignificanceVertexPartition, and SurpriseVertexPartition.
 #'@param num_iter Numeric number of iterations. Default is 2.
 #'@param verbose A logic flag to determine whether or not we should print
 #'  run diagnostics.
@@ -113,100 +115,65 @@ leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartiti
   num_edge   = igraph::gsize( igraph )
   num_vertex = igraph::gorder( igraph )
 
-  # check input vectors
+  # check input vector parameters
   if( !is.null( initial_membership ) )
   {
     if( length( initial_membership ) != num_vertex )
-    {
       err_string <- paste( err_string, '  -> initial_membership length != number of vertices\n', sep = '' )
-    }
     if( mode( initial_membership ) != 'numeric' )
-    {
       err_string <- paste( err_string, '  -> initial_membership is not an numeric vector\n', sep = '' )
-    }
   }
 
   if( !is.null( edge_weights ) )
   {
     if( length( edge_weights ) != num_edge )
-    {
       err_string <- paste( err_string, '  -> edge_weights length != number of edges\n', sep = '' )
-    }
     if( mode( edge_weights ) != 'numeric' )
-    {
       err_string <- paste( err_string, '  -> edge_weights is not an double vector\n', sep = '' )
-    }
   }
 
   if( !is.null( node_sizes ) )
   {
     if( length( node_sizes ) != num_vertex )
-    {
       err_string <- paste( err_string, '  -> node_sizes length != number of vertices\n', sep = '' )
-    }
     if( mode( node_sizes ) != 'numeric' )
-    {
       err_string <- paste( err_string, '  -> node_sizes is not an numeric vector\n', sep = '' )
-    }
   }
 
   # check remaining parameters
   if( !is.null( seed ) && ( mode( seed ) != 'numeric' || seed <= 0 ) )
-  {
     err_string <- paste( err_string, '  -> seed < 1\n', sep = '' )
-  }
 
-  if( is.null( resolution_parameter ) )
+  # Check resolution parameter if relevant.
+  if( partition_type %in% c('CPMVertexPartition','RBConfigurationVertexPartition','RBERVertexPartition') )
   {
-    resolution_parameter = 0.5
-  }
-  if( mode( resolution_parameter ) != 'numeric' || resolution_parameter <= 0.0 )
-  {
-    err_string <- paste( err_string, '  -> resolution_parameter <= 0\n', sep = '' )
+    if( is.null( resolution_parameter ) )
+      resolution_parameter = 0.1
+    if( mode( resolution_parameter ) != 'numeric' || resolution_parameter <= 0.0 )
+      err_string <- paste( err_string, '  -> resolution_parameter <= 0\n', sep = '' )
   }
 
   if( is.null( num_iter ) )
-  {
-	num_iter = 2  
-  }
+	  num_iter = 2  
   if( mode( num_iter ) != 'numeric' || num_iter < 1 )
-  {
     err_string <- paste( err_string, '  -> num_iter < 1\n', sep = '' )
-  }
-
   if( !identical( err_string, '' ) )
-  {
     stop( paste( 'input parameter error(s):\n', err_string, sep = ''  ) )
-  }
-  
-  if( is.null( resolution_parameter ) || ( !is.integer( resolution_parameter ) && !is.double( resolution_parameter ) ) )
-  {
-	resolution_parameter = 0.5
-  }
-  
-  if( is.null( num_iter ) || ( !is.integer( num_iter ) && !is.double( num_iter ) ) )
-  {
-    num_iter = 2
-  }
 
   if( verbose )
   {
-    cat( 'leiden_find_partition: partition_type       ', partition_type, '\n')
+    message( 'leiden_find_partition: partition_type       ', partition_type )
     if( is.null( seed ) )
-    {
-      cat( 'leiden_find_partition: seed                  NULL\n' )
-    }
+      message( 'leiden_find_partition: seed                  NULL' )
     else
-    {
-      cat( 'leiden_find_partition: seed                 ', seed, '\n')
-    }
-    cat( 'leiden_find_partition: resolution_parameter ', resolution_parameter, '\n')
-    cat( 'leiden_find_partition: num_iter             ', num_iter, '\n')
-    cat( 'leiden_find_partition: initial_membership   ', length(initial_membership ), '\n')
-    cat( 'leiden_find_partition: edge_weights         ', length( edge_weights ), '\n')
-    cat( 'leiden_find_partition: node_sizes           ', length( node_sizes ), '\n')
-    cat( 'leiden_find_partition: number vertices      ', num_vertex, '\n' )
-    cat( 'leiden_find_partition: number edges         ', num_edge, '\n' )
+      message( 'leiden_find_partition: seed                 ', seed )
+    message( 'leiden_find_partition: resolution_parameter ', resolution_parameter )
+    message( 'leiden_find_partition: num_iter             ', num_iter )
+    message( 'leiden_find_partition: initial_membership   ', length(initial_membership ) )
+    message( 'leiden_find_partition: edge_weights         ', length( edge_weights ) )
+    message( 'leiden_find_partition: node_sizes           ', length( node_sizes ) )
+    message( 'leiden_find_partition: number vertices      ', num_vertex )
+    message( 'leiden_find_partition: number edges         ', num_edge )
   }
   
   result = .Call( '_leiden_find_partition', igraph, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )

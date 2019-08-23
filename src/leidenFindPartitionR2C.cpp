@@ -323,10 +323,21 @@ int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP no
 }
 
 
-static const char *partitionTypeList[] =
-{ "CPMVertexPartition",             "ModularityVertexPartition",
-  "RBConfigurationVertexPartition", "RBERVertexPartition",
-  "SignificanceVertexPartition",    "SurpriseVertexPartition" };
+typedef struct
+{
+  char *name;
+  int   flagResolutionParameter;
+} VertexPartitionTypes;
+
+static const VertexPartitionTypes vertexPartitionTypes[]=
+{
+    { "CPMVertexPartition",             1 },
+    { "ModularityVertexPartition",      0 },
+    { "RBConfigurationVertexPartition", 1 },
+    { "RBERVertexPartition",            1 },
+    { "SignificanceVertexPartition",    0 },
+    { "SurpriseVertexPartition",        0 }
+};
 
 
 /*
@@ -336,18 +347,20 @@ int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, s
 {
   int i;
   int numPartitionType;
-  int flag;
+  int flagValidVertexPartition;
+  int flagResolutionParameter;
 
-  numPartitionType = sizeof( partitionTypeList ) / sizeof(char*);
-  flag = 0;
+  numPartitionType = sizeof( vertexPartitionTypes ) / sizeof( VertexPartitionTypes );
+  flagValidVertexPartition = 0;
   for( i = 0; i < numPartitionType; ++i )
   {
-    if( strcmp( partitionTypeList[i], ppartitionType ) == 0 )
+    if( strcmp( vertexPartitionTypes[i].name, ppartitionType ) == 0 )
     {
-      flag = 1;
+      flagValidVertexPartition = 1;
+      flagResolutionParameter  = vertexPartitionTypes[i].flagResolutionParameter;
     }
   }
-  if( flag == 0 )
+  if( flagValidVertexPartition == 0 )
   {
     error( "_leiden_find_partition: invalid partition_type" );
     *fstatus = -1;
@@ -361,7 +374,7 @@ int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, s
     return ( 0 );
   }
 
-  if( resolutionParameter < 0.0 )
+  if( flagResolutionParameter && resolutionParameter < 0.0 )
   {
     error( "_leiden_find_partition: invalid resolution_parameter: value must be > 0.0" );
     *fstatus = -1;

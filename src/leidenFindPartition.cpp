@@ -30,14 +30,19 @@
  *
  *  @param[in]   igraph                pointer to igraph_t graph
  *  @param[in]   partitionType         partition type used for optimization
- *  @param[in]   initialMembership     initial membership assignments of nodes (NULL for default of one community per node)
- *  @param[in]   edgeWeights           weights of edges (NULL for default of 1.0)
- *  @param[in]   nodeSizes             node sizes (NULL for default of 1)
+ *  @param[in]   initialMembership     vector of initial membership assignments of nodes (NULL for default of one community per node)
+ *  @param[in]   edgeWeights           vector of weights of edges (NULL for default of 1.0)
+ *  @param[in]   nodeSizes             vector of node sizes (NULL for default of 1)
  *  @param[in]   seed                  random number generator seed (0=random seed)
  *  @param[in]   resolutionParameter   resolution parameter
  *  @param[in]   numIter               number of iterations
- *  @param[out]  pmembership           node membership assignments
+ *  @param[out]  pmembership           vector of node membership assignments
+ *  @param[out]  pweightInCommunity    vector of edge weights within community
+ *  @param[out]  pweightFromCommunity  vector of edge weights from community
+ *  @param[out]  pweightToCommunity    vector of edge weights to community
+ *  @param[out]  pweightTotal          total edge weights
  *  @param[out]  pquality              partition quality
+ *  @param[out]  pmodularity           partition modularity
  *  @param[out]  psignificance         partition significance
  *  @param[out]  pstatus               function status (0=success; -1=failure)
  *
@@ -270,17 +275,6 @@ int leidenFindPartition( igraph_t *pigraph,
 }
 
 
-static const char *partitionTypeList[] =
-{
-  "CPMVertexPartition",
-  "ModularityVertexPartition",
-  "RBConfigurationVertexPartition",
-  "RBERVertexPartition",
-  "SignificanceVertexPartition",
-  "SurpriseVertexPartition"
-};
-
-
 int xdumpParameters( igraph_t *pigraph,
                       std::string const partitionType,
                       std::vector < size_t > const *pinitialMembership,
@@ -332,6 +326,23 @@ int xdumpParameters( igraph_t *pigraph,
 }
 
 
+typedef struct
+{
+  char *name;
+  int   flagResolutionParameter;
+} VertexPartitionTypes;
+
+static const VertexPartitionTypes vertexPartitionTypes[]=
+{
+    { "CPMVertexPartition",             1 },
+    { "ModularityVertexPartition",      0 },
+    { "RBConfigurationVertexPartition", 1 },
+    { "RBERVertexPartition",            1 },
+    { "SignificanceVertexPartition",    0 },
+    { "SurpriseVertexPartition",        0 }
+};
+
+
 /*
  * Check input parameter reasonableness.
  */
@@ -344,18 +355,20 @@ int xcheckParameters( std::string const partitionType,
 {
   int numPartitionType;
   int i;
-  int flag;
+  int flagValidVertexPartition;
+  int flagResolutionParameter;
 
-  numPartitionType = sizeof( partitionTypeList ) / sizeof(char*);
-  flag = 0;
+  numPartitionType = sizeof( vertexPartitionTypes ) / sizeof( VertexPartitionTypes );
+  flagValidVertexPartition = 0;
   for( i = 0; i < numPartitionType; ++i )
   {
-    if( partitionType.compare( partitionTypeList[i] ) == 0 )
+    if( partitionType.compare( vertexPartitionTypes[i].name ) == 0 )
     {
-      flag = 1;
+      flagValidVertexPartition = 1;
+      flagResolutionParameter = vertexPartitionTypes[i].flagResolutionParameter;
     }
   }
-  if( flag == 0 )
+  if( flagValidVertexPartition == 0 )
   {
     std::cout << "Error: leidenbase: invalid partitionType\n";
     *pstatus = -1;
@@ -383,7 +396,7 @@ int xcheckParameters( std::string const partitionType,
     return ( 0 );
   }
 
-  if( resolutionParameter <= 0.0 )
+  if( flagResolutionParameter && resolutionParameter <= 0.0 )
   {
     std::cout << "leidenFindPartition: resolution parameter <= 0.0\n";
     *pstatus = -1;

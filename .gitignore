@@ -3,6 +3,7 @@ clean.sh
 .cproject
 DESCRIPTION
 igraph_pbmc_edgelist.txt
+install-sh
 leidenbase_0.1.0.tar.gz
 leidenbase
 mk_repo.sh
@@ -20,6 +21,7 @@ R/.Rhistory
 src/.Rhistory
 src/leidenbase.so
 src/*.o
+src/arpack/*.o
 src/cigraph
 src/cigraph/autom4te.cache
 src/cigraph/configure

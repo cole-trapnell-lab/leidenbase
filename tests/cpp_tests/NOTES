@@ -1,0 +1,32 @@
+file: leiden.cpp
+description: program to test leidenFindPartition
+             function for memory problems using
+             an instrumentation program such as
+             valgrind.
+
+file: Makefile
+description: used to build leiden executable
+
+file: igraph_edgelist.txt
+description: list of graph edges for use when
+             running the leiden executable.
+
+notes:
+  o  set up test directory
+       o  make a test directory
+       o  copy igraph_edgelist.txt.gz,
+          leiden.cpp, and Makefile from
+          this directory to the test
+          directory
+       o  gunzip igraph_edgelist.txt.gz
+       o  copy leidenFindPartition.cpp
+          to the test directory
+       o  copy the leidenalg *.cpp and
+          *.h files to the test directory
+  o  build leiden executable
+       o  use the make utility to build
+          the executable
+  o  run leiden executable
+       o  type 'leiden'
+  o  test leiden using valgrind
+       o  type 'valgrind --leak-check=full leiden'
