@@ -18,7 +18,7 @@ This distribution requires software development tools including C, C++, and FORT
 Use the devtools::install_github() command
 
 ```
-devtools::install_github('https://github.com/cole-trapnell-lab/leidenbase.git')
+devtools::install_github('cole-trapnell-lab/leidenbase')
 ```
 
 ### Leidenbase functions
