@@ -11,14 +11,14 @@ An R to C interface that runs the Leiden community detection algorithm to find a
 
 ### Prerequisites
 
-This distribution requires software development tools including C, C++, and FORTRAN compilers. These compilers are provided often with your operating system or as packages. The R Project distributes C, C++, and FORTRAN [development tools](https://cran.r-project.org/bin/macosx/tools/) for MacOS.
+This distribution requires software development tools including C, C++, and FORTRAN compilers. These compilers are provided often with your operating system or as packages. The R Project distributes C, C++, and FORTRAN development tools for [MacOS](https://cran.r-project.org/bin/macosx/tools/) and for [Windows](https://cran.r-project.org/bin/windows/Rtools/).
 
 ### Installing
   
 Use the devtools::install_github() command
 
 ```
-devtools::install_github('https://github.com/cole-trapnell-lab/leidenbase.git')
+devtools::install_github('cole-trapnell-lab/leidenbase')
 ```
 
 ### Leidenbase functions
