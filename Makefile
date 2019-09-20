@@ -188,7 +188,12 @@ configure.ac: templates/configure.ac.leidenbase.tpl
 src/cigraph/configure.ac: templates/configure.ac.igraph.tpl
 	sed 's/@VERSION@/'$(VERSION_IGRAPH)'/g' $< >$@
 
-src/Makevars.in src/Makevars.win: templates/Makevars.in.tpl templates/Makevars.win.tpl object_files
+src/Makevars.in: templates/Makevars.in.tpl object_files
+	sed 's/@VERSION_IGRAPH@/'$(VERSION_IGRAPH)'/g' $< >$@
+	printf "%s" "OBJECTS=" >> $@
+	cat object_files >> $@
+
+src/Makevars.win: templates/Makevars.win.tpl object_files
 	sed 's/@VERSION_IGRAPH@/'$(VERSION_IGRAPH)'/g' $< >$@
 	printf "%s" "OBJECTS=" >> $@
 	cat object_files >> $@
@@ -203,6 +208,7 @@ leidenbase_$(VERSION_LEIDENBASE).tar.gz: $(CGEN) $(CSRC2) $(CINC2) $(PARSER3) $(
 	rm -f src/Makevars
 	rm -rf leidenbase
 	touch src/cigraph/src/config.h
+	chmod 700 configure
 	Rscript -e 'devtools::build(path = ".")'
 
 #############
