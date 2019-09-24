@@ -28,7 +28,7 @@ PKG_CXXFLAGS= -std=c++11 \
         -Icigraph/src/prpack \
         -Ileidenalg/include \
         -DPRPACK_IGRAPH_SUPPORT
-PKG_LIBS= -liconv -lz -lws2_32 -lgfortran $(BLAS_LIBS) $(LAPACK_LIBS)
+PKG_LIBS= -liconv -lz -lws2_32 -lgfortran -lquadmath $(BLAS_LIBS) $(LAPACK_LIBS)
 
 all: $(SHLIB)
 
