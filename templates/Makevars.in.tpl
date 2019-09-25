@@ -6,6 +6,7 @@
 # distributions and for making the source code publicly
 # and freely available.
 #
+CXX_STD=CXX11
 PKG_CFLAGS=-I. \
         -Icigraph/src  \
         -Icigraph/include \

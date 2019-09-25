@@ -6,6 +6,7 @@
 # distributions and for making the source code publicly
 # and freely available.
 #
+CXX_STD=CXX11
 PKG_CPPFLAGS=-I. \
         -Icigraph/src  \
         -Icigraph/include \
@@ -20,8 +21,7 @@ PKG_CPPFLAGS=-I. \
         -DPACKAGE_VERSION=\"1.1.2.9000\" -DINTERNAL_ARPACK \
         -DIGRAPH_THREAD_LOCAL= \
         -DHAVE_GFORTRAN
-PKG_CXXFLAGS= -std=c++11 \
-        -DIGRAPH_THREAD_LOCAL= -DNDEBUG \
+PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL= -DNDEBUG \
         -I. \
         -Icigraph/src \
         -Icigraph/include \
