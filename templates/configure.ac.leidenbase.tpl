@@ -26,9 +26,8 @@ CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
 FCFLAGS=`"${R_HOME}/bin/R" CMD config FCFLAGS`
 FLIBS=`"${R_HOME}/bin/R" CMD config FLIBS`
 
-AC_LANG(C++)
-AC_LANG(C)
 AC_PROG_CC
+AC_LANG(C)
 
 AC_PROG_CXX
 AC_LANG_PUSH([C++])
