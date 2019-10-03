@@ -1,0 +1,15 @@
+.Rhistory
+.cproject
+.project
+.settings/
+autom4te.cache/
+cigraph/
+config.log
+config.status
+object_files
+src/Makevars
+src/*.o
+src/arpack/*.o
+src/leidenalg/src/*.o
+src/leidenbase.so
+version_number
