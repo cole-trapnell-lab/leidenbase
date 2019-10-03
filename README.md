@@ -60,6 +60,10 @@ is
                              double *psignificance,
                              int *pstatus )`
 
+## Issues with leidenbase
+
+For problems with leidenbase, please consider submitting an issue report to the [leidenbase issue page](https://github.com/cole-trapnell-lab/leidenbase/issues) on github.com. We ask that you include some details that may help us with identifying the source of the problem. For problems with installing leidenbase, please see [reporting install issues](doc/issue_report_install.md)  and for problems with running leidenbase, please see [reporting run issues](doc/issue_report_run.md).
+
 ## Licenses
 
 Leidenbase and leidenalg are distributed under the GPL-3+ license. The C igraph library is distributed under the GPL-2+ license. Licenses for software libraries redistributed with the C igraph library are in LICENSE files in the corresponding sub-directories.
@@ -67,5 +71,6 @@ Leidenbase and leidenalg are distributed under the GPL-3+ license. The C igraph 
 ## Acknowledgements
 
 We express our gratitude to the authors of the igraph and Leidenalg packages for designing, writing, and making them freely available as source code.
+
 
 
