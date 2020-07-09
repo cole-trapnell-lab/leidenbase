@@ -18,7 +18,7 @@ all: leidenbase
 
 top_srcdir=cigraph
 VERSION_LEIDENBASE=0.1.0
-VERSION_IGRAPH=1.1.2.9000
+VERSION_IGRAPH=0.8.2
 
 # We put the version number in a file, so that we can detect
 # if it changes

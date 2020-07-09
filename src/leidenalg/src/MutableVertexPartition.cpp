@@ -1,22 +1,3 @@
-/*
- *  Licence
- *  -------
- *
- *  Copyright (C) 2016 V.A. Traag
- *
- *  This file is free software: you can redistribute it and/or modify it under
- *  the terms of the GNU General Public License as published by the Free Software
- *  Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- *  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with
- *  this program. If not, see http://www.gnu.org/licenses/.
- */
-
 #include "MutableVertexPartition.h"
 
 #ifdef DEBUG
@@ -164,9 +145,11 @@ void MutableVertexPartition::init_admin()
   this->_cnodes.clear();
   this->_cnodes.resize(this->_n_communities);
 
-  this->_current_node_cache_community_from = n + 1; this->_cached_weight_from_community.resize(n, 0);
-  this->_current_node_cache_community_to = n + 1;   this->_cached_weight_to_community.resize(n, 0);
-  this->_current_node_cache_community_all = n + 1;  this->_cached_weight_all_community.resize(n, 0);
+  this->_current_node_cache_community_from = n + 1; this->_cached_weight_from_community.resize(this->_n_communities, 0);
+  this->_current_node_cache_community_to = n + 1;   this->_cached_weight_to_community.resize(this->_n_communities, 0);
+  this->_current_node_cache_community_all = n + 1;  this->_cached_weight_all_community.resize(this->_n_communities, 0);
+
+  this->_empty_communities.clear();
 
   this->_total_weight_in_all_comms = 0.0;
   for (size_t v = 0; v < n; v++)
@@ -264,7 +247,7 @@ void MutableVertexPartition::renumber_communities()
 {
   vector<MutableVertexPartition*> partitions(1);
   partitions[0] = this;
-  this->renumber_communities(MutableVertexPartition::renumber_communities(partitions));
+  this->set_membership(MutableVertexPartition::renumber_communities(partitions));
 }
 
 vector<size_t> MutableVertexPartition::renumber_communities(vector<MutableVertexPartition*> partitions)
@@ -322,11 +305,75 @@ vector<size_t> MutableVertexPartition::renumber_communities(vector<MutableVertex
 
 
 /****************************************************************************
- Renumber the communities using the provided membership vector. Notice that this
- doesn't ensure any property of the community numbers.
+ Renumber the communities using the original fixed membership vector. Notice
+ that this doesn't ensure any property of the community numbers.
 *****************************************************************************/
+vector<size_t> MutableVertexPartition::renumber_communities(map<size_t, size_t> const& membership)
+{
+
+  #ifdef DEBUG
+    cerr << "void MutableVertexPartition::renumber_communities(" << &membership << ")" << endl;
+  #endif
+
+  // Skip whole thing if there are no fixed nodes for efficiency
+  if (membership.size() == 0)
+    return _membership;
+
+  // The number of communities does not depend on whether some are fixed
+  size_t nb_comms = n_communities();
+
+  // Fill the community map with the original communities
+  vector<size_t> new_comm_id(nb_comms);
+  vector<bool> comm_assigned_bool(nb_comms);
+  priority_queue<size_t, vector<size_t>, std::greater<size_t> > new_comm_assigned;
+  for (map<size_t, size_t>::const_iterator m = membership.begin();
+       m != membership.end();
+       m++) {
+    #ifdef DEBUG
+      cerr << "Setting map for fixed community " << m->second << endl;
+    #endif
+    if (!comm_assigned_bool[_membership[m->first]])
+    {
+      new_comm_id[_membership[m->first]] = m->second;
+      comm_assigned_bool[_membership[m->first]] = true;
+      new_comm_assigned.push(m->second);
+    }
+  }
+
+  // Index of the most recently added community
+  size_t cc = 0;
+  for (size_t c = 0; c != nb_comms; c++) {
+    if(!comm_assigned_bool[c]) {
+      // Look for the first free integer
+      while (!new_comm_assigned.empty() && cc == new_comm_assigned.top())
+      {
+          new_comm_assigned.pop();
+          cc++;
+      }
+      // Assign the community
+      #ifdef DEBUG
+        cerr << "Setting map for free community " << cc << endl;
+      #endif
+      new_comm_id[c] = cc++;
+    }
+  }
+
+  // Set the new communities
+  vector<size_t> new_membership(this->graph->vcount());
+  for (size_t i = 0; i < this->graph->vcount(); i++)
+  {
+    #ifdef DEBUG
+      cerr << "Setting membership of node " << i << " from" << _membership[i] << " to " << new_comm_id[_membership[i]] << endl;
+    #endif
+    new_membership[i] = new_comm_id[_membership[i]];
+  }
+
+  return new_membership;
+}
+
 void MutableVertexPartition::renumber_communities(vector<size_t> const& membership)
 {
+  cerr << "This function is deprecated, use MutableVertexPartition::set_membership(vector<size_t> const& membership)" << endl;
   this->set_membership(membership);
 }
 
@@ -347,13 +394,7 @@ void MutableVertexPartition::set_membership(vector<size_t> const& membership)
   #ifdef DEBUG
     cerr << "void MutableVertexPartition::set_membership(" << &membership << ")" << endl;
   #endif
-  for (size_t i = 0; i < this->graph->vcount(); i++)
-  {
-    this->_membership[i] = membership[i];
-    #ifdef DEBUG
-      cerr << "Setting membership[" << i << "] = " << membership[i] << "." << endl;
-    #endif
-  }
+  this->_membership = membership;
 
   this->clean_mem();
   this->init_admin();
@@ -376,6 +417,10 @@ size_t MutableVertexPartition::add_empty_community()
   this->_total_weight_in_comm.resize(this->_n_communities);   this->_total_weight_in_comm[new_comm] = 0;
   this->_total_weight_from_comm.resize(this->_n_communities); this->_total_weight_from_comm[new_comm] = 0;
   this->_total_weight_to_comm.resize(this->_n_communities);   this->_total_weight_to_comm[new_comm] = 0;
+
+  this->_cached_weight_all_community.resize(this->_n_communities);
+  this->_cached_weight_from_community.resize(this->_n_communities);
+  this->_cached_weight_to_community.resize(this->_n_communities);
 
   this->_empty_communities.push_back(new_comm);
   #ifdef DEBUG
@@ -701,26 +746,26 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
     cerr << "double MutableVertexPartition::cache_neigh_communities(" << v << ", " << mode << ")." << endl;
   #endif
   vector<double>* _cached_weight_tofrom_community = NULL;
-  vector<size_t>* _cached_neighs = NULL;
+  vector<size_t>* _cached_neighs_comms = NULL;
   switch (mode)
   {
     case IGRAPH_IN:
       _cached_weight_tofrom_community = &(this->_cached_weight_from_community);
-      _cached_neighs = &(this->_cached_neigh_comms_from);
+      _cached_neighs_comms = &(this->_cached_neigh_comms_from);
       break;
     case IGRAPH_OUT:
       _cached_weight_tofrom_community = &(this->_cached_weight_to_community);
-      _cached_neighs = &(this->_cached_neigh_comms_to);
+      _cached_neighs_comms = &(this->_cached_neigh_comms_to);
       break;
     case IGRAPH_ALL:
       _cached_weight_tofrom_community = &(this->_cached_weight_all_community);
-      _cached_neighs = &(this->_cached_neigh_comms_all);
+      _cached_neighs_comms = &(this->_cached_neigh_comms_all);
       break;
   }
 
   // Reset cached communities
-  for (vector<size_t>::iterator it = _cached_neighs->begin();
-       it != _cached_neighs->end();
+  for (vector<size_t>::iterator it = _cached_neighs_comms->begin();
+       it != _cached_neighs_comms->end();
        it++)
        (*_cached_weight_tofrom_community)[*it] = 0;
 
@@ -731,8 +776,8 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
   size_t degree = neighbours.size();
 
   // Reset cached neighbours
-  _cached_neighs->clear();
-  _cached_neighs->reserve(degree);
+  _cached_neighs_comms->clear();
+  _cached_neighs_comms->reserve(degree);
   for (size_t idx = 0; idx < degree; idx++)
   {
     size_t u = neighbours[idx];
@@ -740,7 +785,7 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
 
     // If it is an edge to the requested community
     #ifdef DEBUG
-      size_t u_comm = this->_membership[u];
+      size_t v_comm = this->_membership[v];
     #endif
     size_t comm = this->_membership[u];
     // Get the weight of the edge
@@ -749,7 +794,7 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
     if (u == v && !this->graph->is_directed())
         w /= 2.0;
     #ifdef DEBUG
-      cerr << "\t" << "Edge (" << v << "-" << u << "), Comm (" << comm << "-" << u_comm << ") weight: " << w << "." << endl;
+      cerr << "\t" << "Edge (" << v << "-" << u << "), Comm (" << v_comm << "-" << comm << ") weight: " << w << "." << endl;
     #endif
     (*_cached_weight_tofrom_community)[comm] += w;
     // REMARK: Notice in the rare case of negative weights, being exactly equal
@@ -757,7 +802,7 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
     // times to the _cached_neighs. However, I don' believe this causes any further issue,
     // so that's why I leave this here as is.
     if ((*_cached_weight_tofrom_community)[comm] != 0)
-      _cached_neighs->push_back(comm);
+      _cached_neighs_comms->push_back(comm);
   }
   #ifdef DEBUG
     cerr << "exit Graph::cache_neigh_communities(" << v << ", " << mode << ")." << endl;

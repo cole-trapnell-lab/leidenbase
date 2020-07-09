@@ -1,22 +1,3 @@
-/*
- *  Licence
- *  -------
- *
- *  Copyright (C) 2016 V.A. Traag
- *
- *  This file is free software: you can redistribute it and/or modify it under
- *  the terms of the GNU General Public License as published by the Free Software
- *  Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- *  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with
- *  this program. If not, see http://www.gnu.org/licenses/.
- */
-
 #ifndef MUTABLEVERTEXPARTITION_H
 #define MUTABLEVERTEXPARTITION_H
 
@@ -24,6 +5,7 @@
 #include "GraphHelper.h"
 #include <map>
 #include <set>
+#include <queue>
 #include <utility>
 #include <algorithm>
 
@@ -34,6 +16,7 @@ using std::make_pair;
 using std::pair;
 using std::sort;
 using std::reverse;
+using std::priority_queue;
 
 /****************************************************************************
 Contains a partition of graph.
@@ -94,6 +77,7 @@ class MutableVertexPartition
     inline Graph* get_graph() { return this->graph; };
 
     void renumber_communities();
+    vector<size_t> renumber_communities(map<size_t, size_t> const& original_fixed_membership);
     void renumber_communities(vector<size_t> const& new_membership);
     void set_membership(vector<size_t> const& new_membership);
     vector<size_t> static renumber_communities(vector<MutableVertexPartition*> partitions);
@@ -106,10 +90,11 @@ class MutableVertexPartition
 
     void from_partition(MutableVertexPartition* partition);
 
-    inline double total_weight_in_comm(size_t comm) { return this->_total_weight_in_comm[comm]; };
-    inline double total_weight_from_comm(size_t comm) { return this->_total_weight_from_comm[comm]; };
-    inline double total_weight_to_comm(size_t comm) { return this->_total_weight_to_comm[comm]; };
-    inline double total_weight_in_all_comms() { return this->_total_weight_in_all_comms; };
+    inline double total_weight_in_comm(size_t comm)   { return comm < _n_communities ? this->_total_weight_in_comm[comm] : 0.0; };
+    inline double total_weight_from_comm(size_t comm) { return comm < _n_communities ? this->_total_weight_from_comm[comm] : 0.0; };
+    inline double total_weight_to_comm(size_t comm)   { return comm < _n_communities ? this->_total_weight_to_comm[comm] : 0.0; };
+    
+    inline double total_weight_in_all_comms()         { return this->_total_weight_in_all_comms; };
     inline size_t total_possible_edges_in_all_comms() { return this->_total_possible_edges_in_all_comms; };
 
     double weight_to_comm(size_t v, size_t comm);
