@@ -4,12 +4,19 @@
 \alias{leiden_find_partition}
 \title{Leiden find partition community detection function}
 \usage{
-leiden_find_partition(igraph, partition_type = c("CPMVertexPartition",
-  "ModularityVertexPartition", "RBConfigurationVertexPartition",
-  "RBERVertexPartition", "SignificanceVertexPartition",
-  "SurpriseVertexPartition"), initial_membership = NULL,
-  edge_weights = NULL, node_sizes = NULL, seed = NULL,
-  resolution_parameter = 0.1, num_iter = 2, verbose = FALSE)
+leiden_find_partition(
+  igraph,
+  partition_type = c("CPMVertexPartition", "ModularityVertexPartition",
+    "RBConfigurationVertexPartition", "RBERVertexPartition",
+    "SignificanceVertexPartition", "SurpriseVertexPartition"),
+  initial_membership = NULL,
+  edge_weights = NULL,
+  node_sizes = NULL,
+  seed = NULL,
+  resolution_parameter = 0.1,
+  num_iter = 2,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{igraph}{R igraph graph.}
@@ -32,7 +39,9 @@ either NULL for random seed values or greater than 0 for a fixed seed
 value. Default is NULL.}
 
 \item{resolution_parameter}{Numeric resolution parameter. The value
-must be greater than 0.0. Default is 0.1.}
+must be greater than 0.0. Default is 0.1. The resolution_parameter is
+ignored for the partition_types ModularityVertexPartition,
+SignificanceVertexPartition, and SurpriseVertexPartition.}
 
 \item{num_iter}{Numeric number of iterations. Default is 2.}
 

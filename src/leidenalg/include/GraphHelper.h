@@ -1,22 +1,3 @@
-/*
- *  Licence
- *  -------
- *
- *  Copyright (C) 2016 V.A. Traag
- *
- *  This file is free software: you can redistribute it and/or modify it under
- *  the terms of the GNU General Public License as published by the Free Software
- *  Foundation, either version 3 of the License, or (at your option) any later
- *  version.
- *
- *  This program is distributed in the hope that it will be useful, but WITHOUT ANY
- *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
- *  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License along with
- *  this program. If not, see http://www.gnu.org/licenses/.
- */
-
 #ifndef GRAPHHELPER_INCLUDED
 #define GRAPHHELPER_INCLUDED
 
@@ -114,10 +95,6 @@ class Graph
     size_t possible_edges(size_t n);
 
     Graph* collapse_graph(MutableVertexPartition* partition);
-
-    double weight_tofrom_community(size_t v, size_t comm, vector<size_t> const& membership, igraph_neimode_t mode);
-    void cache_neigh_communities(size_t v, vector<size_t> const& membership, igraph_neimode_t mode);
-    vector<size_t> const& get_neigh_comms(size_t v, vector<size_t> const& membership, igraph_neimode_t mode);
 
     vector<size_t> const& get_neighbour_edges(size_t v, igraph_neimode_t mode);
     vector<size_t> const& get_neighbours(size_t v, igraph_neimode_t mode);
@@ -227,7 +204,6 @@ class Graph
     double _density;
 
     void init_admin();
-    void init_weighted_neigh_selection();
     void set_defaults();
     void set_default_edge_weight();
     void set_default_node_size();

@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.3.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,6 +30,9 @@
 
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
+
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
 
 #ifndef YY_IGRAPH_LGL_YY_Y_TAB_H_INCLUDED
 # define YY_IGRAPH_LGL_YY_Y_TAB_H_INCLUDED
@@ -57,12 +61,12 @@ extern int igraph_lgl_yydebug;
 
 union YYSTYPE
 {
-#line 81 "src/cigraph/src/foreign-lgl-parser.y" /* yacc.c:1909  */
+#line 81 "src/cigraph/src/foreign-lgl-parser.y" /* yacc.c:1921  */
 
   long int edgenum;
   double weightnum;
 
-#line 66 "y.tab.h" /* yacc.c:1909  */
+#line 70 "y.tab.h" /* yacc.c:1921  */
 };
 
 typedef union YYSTYPE YYSTYPE;

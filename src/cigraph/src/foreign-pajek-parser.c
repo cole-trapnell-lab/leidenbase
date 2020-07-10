@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.3.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,11 +41,14 @@
    define necessary library symbols; they are noted "INFRINGES ON
    USER NAME SPACE" below.  */
 
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
 /* Identify Bison output.  */
 #define YYBISON 1
 
 /* Bison version.  */
-#define YYBISON_VERSION "3.0.4"
+#define YYBISON_VERSION "3.3.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -67,8 +71,8 @@
 #define yynerrs         igraph_pajek_yynerrs
 
 
-/* Copy the first part of user declarations.  */
-#line 23 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:339  */
+/* First part of user prologue.  */
+#line 23 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:337  */
 
 
 /* 
@@ -154,13 +158,16 @@ extern long int igraph_i_pajek_actedge;
 #define scanner context->scanner
 
 
-#line 158 "y.tab.c" /* yacc.c:339  */
-
+#line 162 "y.tab.c" /* yacc.c:337  */
 # ifndef YY_NULLPTR
-#  if defined __cplusplus && 201103L <= __cplusplus
-#   define YY_NULLPTR nullptr
+#  if defined __cplusplus
+#   if 201103L <= __cplusplus
+#    define YY_NULLPTR nullptr
+#   else
+#    define YY_NULLPTR 0
+#   endif
 #  else
-#   define YY_NULLPTR 0
+#   define YY_NULLPTR ((void*)0)
 #  endif
 # endif
 
@@ -246,7 +253,7 @@ extern int igraph_pajek_yydebug;
 
 union YYSTYPE
 {
-#line 118 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:355  */
+#line 118 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:352  */
 
   long int intnum;
   double   realnum;  
@@ -255,7 +262,7 @@ union YYSTYPE
     int len;
   } string;  
 
-#line 259 "y.tab.c" /* yacc.c:355  */
+#line 266 "y.tab.c" /* yacc.c:352  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -283,9 +290,7 @@ int igraph_pajek_yyparse (igraph_i_pajek_parsedata_t* context);
 
 #endif /* !YY_IGRAPH_PAJEK_YY_Y_TAB_H_INCLUDED  */
 
-/* Copy the second part of user declarations.  */
 
-#line 289 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -306,13 +311,13 @@ typedef signed char yytype_int8;
 #ifdef YYTYPE_UINT16
 typedef YYTYPE_UINT16 yytype_uint16;
 #else
-typedef unsigned short int yytype_uint16;
+typedef unsigned short yytype_uint16;
 #endif
 
 #ifdef YYTYPE_INT16
 typedef YYTYPE_INT16 yytype_int16;
 #else
-typedef short int yytype_int16;
+typedef short yytype_int16;
 #endif
 
 #ifndef YYSIZE_T
@@ -324,7 +329,7 @@ typedef short int yytype_int16;
 #  include <stddef.h> /* INFRINGES ON USER NAME SPACE */
 #  define YYSIZE_T size_t
 # else
-#  define YYSIZE_T unsigned int
+#  define YYSIZE_T unsigned
 # endif
 #endif
 
@@ -360,15 +365,6 @@ typedef short int yytype_int16;
 # define YY_ATTRIBUTE_UNUSED YY_ATTRIBUTE ((__unused__))
 #endif
 
-#if !defined _Noreturn \
-     && (!defined __STDC_VERSION__ || __STDC_VERSION__ < 201112)
-# if defined _MSC_VER && 1200 <= _MSC_VER
-#  define _Noreturn __declspec (noreturn)
-# else
-#  define _Noreturn YY_ATTRIBUTE ((__noreturn__))
-# endif
-#endif
-
 /* Suppress unused-variable warnings by "using" E.  */
 #if ! defined lint || defined __GNUC__
 # define YYUSE(E) ((void) (E))
@@ -376,7 +372,7 @@ typedef short int yytype_int16;
 # define YYUSE(E) /* empty */
 #endif
 
-#if defined __GNUC__ && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
+#if defined __GNUC__ && ! defined __ICC && 407 <= __GNUC__ * 100 + __GNUC_MINOR__
 /* Suppress an incorrect diagnostic about yylval being uninitialized.  */
 # define YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN \
     _Pragma ("GCC diagnostic push") \
@@ -540,16 +536,16 @@ union yyalloc
 /* YYNSTATES -- Number of states.  */
 #define YYNSTATES  207
 
-/* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
-   by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   306
 
+/* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
+   as returned by yylex, with out-of-bounds checking.  */
 #define YYTRANSLATE(YYX)                                                \
-  ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
+  ((unsigned) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
 
 /* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
-   as returned by yylex, without out-of-bounds checking.  */
+   as returned by yylex.  */
 static const yytype_uint8 yytranslate[] =
 {
        0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -877,22 +873,22 @@ static const yytype_uint8 yyr2[] =
 
 #define YYRECOVERING()  (!!yyerrstatus)
 
-#define YYBACKUP(Token, Value)                                  \
-do                                                              \
-  if (yychar == YYEMPTY)                                        \
-    {                                                           \
-      yychar = (Token);                                         \
-      yylval = (Value);                                         \
-      YYPOPSTACK (yylen);                                       \
-      yystate = *yyssp;                                         \
-      goto yybackup;                                            \
-    }                                                           \
-  else                                                          \
-    {                                                           \
-      yyerror (&yylloc, context, YY_("syntax error: cannot back up")); \
-      YYERROR;                                                  \
-    }                                                           \
-while (0)
+#define YYBACKUP(Token, Value)                                    \
+  do                                                              \
+    if (yychar == YYEMPTY)                                        \
+      {                                                           \
+        yychar = (Token);                                         \
+        yylval = (Value);                                         \
+        YYPOPSTACK (yylen);                                       \
+        yystate = *yyssp;                                         \
+        goto yybackup;                                            \
+      }                                                           \
+    else                                                          \
+      {                                                           \
+        yyerror (&yylloc, context, YY_("syntax error: cannot back up")); \
+        YYERROR;                                                  \
+      }                                                           \
+  while (0)
 
 /* Error token number */
 #define YYTERROR        1
@@ -951,10 +947,10 @@ do {                                            \
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
 YY_ATTRIBUTE_UNUSED
-static unsigned
+static int
 yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 {
-  unsigned res = 0;
+  int res = 0;
   int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
   if (0 <= yylocp->first_line)
     {
@@ -997,41 +993,41 @@ do {                                                                      \
 } while (0)
 
 
-/*----------------------------------------.
-| Print this symbol's value on YYOUTPUT.  |
-`----------------------------------------*/
+/*-----------------------------------.
+| Print this symbol's value on YYO.  |
+`-----------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, igraph_i_pajek_parsedata_t* context)
+yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, igraph_i_pajek_parsedata_t* context)
 {
-  FILE *yyo = yyoutput;
-  YYUSE (yyo);
+  FILE *yyoutput = yyo;
+  YYUSE (yyoutput);
   YYUSE (yylocationp);
   YYUSE (context);
   if (!yyvaluep)
     return;
 # ifdef YYPRINT
   if (yytype < YYNTOKENS)
-    YYPRINT (yyoutput, yytoknum[yytype], *yyvaluep);
+    YYPRINT (yyo, yytoknum[yytype], *yyvaluep);
 # endif
   YYUSE (yytype);
 }
 
 
-/*--------------------------------.
-| Print this symbol on YYOUTPUT.  |
-`--------------------------------*/
+/*---------------------------.
+| Print this symbol on YYO.  |
+`---------------------------*/
 
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, igraph_i_pajek_parsedata_t* context)
+yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, igraph_i_pajek_parsedata_t* context)
 {
-  YYFPRINTF (yyoutput, "%s %s (",
+  YYFPRINTF (yyo, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
-  YY_LOCATION_PRINT (yyoutput, *yylocationp);
-  YYFPRINTF (yyoutput, ": ");
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, context);
-  YYFPRINTF (yyoutput, ")");
+  YY_LOCATION_PRINT (yyo, *yylocationp);
+  YYFPRINTF (yyo, ": ");
+  yy_symbol_value_print (yyo, yytype, yyvaluep, yylocationp, context);
+  YYFPRINTF (yyo, ")");
 }
 
 /*------------------------------------------------------------------.
@@ -1065,7 +1061,7 @@ do {                                                            \
 static void
 yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, igraph_i_pajek_parsedata_t* context)
 {
-  unsigned long int yylno = yyrline[yyrule];
+  unsigned long yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
   YYFPRINTF (stderr, "Reducing stack by rule %d (line %lu):\n",
@@ -1076,7 +1072,7 @@ yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        yystos[yyssp[yyi + 1 - yynrhs]],
-                       &(yyvsp[(yyi + 1) - (yynrhs)])
+                       &yyvsp[(yyi + 1) - (yynrhs)]
                        , &(yylsp[(yyi + 1) - (yynrhs)])                       , context);
       YYFPRINTF (stderr, "\n");
     }
@@ -1180,7 +1176,10 @@ yytnamerr (char *yyres, const char *yystr)
           case '\\':
             if (*++yyp != '\\')
               goto do_not_strip_quotes;
-            /* Fall through.  */
+            else
+              goto append;
+
+          append:
           default:
             if (yyres)
               yyres[yyn] = *yyp;
@@ -1198,7 +1197,7 @@ yytnamerr (char *yyres, const char *yystr)
   if (! yyres)
     return yystrlen (yystr);
 
-  return yystpcpy (yyres, yystr) - yyres;
+  return (YYSIZE_T) (yystpcpy (yyres, yystr) - yyres);
 }
 # endif
 
@@ -1276,10 +1275,10 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
                 yyarg[yycount++] = yytname[yyx];
                 {
                   YYSIZE_T yysize1 = yysize + yytnamerr (YY_NULLPTR, yytname[yyx]);
-                  if (! (yysize <= yysize1
-                         && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+                  if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+                    yysize = yysize1;
+                  else
                     return 2;
-                  yysize = yysize1;
                 }
               }
         }
@@ -1291,6 +1290,7 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
       case N:                               \
         yyformat = S;                       \
       break
+    default: /* Avoid compiler warnings. */
       YYCASE_(0, YY_("syntax error"));
       YYCASE_(1, YY_("syntax error, unexpected %s"));
       YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
@@ -1302,9 +1302,10 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 
   {
     YYSIZE_T yysize1 = yysize + yystrlen (yyformat);
-    if (! (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM))
+    if (yysize <= yysize1 && yysize1 <= YYSTACK_ALLOC_MAXIMUM)
+      yysize = yysize1;
+    else
       return 2;
-    yysize = yysize1;
   }
 
   if (*yymsg_alloc < yysize)
@@ -1456,23 +1457,31 @@ YYLTYPE yylloc = yyloc_default;
   yylsp[0] = yylloc;
   goto yysetstate;
 
+
 /*------------------------------------------------------------.
-| yynewstate -- Push a new state, which is found in yystate.  |
+| yynewstate -- push a new state, which is found in yystate.  |
 `------------------------------------------------------------*/
- yynewstate:
+yynewstate:
   /* In all cases, when you get here, the value and location stacks
      have just been pushed.  So pushing a state here evens the stacks.  */
   yyssp++;
 
- yysetstate:
-  *yyssp = yystate;
+
+/*--------------------------------------------------------------------.
+| yynewstate -- set current state (the top of the stack) to yystate.  |
+`--------------------------------------------------------------------*/
+yysetstate:
+  *yyssp = (yytype_int16) yystate;
 
   if (yyss + yystacksize - 1 <= yyssp)
+#if !defined yyoverflow && !defined YYSTACK_RELOCATE
+    goto yyexhaustedlab;
+#else
     {
       /* Get the current used size of the three stacks, in elements.  */
-      YYSIZE_T yysize = yyssp - yyss + 1;
+      YYSIZE_T yysize = (YYSIZE_T) (yyssp - yyss + 1);
 
-#ifdef yyoverflow
+# if defined yyoverflow
       {
         /* Give user a chance to reallocate the stack.  Use copies of
            these so that the &'s don't force the real ones into
@@ -1490,15 +1499,11 @@ YYLTYPE yylloc = yyloc_default;
                     &yyvs1, yysize * sizeof (*yyvsp),
                     &yyls1, yysize * sizeof (*yylsp),
                     &yystacksize);
-
-        yyls = yyls1;
         yyss = yyss1;
         yyvs = yyvs1;
+        yyls = yyls1;
       }
-#else /* no yyoverflow */
-# ifndef YYSTACK_RELOCATE
-      goto yyexhaustedlab;
-# else
+# else /* defined YYSTACK_RELOCATE */
       /* Extend the stack our own way.  */
       if (YYMAXDEPTH <= yystacksize)
         goto yyexhaustedlab;
@@ -1515,23 +1520,23 @@ YYLTYPE yylloc = yyloc_default;
         YYSTACK_RELOCATE (yyss_alloc, yyss);
         YYSTACK_RELOCATE (yyvs_alloc, yyvs);
         YYSTACK_RELOCATE (yyls_alloc, yyls);
-#  undef YYSTACK_RELOCATE
+# undef YYSTACK_RELOCATE
         if (yyss1 != yyssa)
           YYSTACK_FREE (yyss1);
       }
 # endif
-#endif /* no yyoverflow */
 
       yyssp = yyss + yysize - 1;
       yyvsp = yyvs + yysize - 1;
       yylsp = yyls + yysize - 1;
 
       YYDPRINTF ((stderr, "Stack size increased to %lu\n",
-                  (unsigned long int) yystacksize));
+                  (unsigned long) yystacksize));
 
       if (yyss + yystacksize - 1 <= yyssp)
         YYABORT;
     }
+#endif /* !defined yyoverflow && !defined YYSTACK_RELOCATE */
 
   YYDPRINTF ((stderr, "Entering state %d\n", yystate));
 
@@ -1540,11 +1545,11 @@ YYLTYPE yylloc = yyloc_default;
 
   goto yybackup;
 
+
 /*-----------.
 | yybackup.  |
 `-----------*/
 yybackup:
-
   /* Do appropriate processing given the current state.  Read a
      lookahead token if we need one and don't already have one.  */
 
@@ -1617,7 +1622,7 @@ yydefault:
 
 
 /*-----------------------------.
-| yyreduce -- Do a reduction.  |
+| yyreduce -- do a reduction.  |
 `-----------------------------*/
 yyreduce:
   /* yyn is the number of a rule to reduce with.  */
@@ -1633,625 +1638,626 @@ yyreduce:
      GCC warning that YYVAL may be used uninitialized.  */
   yyval = yyvsp[1-yylen];
 
-  /* Default location.  */
+  /* Default location. */
   YYLLOC_DEFAULT (yyloc, (yylsp - yylen), yylen);
+  yyerror_range[1] = yyloc;
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
         case 2:
-#line 192 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 192 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
   if (context->vcount2 > 0) { igraph_i_pajek_check_bipartite(context); }
  }
-#line 1647 "y.tab.c" /* yacc.c:1646  */
+#line 1653 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 6:
-#line 200 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 200 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   context->vcount=(yyvsp[0].intnum); 
   context->vcount2=0;
             }
-#line 1656 "y.tab.c" /* yacc.c:1646  */
+#line 1662 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 7:
-#line 204 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 204 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   context->vcount=(yyvsp[-1].intnum);
   context->vcount2=(yyvsp[0].intnum);
   igraph_i_pajek_add_bipartite_type(context);
 }
-#line 1666 "y.tab.c" /* yacc.c:1646  */
+#line 1672 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 12:
-#line 214 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 214 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->actvertex=(yyvsp[0].intnum); }
-#line 1672 "y.tab.c" /* yacc.c:1646  */
+#line 1678 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 13:
-#line 214 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 214 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { }
-#line 1678 "y.tab.c" /* yacc.c:1646  */
+#line 1684 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 14:
-#line 217 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 217 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.intnum)=(yyvsp[0].intnum); context->mode=1; }
-#line 1684 "y.tab.c" /* yacc.c:1646  */
+#line 1690 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 15:
-#line 219 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 219 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
   igraph_i_pajek_add_string_vertex_attribute("id", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
   igraph_i_pajek_add_string_vertex_attribute("name", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
 }
-#line 1693 "y.tab.c" /* yacc.c:1646  */
+#line 1699 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 17:
-#line 225 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 225 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_i_pajek_add_numeric_vertex_attribute("x", (yyvsp[-1].realnum), context);
   igraph_i_pajek_add_numeric_vertex_attribute("y", (yyvsp[0].realnum), context);
 	    }
-#line 1702 "y.tab.c" /* yacc.c:1646  */
+#line 1708 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 18:
-#line 229 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 229 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_i_pajek_add_numeric_vertex_attribute("x", (yyvsp[-2].realnum), context);
   igraph_i_pajek_add_numeric_vertex_attribute("y", (yyvsp[-1].realnum), context);
   igraph_i_pajek_add_numeric_vertex_attribute("z", (yyvsp[0].realnum), context);
 	    }
-#line 1712 "y.tab.c" /* yacc.c:1646  */
+#line 1718 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 20:
-#line 235 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 235 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_i_pajek_add_string_vertex_attribute("shape", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
 }
-#line 1720 "y.tab.c" /* yacc.c:1646  */
+#line 1726 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 24:
-#line 243 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 243 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
 	 igraph_i_pajek_add_numeric_vertex_attribute("xfact", (yyvsp[0].realnum), context);
        }
-#line 1728 "y.tab.c" /* yacc.c:1646  */
+#line 1734 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 25:
-#line 246 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 246 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("yfact", (yyvsp[0].realnum), context);
        }
-#line 1736 "y.tab.c" /* yacc.c:1646  */
+#line 1742 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 26:
-#line 249 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 249 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { /* RGB color */
          igraph_i_pajek_add_numeric_vertex_attribute("color-red", (yyvsp[-2].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("color-green", (yyvsp[-1].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("color-blue", (yyvsp[0].realnum), context);
        }
-#line 1746 "y.tab.c" /* yacc.c:1646  */
+#line 1752 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 27:
-#line 254 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 254 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("framecolor-red", (yyvsp[-2].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("framecolor-green", (yyvsp[-1].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("framecolor-blue", (yyvsp[0].realnum), context);
        }
-#line 1756 "y.tab.c" /* yacc.c:1646  */
+#line 1762 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 28:
-#line 259 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 259 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("labelcolor-red", (yyvsp[-2].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("labelcolor-green", (yyvsp[-1].realnum), context);
 	 igraph_i_pajek_add_numeric_vertex_attribute("labelcolor-blue", (yyvsp[0].realnum), context);
        }
-#line 1766 "y.tab.c" /* yacc.c:1646  */
+#line 1772 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 29:
-#line 264 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 264 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("labeldist", (yyvsp[0].realnum), context);
      }
-#line 1774 "y.tab.c" /* yacc.c:1646  */
+#line 1780 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 30:
-#line 267 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 267 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("labeldegree2", (yyvsp[0].realnum), context);
      }
-#line 1782 "y.tab.c" /* yacc.c:1646  */
+#line 1788 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 31:
-#line 270 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 270 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("framewidth", (yyvsp[0].realnum), context);
      }
-#line 1790 "y.tab.c" /* yacc.c:1646  */
+#line 1796 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 32:
-#line 273 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 273 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("fontsize", (yyvsp[0].realnum), context);
      }
-#line 1798 "y.tab.c" /* yacc.c:1646  */
+#line 1804 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 33:
-#line 276 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 276 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {       
          igraph_i_pajek_add_numeric_vertex_attribute("rotation", (yyvsp[0].realnum), context);
      }
-#line 1806 "y.tab.c" /* yacc.c:1646  */
+#line 1812 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 34:
-#line 279 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 279 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("radius", (yyvsp[0].realnum), context);
      }
-#line 1814 "y.tab.c" /* yacc.c:1646  */
+#line 1820 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 35:
-#line 282 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 282 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("diamondratio", (yyvsp[0].realnum), context);
      }
-#line 1822 "y.tab.c" /* yacc.c:1646  */
+#line 1828 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 36:
-#line 285 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 285 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("labeldegree", (yyvsp[0].realnum), context);
      }
-#line 1830 "y.tab.c" /* yacc.c:1646  */
+#line 1836 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 37:
-#line 288 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 288 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          igraph_i_pajek_add_numeric_vertex_attribute("vertexsize", (yyvsp[0].realnum), context);
      }
-#line 1838 "y.tab.c" /* yacc.c:1646  */
+#line 1844 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 38:
-#line 293 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 293 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=3; }
-#line 1844 "y.tab.c" /* yacc.c:1646  */
+#line 1850 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 39:
-#line 293 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 293 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
          context->mode=1;
 	 igraph_i_pajek_add_string_vertex_attribute("font", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
      }
-#line 1853 "y.tab.c" /* yacc.c:1646  */
+#line 1859 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 40:
-#line 297 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 297 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=3; }
-#line 1859 "y.tab.c" /* yacc.c:1646  */
+#line 1865 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 41:
-#line 297 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 297 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          context->mode=1;
 	 igraph_i_pajek_add_string_vertex_attribute("url", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
      }
-#line 1868 "y.tab.c" /* yacc.c:1646  */
+#line 1874 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 42:
-#line 301 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 301 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=3; }
-#line 1874 "y.tab.c" /* yacc.c:1646  */
+#line 1880 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 43:
-#line 301 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 301 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          context->mode=1;
 	 igraph_i_pajek_add_string_vertex_attribute("color", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
      }
-#line 1883 "y.tab.c" /* yacc.c:1646  */
+#line 1889 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 44:
-#line 305 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 305 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=3; }
-#line 1889 "y.tab.c" /* yacc.c:1646  */
+#line 1895 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 45:
-#line 305 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 305 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          context->mode=1;
 	 igraph_i_pajek_add_string_vertex_attribute("framecolor", 
 						    (yyvsp[0].string).str, (yyvsp[0].string).len, context);
      }
-#line 1899 "y.tab.c" /* yacc.c:1646  */
+#line 1905 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 46:
-#line 310 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 310 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=3; }
-#line 1905 "y.tab.c" /* yacc.c:1646  */
+#line 1911 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 47:
-#line 310 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 310 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
          context->mode=1;
 	 igraph_i_pajek_add_string_vertex_attribute("labelcolor", 
 						    (yyvsp[0].string).str, (yyvsp[0].string).len, context);
      }
-#line 1915 "y.tab.c" /* yacc.c:1646  */
+#line 1921 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 48:
-#line 317 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 317 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.string)=(yyvsp[0].string); }
-#line 1921 "y.tab.c" /* yacc.c:1646  */
+#line 1927 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 55:
-#line 321 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 321 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=1; }
-#line 1927 "y.tab.c" /* yacc.c:1646  */
+#line 1933 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 56:
-#line 322 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 322 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=1; }
-#line 1933 "y.tab.c" /* yacc.c:1646  */
+#line 1939 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 60:
-#line 327 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 327 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->actedge++;
 	                  context->mode=2; }
-#line 1940 "y.tab.c" /* yacc.c:1646  */
+#line 1946 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 61:
-#line 328 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 328 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_vector_push_back(context->vector, (yyvsp[-5].intnum)-1);
   igraph_vector_push_back(context->vector, (yyvsp[-4].intnum)-1); }
-#line 1948 "y.tab.c" /* yacc.c:1646  */
+#line 1954 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 64:
-#line 337 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 337 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=0; }
-#line 1954 "y.tab.c" /* yacc.c:1646  */
+#line 1960 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 65:
-#line 338 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 338 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=0; }
-#line 1960 "y.tab.c" /* yacc.c:1646  */
+#line 1966 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 69:
-#line 343 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 343 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->actedge++; 
 	                    context->mode=2; }
-#line 1967 "y.tab.c" /* yacc.c:1646  */
+#line 1973 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 70:
-#line 344 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 344 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_vector_push_back(context->vector, (yyvsp[-5].intnum)-1);
   igraph_vector_push_back(context->vector, (yyvsp[-4].intnum)-1); }
-#line 1975 "y.tab.c" /* yacc.c:1646  */
+#line 1981 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 74:
-#line 353 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 353 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
   igraph_i_pajek_add_numeric_edge_attribute("weight", (yyvsp[0].realnum), context);
 }
-#line 1983 "y.tab.c" /* yacc.c:1646  */
+#line 1989 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 78:
-#line 361 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 361 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("color-red", (yyvsp[-2].realnum), context);
        igraph_i_pajek_add_numeric_edge_attribute("color-green", (yyvsp[-1].realnum), context);
        igraph_i_pajek_add_numeric_edge_attribute("color-blue", (yyvsp[0].realnum), context);
    }
-#line 1993 "y.tab.c" /* yacc.c:1646  */
+#line 1999 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 79:
-#line 366 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 366 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
        igraph_i_pajek_add_numeric_edge_attribute("arrowsize", (yyvsp[0].realnum), context);
    }
-#line 2001 "y.tab.c" /* yacc.c:1646  */
+#line 2007 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 80:
-#line 369 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 369 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("edgewidth", (yyvsp[0].realnum), context);
    }
-#line 2009 "y.tab.c" /* yacc.c:1646  */
+#line 2015 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 81:
-#line 372 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 372 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("hook1", (yyvsp[0].realnum), context);
    }
-#line 2017 "y.tab.c" /* yacc.c:1646  */
+#line 2023 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 82:
-#line 375 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 375 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("hook2", (yyvsp[0].realnum), context);
    }
-#line 2025 "y.tab.c" /* yacc.c:1646  */
+#line 2031 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 83:
-#line 378 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 378 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("angle1", (yyvsp[0].realnum), context);
    }
-#line 2033 "y.tab.c" /* yacc.c:1646  */
+#line 2039 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 84:
-#line 381 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 381 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("angle2", (yyvsp[0].realnum), context);
    }
-#line 2041 "y.tab.c" /* yacc.c:1646  */
+#line 2047 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 85:
-#line 384 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 384 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("velocity1", (yyvsp[0].realnum), context);
    }
-#line 2049 "y.tab.c" /* yacc.c:1646  */
+#line 2055 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 86:
-#line 387 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 387 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("velocity2", (yyvsp[0].realnum), context);
    }
-#line 2057 "y.tab.c" /* yacc.c:1646  */
+#line 2063 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 87:
-#line 390 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 390 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("arrowpos", (yyvsp[0].realnum), context);
    }
-#line 2065 "y.tab.c" /* yacc.c:1646  */
+#line 2071 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 88:
-#line 393 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 393 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("labelpos", (yyvsp[0].realnum), context);
    }
-#line 2073 "y.tab.c" /* yacc.c:1646  */
+#line 2079 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 89:
-#line 396 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 396 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("labelangle", (yyvsp[0].realnum), context);
    }
-#line 2081 "y.tab.c" /* yacc.c:1646  */
+#line 2087 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 90:
-#line 399 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 399 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("labelangle2", (yyvsp[0].realnum), context);
    }
-#line 2089 "y.tab.c" /* yacc.c:1646  */
+#line 2095 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 91:
-#line 402 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 402 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("labeldegree", (yyvsp[0].realnum), context);
    }
-#line 2097 "y.tab.c" /* yacc.c:1646  */
+#line 2103 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 92:
-#line 405 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 405 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {		/* what is this??? */
        igraph_i_pajek_add_numeric_edge_attribute("arrowsize", (yyvsp[0].realnum), context);
    }
-#line 2105 "y.tab.c" /* yacc.c:1646  */
+#line 2111 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 93:
-#line 408 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 408 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
        igraph_i_pajek_add_numeric_edge_attribute("fontsize", (yyvsp[0].realnum), context);
    }
-#line 2113 "y.tab.c" /* yacc.c:1646  */
+#line 2119 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 94:
-#line 413 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 413 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=4; }
-#line 2119 "y.tab.c" /* yacc.c:1646  */
+#line 2125 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 95:
-#line 413 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 413 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
       context->mode=2;
       igraph_i_pajek_add_string_edge_attribute("arrowtype", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
     }
-#line 2128 "y.tab.c" /* yacc.c:1646  */
+#line 2134 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 96:
-#line 417 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 417 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=4; }
-#line 2134 "y.tab.c" /* yacc.c:1646  */
+#line 2140 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 97:
-#line 417 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 417 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
       context->mode=2;
       igraph_i_pajek_add_string_edge_attribute("linepattern", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
     }
-#line 2143 "y.tab.c" /* yacc.c:1646  */
+#line 2149 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 98:
-#line 421 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 421 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=4; }
-#line 2149 "y.tab.c" /* yacc.c:1646  */
+#line 2155 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 99:
-#line 421 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 421 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
       context->mode=2;
       igraph_i_pajek_add_string_edge_attribute("label", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
     }
-#line 2158 "y.tab.c" /* yacc.c:1646  */
+#line 2164 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 100:
-#line 425 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 425 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=4; }
-#line 2164 "y.tab.c" /* yacc.c:1646  */
+#line 2170 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 101:
-#line 425 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 425 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
       context->mode=2;
       igraph_i_pajek_add_string_edge_attribute("labelcolor", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
     }
-#line 2173 "y.tab.c" /* yacc.c:1646  */
+#line 2179 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 102:
-#line 429 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 429 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=4; }
-#line 2179 "y.tab.c" /* yacc.c:1646  */
+#line 2185 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 103:
-#line 429 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 429 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
       context->mode=2;
       igraph_i_pajek_add_string_edge_attribute("color", (yyvsp[0].string).str, (yyvsp[0].string).len, context);
     }
-#line 2188 "y.tab.c" /* yacc.c:1646  */
+#line 2194 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 104:
-#line 435 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 435 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=2; (yyval.string)=(yyvsp[0].string); }
-#line 2194 "y.tab.c" /* yacc.c:1646  */
+#line 2200 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 105:
-#line 437 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 437 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=1; }
-#line 2200 "y.tab.c" /* yacc.c:1646  */
+#line 2206 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 112:
-#line 445 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 445 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=0; context->actfrom=labs((yyvsp[0].intnum))-1; }
-#line 2206 "y.tab.c" /* yacc.c:1646  */
+#line 2212 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 113:
-#line 447 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 447 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_vector_push_back(context->vector, context->actfrom); 
   igraph_vector_push_back(context->vector, labs((yyvsp[0].intnum))-1); 
 }
-#line 2215 "y.tab.c" /* yacc.c:1646  */
+#line 2221 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 114:
-#line 452 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 452 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->directed=0; }
-#line 2221 "y.tab.c" /* yacc.c:1646  */
+#line 2227 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 121:
-#line 460 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 460 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->mode=0; context->actfrom=labs((yyvsp[0].intnum))-1; }
-#line 2227 "y.tab.c" /* yacc.c:1646  */
+#line 2233 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 122:
-#line 462 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 462 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { 
   igraph_vector_push_back(context->vector, context->actfrom); 
   igraph_vector_push_back(context->vector, labs((yyvsp[0].intnum))-1); 
 }
-#line 2236 "y.tab.c" /* yacc.c:1646  */
+#line 2242 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 124:
-#line 471 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 471 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->actfrom=0; 
                          context->actto=0; 
                          context->directed=(context->vcount2==0);
                        }
-#line 2245 "y.tab.c" /* yacc.c:1646  */
+#line 2251 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 127:
-#line 478 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 478 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { context->actfrom++; context->actto=0; }
-#line 2251 "y.tab.c" /* yacc.c:1646  */
+#line 2257 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 130:
-#line 482 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 482 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     {
   if ((yyvsp[0].realnum) != 0) {
     if (context->vcount2==0) {
@@ -2269,46 +2275,46 @@ yyreduce:
   }
   context->actto++;
 }
-#line 2273 "y.tab.c" /* yacc.c:1646  */
+#line 2279 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 131:
-#line 502 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 502 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.intnum)=igraph_pajek_get_number(igraph_pajek_yyget_text(scanner),
 					  igraph_pajek_yyget_leng(scanner)); }
-#line 2280 "y.tab.c" /* yacc.c:1646  */
+#line 2286 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 132:
-#line 505 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 505 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.realnum)=igraph_pajek_get_number(igraph_pajek_yyget_text(scanner),
 					  igraph_pajek_yyget_leng(scanner)); }
-#line 2287 "y.tab.c" /* yacc.c:1646  */
+#line 2293 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 135:
-#line 510 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 510 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.string).str=igraph_pajek_yyget_text(scanner); 
               (yyval.string).len=igraph_pajek_yyget_leng(scanner); }
-#line 2294 "y.tab.c" /* yacc.c:1646  */
+#line 2300 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 136:
-#line 512 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 512 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.string).str=igraph_pajek_yyget_text(scanner); 
               (yyval.string).len=igraph_pajek_yyget_leng(scanner); }
-#line 2301 "y.tab.c" /* yacc.c:1646  */
+#line 2307 "y.tab.c" /* yacc.c:1652  */
     break;
 
   case 137:
-#line 514 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1646  */
+#line 514 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1652  */
     { (yyval.string).str=igraph_pajek_yyget_text(scanner)+1; 
                (yyval.string).len=igraph_pajek_yyget_leng(scanner)-2; }
-#line 2308 "y.tab.c" /* yacc.c:1646  */
+#line 2314 "y.tab.c" /* yacc.c:1652  */
     break;
 
 
-#line 2312 "y.tab.c" /* yacc.c:1646  */
+#line 2318 "y.tab.c" /* yacc.c:1652  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2334,14 +2340,13 @@ yyreduce:
   /* Now 'shift' the result of the reduction.  Determine what state
      that goes to, based on the state we popped back to and the rule
      number reduced by.  */
-
-  yyn = yyr1[yyn];
-
-  yystate = yypgoto[yyn - YYNTOKENS] + *yyssp;
-  if (0 <= yystate && yystate <= YYLAST && yycheck[yystate] == *yyssp)
-    yystate = yytable[yystate];
-  else
-    yystate = yydefgoto[yyn - YYNTOKENS];
+  {
+    const int yylhs = yyr1[yyn] - YYNTOKENS;
+    const int yyi = yypgoto[yylhs] + *yyssp;
+    yystate = (0 <= yyi && yyi <= YYLAST && yycheck[yyi] == *yyssp
+               ? yytable[yyi]
+               : yydefgoto[yylhs]);
+  }
 
   goto yynewstate;
 
@@ -2424,14 +2429,11 @@ yyerrlab:
 | yyerrorlab -- error raised explicitly by YYERROR.  |
 `---------------------------------------------------*/
 yyerrorlab:
+  /* Pacify compilers when the user code never invokes YYERROR and the
+     label yyerrorlab therefore never appears in user code.  */
+  if (0)
+    YYERROR;
 
-  /* Pacify compilers like GCC when the user code never invokes
-     YYERROR and the label yyerrorlab therefore never appears in user
-     code.  */
-  if (/*CONSTCOND*/ 0)
-     goto yyerrorlab;
-
-  yyerror_range[1] = yylsp[1-yylen];
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYERROR.  */
   YYPOPSTACK (yylen);
@@ -2497,12 +2499,14 @@ yyacceptlab:
   yyresult = 0;
   goto yyreturn;
 
+
 /*-----------------------------------.
 | yyabortlab -- YYABORT comes here.  |
 `-----------------------------------*/
 yyabortlab:
   yyresult = 1;
   goto yyreturn;
+
 
 #if !defined yyoverflow || YYERROR_VERBOSE
 /*-------------------------------------------------.
@@ -2514,6 +2518,10 @@ yyexhaustedlab:
   /* Fall through.  */
 #endif
 
+
+/*-----------------------------------------------------.
+| yyreturn -- parsing is finished, return the result.  |
+`-----------------------------------------------------*/
 yyreturn:
   if (yychar != YYEMPTY)
     {
@@ -2543,7 +2551,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 517 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1906  */
+#line 517 "src/cigraph/src/foreign-pajek-parser.y" /* yacc.c:1918  */
 
 
 int igraph_pajek_yyerror(YYLTYPE* locp, 
@@ -2661,7 +2669,7 @@ int igraph_i_pajek_add_string_vertex_attribute(const char *name,
   if (tmp==0) {
     IGRAPH_ERROR("cannot add element to hash table", IGRAPH_ENOMEM);
   }
-  IGRAPH_FINALLY(free, tmp);
+  IGRAPH_FINALLY(igraph_free, tmp);
   strncpy(tmp, value, len);
   tmp[len]='\0';
 
@@ -2688,7 +2696,7 @@ int igraph_i_pajek_add_string_edge_attribute(const char *name,
   if (tmp==0) {
     IGRAPH_ERROR("cannot add element to hash table", IGRAPH_ENOMEM);
   }
-  IGRAPH_FINALLY(free, tmp);
+  IGRAPH_FINALLY(igraph_free, tmp);
   strncpy(tmp, value, len);
   tmp[len]='\0';
   

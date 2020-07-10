@@ -6,7 +6,8 @@ dnl We acknowledge Gabor Csardi's work on the R/C igraph
 dnl distributions and for making the source code publicly
 dnl and freely available.
 dnl
-AC_INIT(igraph, 1.1.2.9000, csardi.gabor@gmail.com)
+AC_INIT(igraph, 1.1.0, csardi.gabor@gmail.com)
+dnl AC_CONFIG_SRCDIR(src/rinterface.c)
 dnl edit AC_CONFIG_SRCDIR() to look for src/igraph_set.c when used in leidenbase
 AC_CONFIG_SRCDIR(src/igraph_set.c)
 AC_CONFIG_HEADERS(src/config.h)

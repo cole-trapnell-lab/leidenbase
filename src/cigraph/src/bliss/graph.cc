@@ -62,6 +62,7 @@ AbstractGraph::AbstractGraph()
   first_path_automorphism = 0;
   best_path_automorphism = 0;
   in_search = false;
+  refine_equal_to_first = false;
 
   /* Default value for using "long prune" */
   opt_use_long_prune = true;
@@ -811,6 +812,7 @@ AbstractGraph::search(const bool canonical, Stats& stats)
     root.in_best_path = false;
     root.cmp_to_best_path = 0;
     root.long_prune_begin = 0;
+    root.needs_long_prune = false;
 
     root.failure_recording_ival = 0;
 
