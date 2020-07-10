@@ -3,7 +3,7 @@
 .project
 .settings/
 autom4te.cache/
-cigraph/
+/cigraph/
 config.log
 config.status
 object_files
