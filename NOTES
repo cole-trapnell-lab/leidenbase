@@ -23,11 +23,12 @@ notes:
        git submodule init
        git submodule update
        git submodule foreach git pull origin master # this updates the modules
-  o  git submodule information: https://gist.github.com/gitaarik/8735255
+  o  git submodule information URL: https://gist.github.com/gitaarik/8735255
   o  igraph and leidenbase version numbers are set by leidenbase/Makefile 
   o  object_files and Makevars.* (where Makevars.* has OBJECTS defined as
      the object files in object_files) are made/updated by leidenbase/Makefile
-
+  o  run R: devtools::document() before packaging
+  o  run R: devtools::check() and devtools::test() before packaging
 
 destination directory: $top_dir/src/arpack
 source: R igraph distribution $top_dir/tools/arpack
