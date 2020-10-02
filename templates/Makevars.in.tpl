@@ -17,7 +17,7 @@ PKG_CFLAGS=-I. \
         -Icigraph/src/AMD/Include \
         -Icigraph/src/COLAMD/Include   \
 	-Icigraph/src/SuiteSparse_config \
-	@CPPFLAGS@ @CFLAGS@ -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT\
+	@CPPFLAGS@ @CFLAGS@ -DUSING_R -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT\
 	-DPACKAGE_VERSION=\"@VERSION_IGRAPH@\" -DINTERNAL_ARPACK \
 	-DIGRAPH_THREAD_LOCAL=/**/
 PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL=/**/ -DNDEBUG \
@@ -26,7 +26,7 @@ PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL=/**/ -DNDEBUG \
         -Icigraph/include \
         -Icigraph/src/prpack \
         -Ileidenalg/include \
-        -DPRPACK_IGRAPH_SUPPORT
+        -DUSING_R -DPRPACK_IGRAPH_SUPPORT
 PKG_LIBS=@XML2_LIBS@ @GMP_LIBS@ @GLPK_LIBS@ $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS)
 
 all: $(SHLIB)

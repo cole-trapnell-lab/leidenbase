@@ -34,6 +34,17 @@
 /*
  * From R igraph file src/rinterface.c
  */
+void R_igraph_myhandler (const char *reason, const char *file,
+                         int line, int igraph_errno) {
+  IGRAPH_FINALLY_FREE();
+  error("At %s:%i : %s, %s", file, line, reason,
+        igraph_strerror(igraph_errno));
+}
+
+
+/*
+ * From R igraph file src/rinterface.c
+ */
 int R_SEXP_to_vector(SEXP sv, igraph_vector_t *v) {
   v->stor_begin=REAL(sv);
   v->stor_end=v->stor_begin+GET_LENGTH(sv);

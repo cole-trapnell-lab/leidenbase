@@ -21,7 +21,7 @@ Description: An R to C interface that runs the Leiden community
     DOI: 10.1038/s41598-019-41695-z.
 Requires: R (>= 3.0.0)
 Imports:
-    igraph (>= 1.1.0)
+    igraph (>= 0.8.2)
 License: GNU PUBLIC LICENSE 2 and GNU PUBLIC LICENSE 3
 Encoding: UTF-8
 LazyData: true

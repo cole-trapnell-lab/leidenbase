@@ -17,7 +17,7 @@ all: leidenbase
 # Main package
 
 top_srcdir=cigraph
-VERSION_LEIDENBASE=0.1.1
+VERSION_LEIDENBASE=0.1.2
 VERSION_IGRAPH=0.8.2
 
 # We put the version number in a file, so that we can detect
@@ -207,6 +207,7 @@ leidenbase_$(VERSION_LEIDENBASE).tar.gz: $(CGEN) $(CSRC2) $(CINC2) $(PARSER3) $(
 	rm -f src/cigraph/src/config.h
 	rm -f src/Makevars
 	rm -rf leidenbase
+	mkdir -p src/cigraph/src
 	touch src/cigraph/src/config.h
 	chmod 700 configure
 	Rscript -e 'devtools::build(path = ".")'

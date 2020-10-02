@@ -17,7 +17,7 @@ PKG_CPPFLAGS=-I. \
         -Icigraph/src/AMD/Include \
         -Icigraph/src/COLAMD/Include   \
         -Icigraph/src/SuiteSparse_config \
-        -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT\
+        -DUSING_R -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT\
         -DPACKAGE_VERSION=\"1.1.2.9000\" -DINTERNAL_ARPACK \
         -DIGRAPH_THREAD_LOCAL= \
         -DHAVE_GFORTRAN
@@ -27,7 +27,7 @@ PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL= -DNDEBUG \
         -Icigraph/include \
         -Icigraph/src/prpack \
         -Ileidenalg/include \
-        -DPRPACK_IGRAPH_SUPPORT
+        -DUSING_R -DPRPACK_IGRAPH_SUPPORT
 PKG_LIBS= -liconv -lz -lws2_32 -lgfortran -lquadmath $(BLAS_LIBS) $(LAPACK_LIBS)
 
 all: $(SHLIB)
