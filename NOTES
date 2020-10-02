@@ -28,8 +28,19 @@ notes:
   o  igraph and leidenbase version numbers are set in/by leidenbase/Makefile 
   o  object_files and Makevars.* (where Makevars.* has OBJECTS defined as
      the object files in object_files) are made/updated by leidenbase/Makefile
+  o  run Make in leidenbase dev
   o  run R: devtools::document() before packaging
   o  run R: devtools::check() and devtools::test() before packaging
+  o  re-run Make to create leidenbase tar.gz file
+  o  move leidenbase_x.x.x.tar.gz file into parent directory
+  o  remove leidenbase master: in leidenbase repository:
+       git checkout master
+       rm DESCRIPTION README.md configure configure.ac install-sh
+       rm -r R doc tests man src inst
+  o  in parent directory untar leidenbase_x.x.x.tar.gz into leidenbase
+       tar xzvf leidenbase_x.x.x.tar.gz
+  o  add and commit leidenbase master and push to github
+
 
 destination directory: $top_dir/src/arpack
 source: R igraph distribution $top_dir/tools/arpack
