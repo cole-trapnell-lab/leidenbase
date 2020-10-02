@@ -25,21 +25,21 @@ devtools::install_github('cole-trapnell-lab/leidenbase')
 
 #### Linux Debian 10 Buster
 
-R distribution: Debian packages
-C/C++ compilers: Debian distribution packages
-FORTRAN compiler: Debian distribution packages
+R distribution: Debian packages  
+C/C++ compilers: Debian distribution packages  
+FORTRAN compiler: Debian distribution packages  
 
 #### MacOS 10.15 Catalina
 
-R distribution: CRAN package from https://cran.r-project.org/bin/macosx/R-4.0.2.pkg
-C/C++ compilers: Apple Xcode 12.0
-FORTRAN compiler: gfortran 10.2 from https://github.com/fxcoudert/gfortran-for-macOS/releases
+R distribution: CRAN package from https://cran.r-project.org/bin/macosx/R-4.0.2.pkg  
+C/C++ compilers: Apple Xcode 12.0  
+FORTRAN compiler: gfortran 10.2 from https://github.com/fxcoudert/gfortran-for-macOS/releases  
 
 #### MicroSoft Windows 10
 
-R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.0.2-win.exe
-C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
-FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
+R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.0.2-win.exe  
+C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
+FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
 
 #### Suggestions
 
