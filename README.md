@@ -41,6 +41,9 @@ R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-
 C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
 FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
 
+## Suggestions
+
+Try to use compatible C/C++ and FORTRAN compilers. For example, if you install R using a CRAN package, try to use the R compiler tools, and if you use *brew* on MacOS to install R, try to use brew-installed compilers.
 
 ### Leidenbase functions
 
