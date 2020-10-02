@@ -6,7 +6,7 @@ dnl We acknowledge Gabor Csardi's work on the R/C igraph
 dnl distributions and for making the source code publicly 
 dnl and freely available.
 dnl
-AC_INIT([leidenbase], 0.1.0)
+AC_INIT([leidenbase], 0.1.2)
 AC_CONFIG_SRCDIR(src/leidenFindPartition.cpp)
 
 : ${R_HOME=`R RHOME`}

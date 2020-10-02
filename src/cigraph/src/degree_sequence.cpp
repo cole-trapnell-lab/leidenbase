@@ -1,6 +1,6 @@
 /*
   Constructing realizations of degree sequences and bi-degree sequences.
-  Copyright (C) 2018 Szabolcs Horvat <szhorvat@gmail.com>
+  Copyright (C) 2018-2020 Szabolcs Horvat <szhorvat@gmail.com>
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -82,10 +82,6 @@ static int igraph_i_havel_hakimi(const igraph_vector_t *deg, igraph_vector_t *ed
         vd_pair vd = vertices.back();
         vertices.pop_back();
 
-        if (vd.degree < 0) {
-            IGRAPH_ERROR("Vertex degrees must be positive", IGRAPH_EINVAL);
-        }
-
         if (vd.degree == 0) {
             continue;
         }
@@ -147,10 +143,6 @@ static int igraph_i_havel_hakimi_index(const igraph_vector_t *deg, igraph_vector
 
         vd_pair vd = **pt;
         vertices.erase(*pt);
-
-        if (vd.degree < 0) {
-            IGRAPH_ERROR("Vertex degrees must be positive", IGRAPH_EINVAL);
-        }
 
         if (vd.degree == 0) {
             continue;
@@ -226,12 +218,8 @@ static int igraph_i_kleitman_wang(const igraph_vector_t *outdeg, const igraph_ve
         }
 
 
-        if (vdp->degree.first < 0 || vdp->degree.second < 0) {
-            IGRAPH_ERROR("Vertex degrees must be positive", IGRAPH_EINVAL);
-        }
-
         // are there a sufficient number of other vertices to connect to?
-        if (vertices.size() < vdp->degree.second - 1) {
+        if (vertices.size() - 1 < vdp->degree.second) {
             goto fail;
         }
 
@@ -294,10 +282,6 @@ static int igraph_i_kleitman_wang_index(const igraph_vector_t *outdeg, const igr
             continue;
         }
 
-        if (vd.degree.first < 0 || vd.degree.second < 0) {
-            IGRAPH_ERROR("Vertex degrees must be positive", IGRAPH_EINVAL);
-        }
-
         int k = 0;
         vlist::iterator it;
         for (it = vertices.begin();
@@ -342,6 +326,10 @@ static int igraph_i_realize_undirected_degree_sequence(
         IGRAPH_ERROR("The sum of degrees must be even for an undirected graph", IGRAPH_EINVAL);
     }
 
+    if (igraph_vector_min(deg) < 0) {
+        IGRAPH_ERROR("Vertex degrees must be non-negative", IGRAPH_EINVAL);
+    }
+
     igraph_vector_t edges;
     IGRAPH_CHECK(igraph_vector_init(&edges, deg_sum));
     IGRAPH_FINALLY(igraph_vector_destroy, &edges);
@@ -382,6 +370,10 @@ static int igraph_i_realize_directed_degree_sequence(
     }
     if (igraph_vector_sum(indeg) != edge_count) {
         IGRAPH_ERROR("In- and out-degree sequences do not sum to the same value", IGRAPH_EINVAL);
+    }
+
+    if (igraph_vector_min(outdeg) < 0 || igraph_vector_min(indeg) < 0) {
+        IGRAPH_ERROR("Vertex degrees must be non-negative", IGRAPH_EINVAL);
     }
 
     igraph_vector_t edges;
@@ -426,6 +418,32 @@ static int igraph_i_realize_directed_degree_sequence(
  *
  * The \c method parameter controls the order in which the vertices to be connected are chosen.
  *
+ * </para><para>
+ * References:
+ *
+ * </para><para>
+ * V. Havel,
+ * Poznámka o existenci konečných grafů (A remark on the existence of finite graphs),
+ * Časopis pro pěstování matematiky 80, 477-480 (1955).
+ * http://eudml.org/doc/19050
+ *
+ * </para><para>
+ * S. L. Hakimi,
+ * On Realizability of a Set of Integers as Degrees of the Vertices of a Linear Graph,
+ * Journal of the SIAM 10, 3 (1962).
+ * https://www.jstor.org/stable/2098746
+ *
+ * </para><para>
+ * D. J. Kleitman and D. L. Wang,
+ * Algorithms for Constructing Graphs and Digraphs with Given Valences and Factors,
+ * Discrete Mathematics 6, 1 (1973).
+ * https://doi.org/10.1016/0012-365X%2873%2990037-X
+ *
+ * </para><para>
+ * Sz. Horvát and C. D. Modes,
+ * Connectivity matters: Construction and exact random sampling of connected graphs (2020).
+ * https://arxiv.org/abs/2009.03747
+ *
  * \param graph Pointer to an uninitialized graph object.
  * \param outdeg The degree sequence for a simple undirected graph
  *        (if \p indeg is NULL or of length zero), or the out-degree sequence of
@@ -438,8 +456,8 @@ static int igraph_i_realize_directed_degree_sequence(
  *          The vertex with smallest remaining degree is selected first. The result is usually
  *          a graph with high negative degree assortativity. In the undirected case, this method
  *          is guaranteed to generate a connected graph, provided that a connected realization exists.
- *          See http://szhorvat.net/pelican/hh-connected-graphs.html for a proof.
- *          In the directed case it tends to generate weakly connected graphs, but this is not
+ *          See Horvát and Modes (2020) as well as http://szhorvat.net/pelican/hh-connected-graphs.html 
+ *          for a proof. In the directed case it tends to generate weakly connected graphs, but this is not
  *          guaranteed.
  *          \cli IGRAPH_REALIZE_DEGSEQ_LARGEST
  *          The vertex with the largest remaining degree is selected first. The result

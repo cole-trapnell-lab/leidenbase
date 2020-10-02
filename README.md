@@ -21,6 +21,30 @@ Use the devtools::install_github() command
 devtools::install_github('cole-trapnell-lab/leidenbase')
 ```
 
+### Tested conditions
+
+#### Linux Debian 10 Buster
+
+R distribution: Debian packages  
+C/C++ compilers: Debian distribution packages  
+FORTRAN compiler: Debian distribution packages  
+
+#### MacOS 10.15 Catalina
+
+R distribution: CRAN package from https://cran.r-project.org/bin/macosx/R-4.0.2.pkg  
+C/C++ compilers: Apple Xcode 12.0  
+FORTRAN compiler: gfortran 10.2 from https://github.com/fxcoudert/gfortran-for-macOS/releases  
+
+#### MicroSoft Windows 10
+
+R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.0.2-win.exe  
+C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
+FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
+
+#### Suggestions
+
+Try to use compatible C/C++ and FORTRAN compilers. For example, if you install R using a CRAN package, try to use the R compiler tools, and if you use *brew* on MacOS to install R, try to use brew-installed compilers.
+
 ### Leidenbase functions
 
 The R wrapper for running the Leiden algorithm find partition function is  

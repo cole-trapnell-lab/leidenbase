@@ -67,7 +67,7 @@
 #define DEBUG   0
 
 
-extern igraph_error_handler_t igraph_error_handler_printignore;
+extern igraph_error_handler_t R_igraph_myhandler;
 
 
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus );
@@ -117,7 +117,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Print error message and return on igraph error. (Default is to
    * abort on error.)
    */
-  igraph_set_error_handler( igraph_error_handler_printignore );
+  igraph_set_error_handler( R_igraph_myhandler );
 
   /*
    * Convert R igraph object to an igraph graph using the igraph internal functions.
