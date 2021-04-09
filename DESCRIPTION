@@ -1,7 +1,7 @@
 Package: leidenbase
 Type: Package
 Title: R and C wrappers to run the Leiden find_partition function
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: person( 'Brent', 'Ewing', role = c( 'aut', 'cre' ), email = 'bge@uw.edu' )
 Description: An R to C interface that runs the Leiden community
     detection algorithm to find a basic partition. It runs the
@@ -27,6 +27,6 @@ LazyData: true
 RoxygenNote: 7.1.1
 Suggests: testthat
 NeedsCompilation: yes
-Packaged: 2020-10-02 18:40:44 UTC; brent
+Packaged: 2021-04-09 17:15:46 UTC; brent
 Author: Brent Ewing [aut, cre]
 Maintainer: Brent Ewing <bge@uw.edu>

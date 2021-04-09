@@ -36,10 +36,15 @@ int main( int argc, char **argv )
 {
   int n_iter;
   int status;
+  int version_major;
+  int version_minor;
+  int version_subminor;
 
-  size_t i, ncomm;
+  size_t i, j, ncomm;
   char string[1024];
   char fn[8192];
+
+  const char *igraphVersion;
 
   double resolution_parameter;
   double weightTotal;
@@ -53,7 +58,12 @@ int main( int argc, char **argv )
 
   FILE *fp;
 
-  strcpy( fn, "igraph_edgelist.txt" );
+
+  igraph_version( NULL, &version_major, &version_minor, &version_subminor );
+
+  fprintf( stdout, "igraph version %d.%d.%d\n", version_major, version_minor, version_subminor );
+
+  strcpy( fn, "edgelist.edg" );
 
   fp = fopen( fn, "r" );
   if( fp == NULL )
@@ -62,7 +72,8 @@ int main( int argc, char **argv )
     return( -1 );
   }
 
-  status = igraph_read_graph_edgelist( &i_graph, fp, 0, IGRAPH_ADJ_DIRECTED );
+  status = igraph_read_graph_edgelist( &i_graph, fp, 0, true );
+
   if( status != 0 )
   {
     fprintf( stderr, "Error: bad status: igraph_read_graph_edgelist\n" );
@@ -104,18 +115,18 @@ int main( int argc, char **argv )
   **   SignificanceVertexPartition
   **   SurpriseVertexPartition
   */   
-  resolution_parameter = 0.1;
+  resolution_parameter = 0.5;
   n_iter               = 2;
   std::vector<size_t>  membership;
   std::vector<double>  weightInCommunity;
   std::vector<double>  weightFromCommunity;
   std::vector<double>  weightToCommunity;
   leidenFindPartition( &i_graph,
-                         "RBConfigurationVertexPartition",
+                         "CPMVertexPartition",
                          NULL,
                          NULL,
                          NULL,
-                         123456,
+                         2016,
                          resolution_parameter,
                          n_iter,
                          &membership,
@@ -134,11 +145,26 @@ int main( int argc, char **argv )
   }
 
 #ifdef FULL_TEST
+  ncomm = 0;
   for( i = 0; i < numVertex - 1; ++i )
   {
-    fprintf( stdout, "%d ", membership[i] + 1 );
+//    fprintf( stdout, "%d %d\n", i, membership[i] );
+    if( membership[i] > ncomm ) ncomm = membership[i];
   }
-  fprintf( stdout, "%d\n", membership[numVertex-1] + 1 );
+//  fprintf( stdout, "%d %d\n", numVertex-1,  membership[numVertex-1] + 1 );
+  if( membership[numVertex-1] > ncomm ) ncomm = membership[numVertex-1];
+
+  for( j = 0; j <= ncomm; ++j )
+  {
+    fprintf( stdout, "%3d:", j );
+    for( i = 0; i < numVertex - 1; ++i )
+    {
+      if( membership[i] == j )
+        fprintf( stdout, " %d", i );
+    }
+    fprintf( stdout, "\n" );
+  }
+  
 #endif
 
   igraph_destroy( &i_graph );
