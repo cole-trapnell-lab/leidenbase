@@ -63,7 +63,7 @@ notes:
   o  move leidenbase_x.x.x.tar.gz file into parent directory
   o  remove leidenbase master: in leidenbase repository:
        o  git checkout master
-       o  rm DESCRIPTION README.md configure configure.ac install-sh
+       o  rm DESCRIPTION NEWS.md README.md configure configure.ac install-sh
        o  rm -r R doc tests man src inst
   o  in parent directory untar leidenbase_x.x.x.tar.gz into leidenbase
        tar xzvf leidenbase_x.x.x.tar.gz
