@@ -148,6 +148,12 @@ void MutableVertexPartition::init_admin()
   this->_current_node_cache_community_from = n + 1; this->_cached_weight_from_community.resize(this->_n_communities, 0);
   this->_current_node_cache_community_to = n + 1;   this->_cached_weight_to_community.resize(this->_n_communities, 0);
   this->_current_node_cache_community_all = n + 1;  this->_cached_weight_all_community.resize(this->_n_communities, 0);
+  this->_cached_neigh_comms_all.resize(n);
+
+  if (this->get_graph()->is_directed()) {
+    this->_cached_neigh_comms_from.resize(n);
+    this->_cached_neigh_comms_to.resize(n);
+  }
 
   this->_empty_communities.clear();
 
@@ -164,9 +170,8 @@ void MutableVertexPartition::init_admin()
   size_t m = graph->ecount();
   for (size_t e = 0; e < m; e++)
   {
-    pair<size_t, size_t> endpoints = this->graph->get_endpoints(e);
-    size_t v = endpoints.first;
-    size_t u = endpoints.second;
+    size_t v, u;
+    this->graph->edge(e, v, u);
 
     size_t v_comm = this->_membership[v];
     size_t u_comm = this->_membership[u];
@@ -247,10 +252,121 @@ void MutableVertexPartition::renumber_communities()
 {
   vector<MutableVertexPartition*> partitions(1);
   partitions[0] = this;
-  this->set_membership(MutableVertexPartition::renumber_communities(partitions));
+  vector<size_t> new_comm_id = MutableVertexPartition::rank_order_communities(partitions);
+  this->relabel_communities(new_comm_id);
 }
 
-vector<size_t> MutableVertexPartition::renumber_communities(vector<MutableVertexPartition*> partitions)
+/****************************************************************************
+ Renumber the communities according to the new labels in new_comm_id.
+
+ This adjusts the internal bookkeeping as required, avoiding the more costly
+ setup required in init_admin(). In particular, this avoids recomputation of
+ weights in/from/to each community by simply assigning the previously
+ computed values to the new, relabeled communities.
+
+ For instance, a new_comm_id of <1, 2, 0> will change the labels such that
+ community 0 becomes 1, community 1 becomes 2, and community 2 becomes 0.
+*****************************************************************************/
+void MutableVertexPartition::relabel_communities(vector<size_t> const& new_comm_id) {
+  if (this->_n_communities != new_comm_id.size()) {
+    throw Exception("Problem swapping community labels. Mismatch between n_communities and new_comm_id vector.");
+  }
+
+  size_t n = this->graph->vcount();
+
+  for (size_t i = 0; i < n; i++)
+    this->_membership[i] = new_comm_id[this->_membership[i]];
+
+  this->update_n_communities();
+  size_t nbcomms = this->n_communities();
+
+  vector<double> new_total_weight_in_comm(nbcomms, 0.0);
+  vector<double> new_total_weight_from_comm(nbcomms, 0.0);
+  vector<double> new_total_weight_to_comm(nbcomms, 0.0);
+  vector<size_t> new_csize(nbcomms, 0);
+  vector<size_t> new_cnodes(nbcomms, 0);
+
+  for (size_t c = 0; c < new_comm_id.size(); c++) {
+    size_t new_c = new_comm_id[c];
+    if (this->_csize[c] > 0) {
+      new_total_weight_in_comm[new_c] = this->_total_weight_in_comm[c];
+      new_total_weight_from_comm[new_c] = this->_total_weight_from_comm[c];
+      new_total_weight_to_comm[new_c] = this->_total_weight_to_comm[c];
+      new_csize[new_c] = this->_csize[c];
+      new_cnodes[new_c] = this->_cnodes[c];
+    }
+  }
+
+  this->_total_weight_in_comm = new_total_weight_in_comm;
+  this->_total_weight_from_comm = new_total_weight_from_comm;
+  this->_total_weight_to_comm = new_total_weight_to_comm;
+  this->_csize = new_csize;
+  this->_cnodes = new_cnodes;
+
+  this->_empty_communities.clear();
+  for (size_t c = 0; c < nbcomms; c++) {
+    if (this->_csize[c] == 0) {
+      this->_empty_communities.push_back(c);
+    }
+  }
+
+  // invalidate cached weight vectors
+  for (size_t c : this->_cached_neigh_comms_from)
+    this->_cached_weight_from_community[c] = 0;
+  this->_cached_neigh_comms_from.clear();
+  this->_cached_weight_from_community.resize(nbcomms, 0);
+  this->_current_node_cache_community_from = n + 1;
+
+  for (size_t c : this->_cached_neigh_comms_to)
+    this->_cached_weight_to_community[c] = 0;
+  this->_cached_neigh_comms_to.clear();
+  this->_cached_weight_to_community.resize(nbcomms, 0);
+  this->_current_node_cache_community_to = n + 1;
+
+  for (size_t c : this->_cached_neigh_comms_all)
+    this->_cached_weight_all_community[c] = 0;
+  this->_cached_neigh_comms_all.clear();
+  this->_cached_weight_all_community.resize(nbcomms, 0);
+  this->_current_node_cache_community_all = n + 1;
+
+  #ifdef DEBUG
+    if (this->_csize.size() < this->_n_communities ||
+        this->_cnodes.size() < this->_n_communities ||
+        this->_total_weight_in_comm.size() < this->_n_communities ||
+        this->_total_weight_to_comm.size() < this->_n_communities ||
+        this->_total_weight_from_comm.size() < this->_n_communities ||
+        this->_cached_weight_from_community.size() < this->_n_communities ||
+        this->_cached_weight_to_community.size() < this->_n_communities ||
+        this->_cached_weight_all_community.size() < this->_n_communities) {
+      cerr << "ERROR: MutableVertexPartition bookkeeping is too small after rearrange_community_labels." << endl;
+    }
+
+    this->init_admin();
+
+    for (size_t c = 0; c < this->_n_communities; c++) {
+      if (fabs(new_total_weight_in_comm[c] - this->_total_weight_in_comm[c]) > 1e-6 ||
+          fabs(new_total_weight_from_comm[c] - this->_total_weight_from_comm[c]) > 1e-6 ||
+          fabs(new_total_weight_to_comm[c] - this->_total_weight_to_comm[c]) > 1e-6 ||
+          new_csize[c] != this->_csize[c] ||
+          new_cnodes[c] != this->_cnodes[c]) {
+        cerr << "ERROR: MutableVertexPartition bookkeeping is incorrect after rearrange_community_labels." << endl;
+        cerr << "Community c has " << endl
+             << "total_weight_in_comm=" << new_total_weight_in_comm[c]
+             << " (should be " << this->_total_weight_in_comm[c] << ")" << endl
+             << "total_weight_from_comm=" << new_total_weight_from_comm[c]
+             << " (should be " << this->_total_weight_from_comm[c] << ")" << endl
+             << "total_weight_to_comm=" << new_total_weight_to_comm[c]
+             << " (should be " << this->_total_weight_to_comm[c] << ")" << endl
+             << "csize=" << new_csize[c]
+             << " (should be " << this->_csize[c] << ")" << endl
+             << "cnodes=" << new_cnodes[c]
+             << " (should be " << this->_cnodes[c] << ")" << endl;
+      }
+    }
+  #endif
+}
+
+vector<size_t> MutableVertexPartition::rank_order_communities(vector<MutableVertexPartition*> partitions)
 {
   size_t nb_layers = partitions.size();
   size_t nb_comms = partitions[0]->n_communities();
@@ -296,11 +412,7 @@ vector<size_t> MutableVertexPartition::renumber_communities(vector<MutableVertex
     delete[] csizes[i];
   }
 
-  vector<size_t> membership(n, 0);
-  for (size_t i = 0; i < n; i++)
-    membership[i] = new_comm_id[partitions[0]->_membership[i]];
-
-  return membership;
+  return new_comm_id;
 }
 
 
@@ -308,16 +420,16 @@ vector<size_t> MutableVertexPartition::renumber_communities(vector<MutableVertex
  Renumber the communities using the original fixed membership vector. Notice
  that this doesn't ensure any property of the community numbers.
 *****************************************************************************/
-vector<size_t> MutableVertexPartition::renumber_communities(map<size_t, size_t> const& membership)
+void MutableVertexPartition::renumber_communities(vector<size_t> const& fixed_nodes, vector<size_t> const& fixed_membership)
 {
 
   #ifdef DEBUG
-    cerr << "void MutableVertexPartition::renumber_communities(" << &membership << ")" << endl;
+    cerr << "void MutableVertexPartition::renumber_communities(" << &fixed_nodes << ", " << &fixed_membership << ")" << endl;
   #endif
 
   // Skip whole thing if there are no fixed nodes for efficiency
-  if (membership.size() == 0)
-    return _membership;
+  if (fixed_nodes.size() == 0)
+    return;
 
   // The number of communities does not depend on whether some are fixed
   size_t nb_comms = n_communities();
@@ -326,17 +438,16 @@ vector<size_t> MutableVertexPartition::renumber_communities(map<size_t, size_t> 
   vector<size_t> new_comm_id(nb_comms);
   vector<bool> comm_assigned_bool(nb_comms);
   priority_queue<size_t, vector<size_t>, std::greater<size_t> > new_comm_assigned;
-  for (map<size_t, size_t>::const_iterator m = membership.begin();
-       m != membership.end();
-       m++) {
-    #ifdef DEBUG
-      cerr << "Setting map for fixed community " << m->second << endl;
-    #endif
-    if (!comm_assigned_bool[_membership[m->first]])
+  for (size_t v : fixed_nodes) {
+    if (!comm_assigned_bool[_membership[v]])
     {
-      new_comm_id[_membership[m->first]] = m->second;
-      comm_assigned_bool[_membership[m->first]] = true;
-      new_comm_assigned.push(m->second);
+      size_t fixed_comm_v = fixed_membership[v];
+      #ifdef DEBUG
+        cerr << "Setting map for fixed community " << fixed_comm_v << endl;
+      #endif
+      new_comm_id[_membership[v]] = fixed_comm_v;
+      comm_assigned_bool[_membership[v]] = true;
+      new_comm_assigned.push(fixed_comm_v);
     }
   }
 
@@ -358,17 +469,7 @@ vector<size_t> MutableVertexPartition::renumber_communities(map<size_t, size_t> 
     }
   }
 
-  // Set the new communities
-  vector<size_t> new_membership(this->graph->vcount());
-  for (size_t i = 0; i < this->graph->vcount(); i++)
-  {
-    #ifdef DEBUG
-      cerr << "Setting membership of node " << i << " from" << _membership[i] << " to " << new_comm_id[_membership[i]] << endl;
-    #endif
-    new_membership[i] = new_comm_id[_membership[i]];
-  }
-
-  return new_membership;
+  this->relabel_communities(new_comm_id);
 }
 
 void MutableVertexPartition::renumber_communities(vector<size_t> const& membership)
@@ -694,48 +795,6 @@ void MutableVertexPartition::from_partition(MutableVertexPartition* partition)
   this->init_admin();
 }
 
-/****************************************************************************
- Calculate what is the total weight going from a node to a community.
-
-    Parameters:
-      v      -- The node which to check.
-      comm   -- The community which to check.
-*****************************************************************************/
-double MutableVertexPartition::weight_to_comm(size_t v, size_t comm)
-{
-  if (this->_current_node_cache_community_to != v)
-  {
-    this->cache_neigh_communities(v, IGRAPH_OUT);
-    this->_current_node_cache_community_to = v;
-  }
-
-  if (comm < this->_cached_weight_to_community.size())
-    return this->_cached_weight_to_community[comm];
-  else
-    return 0.0;
-}
-
-/****************************************************************************
- Calculate what is the total weight going from a community to a node.
-
-    Parameters:
-      v      -- The node which to check.
-      comm   -- The community which to check.
-*****************************************************************************/
-double MutableVertexPartition::weight_from_comm(size_t v, size_t comm)
-{
-  if (this->_current_node_cache_community_from != v)
-  {
-    this->cache_neigh_communities(v, IGRAPH_IN);
-    this->_current_node_cache_community_from = v;
-  }
-
-  if (comm < this->_cached_weight_from_community.size())
-    return this->_cached_weight_from_community[comm];
-  else
-    return 0.0;
-}
-
 void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t mode)
 {
   // TODO: We can probably calculate at once the IN, OUT and ALL
@@ -764,10 +823,8 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
   }
 
   // Reset cached communities
-  for (vector<size_t>::iterator it = _cached_neighs_comms->begin();
-       it != _cached_neighs_comms->end();
-       it++)
-       (*_cached_weight_tofrom_community)[*it] = 0;
+  for (size_t c : *_cached_neighs_comms)
+       (*_cached_weight_tofrom_community)[c] = 0;
 
   // Loop over all incident edges
   vector<size_t> const& neighbours = this->graph->get_neighbours(v, mode);
@@ -777,7 +834,6 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
 
   // Reset cached neighbours
   _cached_neighs_comms->clear();
-  _cached_neighs_comms->reserve(degree);
   for (size_t idx = 0; idx < degree; idx++)
   {
     size_t u = neighbours[idx];
@@ -811,6 +867,9 @@ void MutableVertexPartition::cache_neigh_communities(size_t v, igraph_neimode_t 
 
 vector<size_t> const& MutableVertexPartition::get_neigh_comms(size_t v, igraph_neimode_t mode)
 {
+  if (!this->get_graph()->is_directed())
+    mode = IGRAPH_ALL; // igraph ignores mode for undirected graphs
+
   switch (mode)
   {
     case IGRAPH_IN:
@@ -838,16 +897,21 @@ vector<size_t> const& MutableVertexPartition::get_neigh_comms(size_t v, igraph_n
   throw Exception("Problem obtaining neighbour communities, invalid mode.");
 }
 
-set<size_t> MutableVertexPartition::get_neigh_comms(size_t v, igraph_neimode_t mode, vector<size_t> const& constrained_membership)
+vector<size_t> MutableVertexPartition::get_neigh_comms(size_t v, igraph_neimode_t mode, vector<size_t> const& constrained_membership)
 {
-  size_t degree = this->graph->degree(v, mode);
-  vector<size_t> const& neigh = this->graph->get_neighbours(v, mode);
-  set<size_t> neigh_comms;
-  for (size_t i=0; i < degree; i++)
+  vector<size_t> neigh_comms;
+  vector<bool> comm_added(this->n_communities(), false);
+  for (size_t u : this->graph->get_neighbours(v, mode))
   {
-    size_t u = neigh[i];
     if (constrained_membership[v] == constrained_membership[u])
-      neigh_comms.insert( this->membership(u) );
+    {
+      size_t comm = this->membership(u);
+      if (!comm_added[comm])
+      {
+        neigh_comms.push_back(comm);
+        comm_added[comm];
+      }
+    }
   }
   return neigh_comms;
 }

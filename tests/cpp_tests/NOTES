@@ -2,7 +2,9 @@ file: leiden.cpp
 description: program to test leidenFindPartition
              function for memory problems using
              an instrumentation program such as
-             valgrind.
+             valgrind
+             and comparing to the leidenalg
+             python module output.
 
 file: Makefile
 description: used to build leiden executable
@@ -30,3 +32,8 @@ notes:
        o  type 'leiden'
   o  test leiden using valgrind
        o  type 'valgrind --leak-check=full leiden'
+  o  specifying a directed graph vs an undirected
+     graph gives about 1/2 the communities. The
+     python py igraph module appears to default
+     to reading the edgelist as an undirected
+     graph.

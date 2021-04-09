@@ -12,6 +12,7 @@
 ^todo$
 ^version_number$
 ^NOTES$
+^CHECKLIST
 ^src/.*\.o$
 ^src/Makevars$
 ^src/.Rhistory$

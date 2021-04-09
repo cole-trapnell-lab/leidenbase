@@ -1,0 +1,152 @@
+== 20210406 leidenbase release preparation and testing
+
+
+** github repositories
+
+    o  igraph: https://github.com/igraph/igraph
+
+    o  leidenalg: https://github.com/vtraag/leidenalg
+
+    o  leidenbase: https://github.com/cole-trapnell-lab/leidenbase
+
+
+** prepare release
+
+    o  clone
+
+         o  leidenalg (done)
+
+         o  leidenbase(done)
+
+         o  igraph into leidenbase branch dev (see below)
+
+    o  copy leidenbase dev NOTES from nexus to ness (done)
+
+         o  ness: cd leidenbase; git checkout -t origin/dev; scp bge@nexus.gs.washington.edu:~/git/leidenbase/NOTES .
+
+         o  update NOTES as required
+
+    o  set up igraph submodule in ness:~/git/leidenbase (done)
+
+         o  cd ~/git/leidenbase
+
+         o  git checkout dev
+
+         o  git submodule add https://github.com/igraph/igraph cigraph
+
+         o  git submodule init
+
+         o  git submodule update
+
+         o  git submodule foreach git pull origin master (this is likely to be unnecessary)
+
+         o  cd cigraph
+
+         o  git checkout 32eaf4e (0.8.5)
+
+         o  tools/getversion.sh # check igraph version number (0.8.5)
+
+    o  copy leidenalg/src/x.cpp to leidenbase/src/leidenalg/src (done x2)
+
+         o  cd /home/brent/git/leidenalg/src
+
+         o  cp CPMVertexPartition.cpp GraphHelper.cpp LinearResolutionParameterVertexPartition.cpp ModularityVertexPartition.cpp MutableVertexPartition.cpp Optimiser.cpp RBConfigurationVertexPartition.cpp RBERVertexPartition.cpp ResolutionParameterVertexPartition.cpp SignificanceVertexPartition.cpp SurpriseVertexPartition.cpp /home/brent/git/leidenbase/src/leidenalg/src
+
+         o  check that all of the current leidenalg .cpp files are in the leidenbase cpp directory (excluding python wrapper files)
+
+    o  copy leidenalg/include/x.h to leidenbase/src/leidenalg/include (done x2)
+
+         o  cd /home/brent/git/leidenalg/include
+
+         o  cp CPMVertexPartition.h GraphHelper.h LinearResolutionParameterVertexPartition.h ModularityVertexPartition.h MutableVertexPartition.h Optimiser.h RBConfigurationVertexPartition.h RBERVertexPartition.h ResolutionParameterVertexPartition.h SignificanceVertexPartition.h SurpriseVertexPartition.h /home/brent/git/leidenbase/src/leidenalg/include
+
+         o  check that all of the current leidenalg .h files are in the leidenbase cpp directory (excluding python wrapper files)
+
+    o  in git/leidenbase/Makefile set igraph and leidenbase version numbers (done)
+
+    o  run make in git/leidenbase (done)
+
+    o  check leidenbase/(DESCRIPTION\NAMESPACE|README.md|version_number) (done)
+
+    o  run R devtools::document() (done)
+
+    o  run R devtools::check() ()
+
+    o  rerun make in git/leidenbase (?)
+
+    o  test (see testing sections below)
+
+    o  update testthat files
+
+    o  rerun make in git/leidenbase
+
+    o  move leidenbase_x.x.x.tar.gz to git/leidenbase/.. (parent directory)
+
+    o  git add and commit dev branch changes
+
+    o  git checkout master
+
+    o  clean master
+
+         o  rm DESCRIPTION README.md configure configure.ac install-sh
+
+         o  rm -r R doc tests man src inst
+
+         o  cd ..
+
+         o  tar xzvf leidenbase_x.x.x.tar.gz
+
+         o  cd leidenbase
+
+         o  git add and commit
+
+         o  git push to origin master
+
+
+
+** leidenbase testing
+
+    o  test on ness
+
+    o  install leidenalg can I control the igraph version?
+
+    o  build leidenbase release: control the leidenbase and igraph version
+
+    o  run leidenalg tst.py (done)
+
+         o  control seed
+
+         o  control vertex partition
+
+         o  outputs?
+
+    o  run leidenbase leiden.cpp program (done)
+
+         o  control seed
+
+         o  control vertex partition
+
+         o  outputs?
+
+    o  run leidenbase in R through cluster_cells
+
+    o  installation testing (see below)
+
+
+
+** installation testing
+
+    o  clear R leidenbase installations prior to testing
+
+    o  windows (not working on preliminary version)
+
+    o  MacOS
+
+    o  debian (done)
+
+    o  ubuntu
+
+    o  centos 7 (done)
+
+
+** update leidenbase regression test files

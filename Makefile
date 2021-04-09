@@ -17,8 +17,8 @@ all: leidenbase
 # Main package
 
 top_srcdir=cigraph
-VERSION_LEIDENBASE=0.1.2
-VERSION_IGRAPH=0.8.2
+VERSION_LEIDENBASE=0.1.3
+VERSION_IGRAPH=0.8.5
 
 # We put the version number in a file, so that we can detect
 # if it changes
@@ -113,6 +113,7 @@ RGEN = configure \
        src/Makevars.in \
        src/Makevars.win \
        DESCRIPTION \
+       NEWS.md \
        src/cigraph/LICENSE \
        src/leidenalg/LICENSE
 
