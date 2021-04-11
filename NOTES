@@ -14,6 +14,10 @@ leidenbase git r:
 ** cautions
   o  watch for igraph graph directed/undirected
   o  Windows testing build using the git bash shell failed because the link line is too long. Use the MS Power Shell.
+  o  check igraph definitions: 
+       o  types in include/igraph_types.h
+       o  igraph_t in include/igraph_datatype.h
+       o  igraph_vector in include/igraph_vector_type.h
 
 ** setup
 clone leidenbase from git repository
