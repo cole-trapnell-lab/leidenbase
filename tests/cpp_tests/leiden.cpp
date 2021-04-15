@@ -72,7 +72,7 @@ int main( int argc, char **argv )
     return( -1 );
   }
 
-  status = igraph_read_graph_edgelist( &i_graph, fp, 0, true );
+  status = igraph_read_graph_edgelist( &i_graph, fp, 0, false );
 
   if( status != 0 )
   {
