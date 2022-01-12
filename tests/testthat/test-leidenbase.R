@@ -1,6 +1,20 @@
 library(igraph)
 library( leidenbase )
 
+# Updating
+# 1. compare leidenbase output using the code in leidenbase/tests/cpp_tests
+#      o  check the NOTES file in leidenbase/tests/cpp_tests
+#      o  compare leidenbase C++ to python leidenalg
+#      o  compare leidenbase R to python leidenalg
+# 2. rebuild the expected values for devtools::test() by setting run_setup
+#    below to TRUE and running
+#      cd leidenbase
+#      R
+#      devtools::test()
+#   This should update the files in leidenbase/inst/testdata.
+#   Remember to reset run_setup to FALSE.
+
+
 run_setup <- FALSE
 dst_dir <- paste0(system.file(package='leidenbase'), '/testdata')
 evf <- paste0(dst_dir, '/expected_values.txt')
