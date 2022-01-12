@@ -1,0 +1,12 @@
+t01_v02_expect <- 11835.00
+t02_v02_expect <- 0.7822
+t03_v02_expect <- 53195.37
+t04_v02_expect <- 98402.11
+t05_v02_expect <- 13864.21
+t06_v02_expect <- 48209.73
+t07_v02_expect <- 52930.96
+t08_v02_expect <- 52930.96
+t09_v02_expect <- 52930.96
+t10_v02_expect <- 52930.96
+t11_v01_expect <- 0.7095
+t11_v02_expect <- 93834.96

@@ -17,7 +17,7 @@ all: leidenbase
 # Main package
 
 top_srcdir=cigraph
-VERSION_LEIDENBASE=0.1.3
+VERSION_LEIDENBASE=0.1.4
 VERSION_IGRAPH=0.8.5
 
 # We put the version number in a file, so that we can detect

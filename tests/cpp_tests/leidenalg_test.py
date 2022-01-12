@@ -6,7 +6,7 @@ import leidenalg
 import igraph as ig
 
 print('python version info: %s' % ( platform.python_version() ) )
-print('leidenalg version: %s' % ( leidenalg.__version__ ) )
+#print('leidenalg version: %s' % ( leidenalg.__version__ ) )
 print('igraph version: %s' % ( ig.__version__ ) )
 
 g = ig.read( filename='edgelist.edg', format='edgelist', directed=False)
