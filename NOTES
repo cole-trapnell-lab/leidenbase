@@ -67,6 +67,9 @@ notes:
             o  Windows
             o  MacOS
             o  Linux
+       o  add and commit file to be included in the distribution
+          because the Makefile uses the files in the dev branch
+          (for some of the files).
   o  re-run Make to create leidenbase tar.gz file
   o  move leidenbase_x.x.x.tar.gz file into parent directory
   o  remove leidenbase master: in leidenbase repository:
