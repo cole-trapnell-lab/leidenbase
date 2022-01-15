@@ -17,7 +17,7 @@
 ^version_number$
 ^NOTES$
 ^CHECKLIST
-^man/.Rd2pdf*$
+^man/.Rd2pdf.*$
 ^src/.*\.o$
 ^src/Makevars$
 ^src/.Rhistory$

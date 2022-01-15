@@ -57,7 +57,8 @@ notes:
   o  run autoconf in leidenbase dev, if necessary configure.ac is modified.
   o  run Make in leidenbase dev
   o  run 'R CMD Rd2pdf leidenbase'      where leidenbase is the directory
-     that contains the unpacked package
+     that contains the unpacked package. Move the resulting pdf file to
+     leidenbase/inst/doc.
   o  run R: devtools::document() before packaging
   o  check before packaging
        o  run devtools::check()
