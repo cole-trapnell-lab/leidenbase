@@ -22,7 +22,7 @@ Description: An R to C interface that runs the Leiden community
 Requires: R (>= 3.0.0)
 Imports:
     igraph (>= 0.8.2)
-License: GNU PUBLIC LICENSE 2 and GNU PUBLIC LICENSE 3
+License: GPL (>=2) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
