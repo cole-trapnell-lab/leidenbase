@@ -8,6 +8,10 @@
 # the igraph distributions and source code publicly and
 # freely available.
 #
+# Notes:
+#   o  this make script creates a leidenbase package. It
+#      is not distributed.
+#
 ########################################################
 
 all: leidenbase

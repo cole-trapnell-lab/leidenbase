@@ -1,4 +1,16 @@
 dnl
+dnl File: configure.ac
+dnl Notes:
+dnl   o  run autoconf in order to make the configure
+dnl      file from this configure.ac file.
+dnl   o  configure.ac is not part of the distribution.
+dnl      It is used only to make the configure file,
+dnl      which is part of the distribution.
+dnl
+dnl   o  the Makefile in the leidenbase directory of
+dnl      the dev branch is not part of the distribution.
+dnl      It is used only to set up the distribution.
+dnl
 dnl This file is based largely on Gabor Csardi's
 dnl R igraph configure.ac file.
 dnl R igraph is distributed under the GPL-2+ license.
@@ -15,16 +27,18 @@ if test -z "${R_HOME}"; then
    exit 1
 fi
 
-CC=`"${R_HOME}/bin/R" CMD config CC`
-CXX11=`"${R_HOME}/bin/R" CMD config CXX11`
-CXX11STD=`"${R_HOME}/bin/R" CMD config CXX11STD`
+R_BIN="${R_HOME}/bin/R"
+
+CC=`"${R_BIN}" CMD config CC`
+CXX11=`"${R_BIN}" CMD config CXX11`
+CXX11STD=`"${R_BIN}" CMD config CXX11STD`
 CXX="${CXX11} ${CXX11STD}"
-FC=`"${R_HOME}/bin/R" CMD config FC`
-CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
-CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
-CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
-FCFLAGS=`"${R_HOME}/bin/R" CMD config FCFLAGS`
-FLIBS=`"${R_HOME}/bin/R" CMD config FLIBS`
+FC=`"${R_BIN}" CMD config FC`
+CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+CFLAGS=`"${R_BIN}" CMD config CFLAGS`
+CXXFLAGS=`"${R_BIN}" CMD config CXX11FLAGS` `"${RBIN}" CMD config CXXPICFLAGS`
+FCFLAGS=`"${R_BIN}" CMD config FCFLAGS`
+FLIBS=`"${R_BIN}/" CMD config FLIBS`
 
 AC_PROG_CC
 AC_LANG(C)

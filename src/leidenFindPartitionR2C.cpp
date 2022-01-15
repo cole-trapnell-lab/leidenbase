@@ -331,12 +331,12 @@ typedef struct
 
 static const VertexPartitionTypes vertexPartitionTypes[]=
 {
-    { "CPMVertexPartition",             1 },
-    { "ModularityVertexPartition",      0 },
-    { "RBConfigurationVertexPartition", 1 },
-    { "RBERVertexPartition",            1 },
-    { "SignificanceVertexPartition",    0 },
-    { "SurpriseVertexPartition",        0 }
+    { (char *)"CPMVertexPartition",             1 },
+    { (char *)"ModularityVertexPartition",      0 },
+    { (char *)"RBConfigurationVertexPartition", 1 },
+    { (char *)"RBERVertexPartition",            1 },
+    { (char *)"SignificanceVertexPartition",    0 },
+    { (char *)"SurpriseVertexPartition",        0 }
 };
 
 

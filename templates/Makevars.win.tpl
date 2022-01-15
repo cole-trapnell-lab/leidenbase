@@ -28,7 +28,7 @@ PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL= -DNDEBUG \
         -Icigraph/src/prpack \
         -Ileidenalg/include \
         -DUSING_R -DPRPACK_IGRAPH_SUPPORT
-PKG_LIBS= -liconv -lz -lws2_32 -lgfortran -lquadmath $(BLAS_LIBS) $(LAPACK_LIBS)
+PKG_LIBS= -liconv -lz -lws2_32 -lgfortran -lquadmath $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS)
 
 all: $(SHLIB)
 

@@ -2,10 +2,14 @@
 ^.gitmodules$
 ^autom4te.cache$
 ^cigraph$
+^config.log$
+^config.status$
 ^clean.sh$
+^cran_checl.txt$
 ^leidenbase_.*.tar.gz$
 ^leidenbase$
 ^Makefile$
+^Makefile.bck$
 ^mk_repo.sh$
 ^object_files$
 ^templates$
@@ -13,6 +17,7 @@
 ^version_number$
 ^NOTES$
 ^CHECKLIST
+^man/.Rd2pdf*$
 ^src/.*\.o$
 ^src/Makevars$
 ^src/.Rhistory$
@@ -38,3 +43,5 @@
 ^src/cigraph/src/simpleraytracer/.*\.o$
 ^src/cigraph/src/SuiteSparse_config/.*\.o$
 ^src/leidenalg/src/.*\.o$
+^src/leidenbase.so$
+^tmp$

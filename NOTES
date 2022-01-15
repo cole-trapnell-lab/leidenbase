@@ -54,7 +54,10 @@ notes:
   o  igraph and leidenbase version numbers are set in/by leidenbase/Makefile 
   o  object_files and Makevars.* (where Makevars.* has OBJECTS defined as
      the object files in object_files) are made/updated by leidenbase/Makefile
+  o  run autoconf in leidenbase dev, if necessary configure.ac is modified.
   o  run Make in leidenbase dev
+  o  run 'R CMD Rd2pdf leidenbase'      where leidenbase is the directory
+     that contains the unpacked package
   o  run R: devtools::document() before packaging
   o  check before packaging
        o  run devtools::check()

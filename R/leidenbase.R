@@ -98,6 +98,13 @@
 #'  Scientific Reports, 3(1) (2013)
 #'  DOI: 10.1038/srep02930
 #'
+#' @examples
+#'   library(igraph)
+#'   fpath <- system.file( 'testdata', 'igraph_n1500_edgelist.txt.gz', package = 'leidenbase' )
+#'   zfp <- gzfile(fpath)
+#'   igraph <- read_graph( file = zfp, format='edgelist', n=1500 )
+#'   res <- leiden_find_partition(igraph=igraph, partition_type='CPMVertexPartition', resolution_parameter=1e-5)
+#'
 #'@useDynLib leidenbase _leiden_find_partition
 #'@import igraph
 #'@export
