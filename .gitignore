@@ -34,3 +34,4 @@ src/uuid/*.o
 src/uuid/.Rhistory
 todo
 version_number
+inst/doc

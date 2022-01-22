@@ -29,17 +29,28 @@ R distribution: Debian packages
 C/C++ compilers: Debian distribution packages  
 FORTRAN compiler: Debian distribution packages  
 
-#### MacOS 10.15 Catalina
+#### MacOS Monterey on Apple ARM CPU
+
+R distribution: https://cran.r-project.org/bin/macosx/big-sur-arm64/base/R-4.1.2-arm64.pkg
+C/C++ compilers: Xcode 13.2.1
+FORTRAN compiler: gfortran 11.0  https://mac.r-project.org/libs-arm64/gfortran-f51f1da0-darwin20.0-arm64.tar.gz
+Note: after downloading gfortran, use the command
+        sudo tar fxz gfortran-f51f1da0-darwin20.0-arm64.tar.gz -C /
+      to install it to /opt.
+For more information, see https://mac.r-project.org/tools/
+
+#### MacOS Monterey on Intel CPU
 
 R distribution: CRAN package from https://cran.r-project.org/bin/macosx/R-4.0.2.pkg  
-C/C++ compilers: Apple Xcode 12.0  
-FORTRAN compiler: gfortran 10.2 from https://github.com/fxcoudert/gfortran-for-macOS/releases  
+C/C++ compilers: Apple Xcode 13.2.1
+FORTRAN compiler: gfortran 8.2 from https://mac.r-project.org/tools/gfortran-8.2-Mojave.dmg
 
 #### MicroSoft Windows 10
 
-R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.0.2-win.exe  
+R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.1.2-win.exe
 C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
 FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe  
+For more information, see https://cran.r-project.org/bin/windows/Rtools/rtools40.html
 
 #### Suggestions
 

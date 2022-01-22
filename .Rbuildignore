@@ -5,9 +5,10 @@
 ^config.log$
 ^config.status$
 ^clean.sh$
-^cran_checl.txt$
+^cran_check.txt$
 ^leidenbase_.*.tar.gz$
 ^leidenbase$
+^leidenbase.Rcheck$
 ^Makefile$
 ^Makefile.bck$
 ^mk_repo.sh$
@@ -15,6 +16,7 @@
 ^templates$
 ^todo$
 ^version_number$
+^win_config$
 ^NOTES$
 ^CHECKLIST
 ^man/.Rd2pdf.*$
@@ -22,6 +24,8 @@
 ^src/Makevars$
 ^src/.Rhistory$
 ^src/arpack/.*\.o$
+^src/cigraph/config.log$
+^src/cigraph/config.status$
 ^src/cigraph/src/.*\.o$
 ^src/cigraph/src/AMD/Source/.*\.o$
 ^src/cigraph/src/bliss/.*\.o$
@@ -34,6 +38,7 @@
 ^src/cigraph/src/CHOLMOD/Supernodal/.*\.o$
 ^src/cigraph/src/COLAMD/Source/.*\.o$
 ^src/cigraph/src/cliquer/.*\.o$
+^src/cigraph/src/config.h$
 ^src/cigraph/src/cs/.*\.o$
 ^src/cigraph/src/glpk/.*\.o$
 ^src/cigraph/src/glpk/amd/.*\.o$
@@ -44,4 +49,5 @@
 ^src/cigraph/src/SuiteSparse_config/.*\.o$
 ^src/leidenalg/src/.*\.o$
 ^src/leidenbase.so$
+^tests/cpp_tests/test$
 ^tmp$

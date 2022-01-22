@@ -112,6 +112,7 @@ ARPACK := $(shell git ls-files src/arpack | \
 #$(info make r files next)
 
 RGEN = configure \
+       configure.win \
        src/cigraph/configure \
        src/cigraph/src/config.h.in \
        src/Makevars.in \
@@ -152,6 +153,11 @@ install-sh: templates/install-sh.tpl
 configure: configure.ac install-sh
 	autoconf
 
+configure.win: configure.win.ac install-sh
+	mkdir -p win_config
+	cp configure.win.ac win_config/configure.ac
+	cd win_config; autoconf; mv configure ../configure.win
+
 src/cigraph/configure src/cigraph/src/config.h.in: src/cigraph/configure.ac
 	cd src/cigraph; autoheader; autoconf
 
@@ -187,6 +193,9 @@ OBJECTS := $(shell echo $(CSRC2) $(ARPACK) $(GLPK2) $(RAY2) $(CXXSRC) | \
 object_files: force
 	@echo '$(OBJECTS)' | cmp -s - $@ || echo '$(OBJECTS)' > $@
 
+configure.win.ac: templates/configure.win.ac.leidenbase.tpl
+	sed 's/@VERSION@/'$(VERSION_LEIDENBASE)'/g' $< >$@
+
 configure.ac: templates/configure.ac.leidenbase.tpl
 	sed 's/@VERSION@/'$(VERSION_LEIDENBASE)'/g' $< >$@
 
@@ -219,4 +228,4 @@ leidenbase_$(VERSION_LEIDENBASE).tar.gz: $(CGEN) $(CSRC2) $(CINC2) $(PARSER3) $(
 
 #############
 
-.PHONY: all leidenbase force
+.PHONY: all leidenbase force leidenbase_$(VERSION_LEIDENBASE).tar.gz

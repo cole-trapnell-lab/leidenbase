@@ -34,7 +34,7 @@
  *  @param[in]   seed                   Numeric random number generator seed (NULL for random seed or numeric value > 0)
  *  @param[in]   resolution_parameter   Numeric resolution parameter (numeric value > 0.0)
  *  @param[in]   num_iter               Numeric number of iterations (numeric value >= 0)
- *  @return A named list consisting of a numeric vector of the node memberships (1-based indices),
+ *  @return A named list consisting of a numeric vector of the node community memberships (1-based indices),
  *    a numeric quality value, a numeric modularity, a numeric significance,
  *    a numeric vector of edge weights within each community,
  *    a numeric vector of edge weights from each community, a numeric vector of edge weights to

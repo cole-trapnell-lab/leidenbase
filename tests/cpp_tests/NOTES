@@ -20,7 +20,8 @@ notes:
           test directory. Alternatively, use
           igraph_edgelist.txt.gz after gunzipping
           it.
-       o  copy leidenFindPartition.cpp
+       o  copy leidenFindPartition.cpp and set
+          #define R_INTERFACE     0
           to the test directory
        o  copy the leidenalg *.cpp and
           *.h files to the test directory

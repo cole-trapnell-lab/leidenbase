@@ -22,9 +22,12 @@ Description: An R to C interface that runs the Leiden community
 Requires: R (>= 3.0.0)
 Imports:
     igraph (>= 0.8.2)
-License: GPL (>=2) + file LICENSE
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: 
+Suggests:
+    rmarkdown,
+    knitr,
     testthat
+VignetteBuilder: knitr

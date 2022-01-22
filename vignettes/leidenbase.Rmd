@@ -1,0 +1,211 @@
+---
+title: "leidenbase.Rmd"
+author: "Brent Ewing"
+date: "1/19/2022"
+output: html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{leidenbase}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, echo=FALSE, results='hide', message=FALSE}
+require(knitr)
+opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+library(leidenbase)
+library(igraph)
+```
+
+### Introduction
+
+Leidenbase consists of R and C++ interfaces for the basic community detection
+functions of Vincent Traags's Leidenalg package. The Leidenalg algorithm is
+described in the article
+
+Traag, V.A., Waltman. L., Van Eck, N.-J. (2018). *From Louvain to Leiden:
+guaranteeing well-connected communities.* Scientific reports, 9(1),
+5233. [10.1038/s41598-019-41695-z](http://dx.doi.org/10.1038/s41598-019-41695-z)
+
+Detailed information describing use of the leiden algorithm is available at
+
+https://leidenalg.readthedocs.io/en/latest/
+
+leidenalg source code is available at
+
+https://github.com/vtraag/leidenalg
+
+
+### R Interface
+
+The R interface consists of the `leiden_find_partition` function
+
+``` r
+leiden_find_partition( igraph, partition_type = c("CPMVertexPartition", "ModularityVertexPartition", "RBConfigurationVertexPartition", "RBERVertexPartition", "SignificanceVertexPartition", "SurpriseVertexPartition"), initial_membership = NULL, edge_weights = NULL, node_sizes = NULL, seed = NULL, resolution_parameter = 0.1, num_iter = 2, verbose = FALSE )
+
+Arguments:
+
+  igraph: R igraph graph.
+
+  partition_type: String partition type name. Default is CPMVertexParition.
+
+  initial_membership: Numeric vector of initial membership assignments of nodes.
+                      These are 1-based indices. Default is one community per
+                      node.
+
+  edge_weights: Numeric vector of edge weights. Default is 1.0 for all edges.
+
+  node_sizes: Numeric vector of node sizes. Default is 1 for all nodes.
+
+  seed: Numeric random number generator seed. The seed value must be
+        either NULL for random seed values or greater than 0 for a
+        fixed seed value. Default is NULL.
+
+  resolution_parameter: Numeric resolution parameter. The value must be
+                        greater than 0.0. Default is 0.1. The
+                        resolution_parameter is ignored
+                        for the partition_types ModularityVertexPartition,   
+                        SignificanceVertexPartition, and
+                        SurpriseVertexPartition.
+
+  num_iter: Numeric number of iterations. Default is 2.
+
+  verbose: A logic flag to determine whether or not we should print run
+           diagnostics.
+           
+Value:
+   A named list consisting of a numeric vector where each value is the community
+   to which the node belongs (1-based indices), a numeric quality value, a
+   numeric modularity, a numeric significance, a numeric vector of edge weights
+   within each community, a numeric vector of edge weights from each community,
+   a numeric vector of edge weights to each community, and total edge weight.
+```
+
+In order to use `leiden_find_partition`, create or load an igraph graph and then
+call `leiden_find_partition`. For example,
+
+```{r}
+library(igraph)
+fpath <- system.file('testdata', 'igraph_n1500_edgelist.txt.gz', package='leidenbase')
+zfp <- gzfile(fpath)
+igraph <- read_graph(file = zfp, format='edgelist')
+res <- leiden_find_partition(igraph, partition_type = 'CPMVertexPartition', seed = 123456, resolution_parameter = 0.5)
+```
+
+`leiden_find_partition` returns
+
+```{r}
+str(res)
+```
+
+The membership vector consists of the community value for each node. For example,
+
+```{r}
+head(res[['membership']])
+```
+
+The nodes that belong to community 1 are
+
+```{r}
+which(res[['membership']]==1)
+```
+The first three communities are
+
+```{r}
+# lim1 <- max(res$membership)
+lim1 <- 3
+for( i in seq(lim1)) {
+  cat(paste0('Community ', i, ':'))
+  for(j in which(res[['membership']]==i))
+    cat(' ', j)
+  cat('\n')
+}
+```
+
+### C/C++ Interface
+
+The C/C++ interface consists of the `leidenFindPartition` function
+
+``` c++
+int leidenFindPartition( igraph_t *pigraph,
+                           std::string const partitionType,
+                           std::vector < size_t > const *pinitialMembership,
+                           std::vector < double > const *pedgeWeights,
+                           std::vector < size_t > const *pnodeSizes,
+                           size_t seed,
+                           double resolutionParameter,
+                           std::int32_t numIter,
+                           std::vector < size_t > *pmembership,
+                           std::vector < double > *pweightInCommunity,
+                           std::vector < double > *pweightFromCommunity,
+                           std::vector < double > *pweightToCommunity,
+                           double *pweightTotal,
+                           double *pquality,
+                           double *pmodularity,
+                           double *psignificance,
+                           int *pstatus )
+
+Parameters:
+
+  igraph: pointer to igraph_t graph
+  partitionType         partition type used for optimization
+  initialMembership     vector of initial membership assignments of nodes (NULL
+                        for default of one community per node)
+  edgeWeights           vector of weights of edges (NULL for default of 1.0)
+  nodeSizes             vector of node sizes (NULL for default of 1)
+  seed                  random number generator seed (0=random seed)
+  resolutionParameter   resolution parameter
+  numIter               number of iterations
+  pmembership           vector of node membership assignments
+  pweightInCommunity    vector of edge weights within community
+  pweightFromCommunity  vector of edge weights from community
+  pweightToCommunity    vector of edge weights to community
+  pweightTotal          total edge weights
+  pquality              partition quality
+  pmodularity           partition modularity
+  psignificance         partition significance
+  pstatus               function status (0=success; -1=failure)
+
+```
+
+Notes for the C/C++ interface:
+
+* Edit leidenFindPartition.cpp to set the preprocessor definition `R_INTERFACE`
+to 0.
+* The resolution parameter is ignored for the partition types
+  ModularityVertexPartition, SignificanceVertexPartition, and
+  SurpriseVertexPartition
+* To use the `leidenFindPartition` function, compile and link to the files
+  src/leidenFindPartition.(cpp|h), src/leidenalg/src/\*.cpp, and 
+  src/leidenalg/include/\*.h and a C igraph object library.
+
+## R leidenbase installation
+
+The leidenbase installation was tested on the following systems
+
+* Linux Debian 10 Buster
+  * R distribution: Debian packages
+  * C/C++ compilers: Debian distribution packages
+  * FORTRAN compiler: Debian distribution packages
+
+
+* MacOS Monterey on Apple ARM CPU
+  * R distribution: https://cran.r-project.org/bin/macosx/big-sur-arm64/base/R-4.1.2-arm64.pkg
+  * C/C++ compilers: Xcode 13.2.1
+  * FORTRAN compiler: gfortran 11.0  https://mac.r-project.org/libs-arm64/gfortran-f51f1da0-darwin20.0-arm64.tar.gz
+  * Note: after downloading gfortran, use the command
+        `sudo tar fxz gfortran-f51f1da0-darwin20.0-arm64.tar.gz -C /`
+      to install it to `/opt`.
+  * For more information, see https://mac.r-project.org/tools/
+
+* MacOS Monterey on Intel CPU
+  * R distribution: CRAN package from https://cran.r-project.org/bin/macosx/R-4.0.2.pkg
+  * C/C++ compilers: Apple Xcode 13.2.1
+  * FORTRAN compiler: gfortran 8.2 from https://mac.r-project.org/tools/gfortran-8.2-Mojave.dmg
+
+* Windows
+  * R distribution: CRAN package from https://cran.r-project.org/bin/windows/base/R-4.1.2-win.exe
+  * C/C++ compilers: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
+  * FORTRAN compiler: CRAN Rtools40 from https://cran.r-project.org/bin/windows/Rtools/rtools40-x86_64.exe
+  * For more information, see https://cran.r-project.org/bin/windows/Rtools/rtools40.html
+
+

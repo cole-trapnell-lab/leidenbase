@@ -36,7 +36,7 @@
  *  @param[in]   seed                  random number generator seed (0=random seed)
  *  @param[in]   resolutionParameter   resolution parameter
  *  @param[in]   numIter               number of iterations
- *  @param[out]  pmembership           vector of node membership assignments
+ *  @param[out]  pmembership           vector of node community membership assignments
  *  @param[out]  pweightInCommunity    vector of edge weights within community
  *  @param[out]  pweightFromCommunity  vector of edge weights from community
  *  @param[out]  pweightToCommunity    vector of edge weights to community

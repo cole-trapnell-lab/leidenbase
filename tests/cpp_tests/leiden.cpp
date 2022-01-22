@@ -40,7 +40,7 @@ int main( int argc, char **argv )
   int version_minor;
   int version_subminor;
 
-  size_t i, j, ncomm;
+  size_t i, j, mxcomm;
   char string[1024];
   char fn[8192];
 
@@ -161,26 +161,61 @@ int main( int argc, char **argv )
   }
 
 #ifdef FULL_TEST
-  ncomm = 0;
-  for( i = 0; i < numVertex - 1; ++i )
+  mxcomm = 0;
+  for( i = 0; i < numVertex; ++i )
   {
-//    fprintf( stdout, "%d %d\n", i, membership[i] );
-    if( membership[i] > ncomm ) ncomm = membership[i];
+    if( membership[i] > mxcomm ) mxcomm = membership[i];
   }
-//  fprintf( stdout, "%d %d\n", numVertex-1,  membership[numVertex-1] + 1 );
-  if( membership[numVertex-1] > ncomm ) ncomm = membership[numVertex-1];
 
-  for( j = 0; j <= ncomm; ++j )
+  for( j = 0; j <= mxcomm; ++j )
   {
-    fprintf( stdout, "%3d:", j );
-    for( i = 0; i < numVertex - 1; ++i )
+    fprintf( stdout, "[%d]", j );
+    for( i = 0; i < numVertex; ++i )
     {
       if( membership[i] == j )
         fprintf( stdout, " %d", i );
     }
-    fprintf( stdout, "\n" );
+    fprintf( stdout, "\n\n" );
   }
-  
+
+  /*
+  ** The weightTotal value returned by leidenFindPartition
+  ** appears to be the number of graph edges (or the number
+  ** of edges * 2 for undirected graphs).
+  **
+  ** The total weight in all communities is the sum of
+  ** the weights in each community. This value is not
+  ** give here.
+  */
+
+  fprintf( stdout, "\n" );
+  fprintf( stdout, "Quality: %f\n", quality );  
+  fprintf( stdout, "Total weight: %f\n", weightTotal );  
+  fprintf( stdout, "Modularity: %f\n", modularity );  
+  fprintf( stdout, "Significance: %f\n", significance );
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight within community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightInCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight from community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightFromCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight to community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightToCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
 #endif
 
   igraph_destroy( &i_graph );
