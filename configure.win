@@ -4392,7 +4392,7 @@ ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
 subdirs="$subdirs src/cigraph"
 
 
-ac_config_files="$ac_config_files src/Makevars.tmp:src/Makevars.in"
+ac_config_files="$ac_config_files src/Makevars.tmp:src/Makevars.win.in"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5099,7 +5099,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
 for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
-    "src/Makevars.tmp") CONFIG_FILES="$CONFIG_FILES src/Makevars.tmp:src/Makevars.in" ;;
+    "src/Makevars.tmp") CONFIG_FILES="$CONFIG_FILES src/Makevars.tmp:src/Makevars.win.in" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
@@ -5516,16 +5516,16 @@ which seems to be undefined.  Please make sure it is defined" >&2;}
 
   case $ac_file$ac_mode in
     "src/Makevars.tmp":F)
-    if test -f src/Makevars && cmp -s src/Makevars.tmp src/Makevars; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: creating src/Makevars" >&5
-$as_echo "$as_me: creating src/Makevars" >&6;}
-      { $as_echo "$as_me:${as_lineno-$LINENO}: src/Makevars is unchanged" >&5
-$as_echo "$as_me: src/Makevars is unchanged" >&6;}
+    if test -f src/Makevars.win && cmp -s src/Makevars.tmp src/Makevars.win; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: creating src/Makevars.win" >&5
+$as_echo "$as_me: creating src/Makevars.win" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: src/Makevars.win is unchanged" >&5
+$as_echo "$as_me: src/Makevars.win is unchanged" >&6;}
       rm src/Makevars.tmp
     else
-      { $as_echo "$as_me:${as_lineno-$LINENO}: creating src/Makevars" >&5
-$as_echo "$as_me: creating src/Makevars" >&6;}
-      mv src/Makevars.tmp src/Makevars
+      { $as_echo "$as_me:${as_lineno-$LINENO}: creating src/Makevars.win" >&5
+$as_echo "$as_me: creating src/Makevars.win" >&6;}
+      mv src/Makevars.tmp src/Makevars.win
     fi
 
  ;;

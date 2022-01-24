@@ -40,7 +40,7 @@ int main( int argc, char **argv )
   int version_minor;
   int version_subminor;
 
-  size_t i, j, ncomm;
+  size_t i, j, mxcomm;
   char string[1024];
   char fn[8192];
 
@@ -61,18 +61,33 @@ int main( int argc, char **argv )
 
   igraph_version( NULL, &version_major, &version_minor, &version_subminor );
 
-  fprintf( stdout, "igraph version %d.%d.%d\n", version_major, version_minor, version_subminor );
+  fprintf( stderr, "igraph version %d.%d.%d\n", version_major, version_minor, version_subminor );
 
   strcpy( fn, "edgelist.edg" );
 
   fp = fopen( fn, "r" );
   if( fp == NULL )
   {
-    fprintf( stderr, "Error: unable to open file %s\n" );
+    fprintf( stderr, "Error: unable to open file %s\n", fn );
     return( -1 );
   }
 
-  status = igraph_read_graph_edgelist( &i_graph, fp, 0, true );
+  /*
+  ** From igraph documentation:
+  **   int igraph_read_graph_edgelist(igraph_t *graph, FILE *instream, 
+  **                                  igraph_integer_t n,
+  **                                  igraph_bool_t directed);
+  **
+  **   Arguments: 
+  **     graph:     Pointer to an uninitialized graph object.
+  **     instream:  Pointer to a stream, it should be readable.
+  **     n:         The number of vertices in the graph. If smaller
+  **                than the largest integer in the file it will be
+  **                ignored. It is thus safe to supply zero here.
+  **     directed:  Logical, if true the graph is directed, if
+  **                false it will be undirected. 
+  */
+  status = igraph_read_graph_edgelist( &i_graph, fp, 0, false );
 
   if( status != 0 )
   {
@@ -138,6 +153,7 @@ int main( int argc, char **argv )
                          &modularity,
                          &significance,
                          &status );
+
   if( status != 0 )
   {
     fprintf( stderr, "Error: bad status: leiden_find_partition\n" );
@@ -145,26 +161,61 @@ int main( int argc, char **argv )
   }
 
 #ifdef FULL_TEST
-  ncomm = 0;
-  for( i = 0; i < numVertex - 1; ++i )
+  mxcomm = 0;
+  for( i = 0; i < numVertex; ++i )
   {
-//    fprintf( stdout, "%d %d\n", i, membership[i] );
-    if( membership[i] > ncomm ) ncomm = membership[i];
+    if( membership[i] > mxcomm ) mxcomm = membership[i];
   }
-//  fprintf( stdout, "%d %d\n", numVertex-1,  membership[numVertex-1] + 1 );
-  if( membership[numVertex-1] > ncomm ) ncomm = membership[numVertex-1];
 
-  for( j = 0; j <= ncomm; ++j )
+  for( j = 0; j <= mxcomm; ++j )
   {
-    fprintf( stdout, "%3d:", j );
-    for( i = 0; i < numVertex - 1; ++i )
+    fprintf( stdout, "[%d]", j );
+    for( i = 0; i < numVertex; ++i )
     {
       if( membership[i] == j )
         fprintf( stdout, " %d", i );
     }
-    fprintf( stdout, "\n" );
+    fprintf( stdout, "\n\n" );
   }
-  
+
+  /*
+  ** The weightTotal value returned by leidenFindPartition
+  ** appears to be the number of graph edges (or the number
+  ** of edges * 2 for undirected graphs).
+  **
+  ** The total weight in all communities is the sum of
+  ** the weights in each community. This value is not
+  ** give here.
+  */
+
+  fprintf( stdout, "\n" );
+  fprintf( stdout, "Quality: %f\n", quality );  
+  fprintf( stdout, "Total weight: %f\n", weightTotal );  
+  fprintf( stdout, "Modularity: %f\n", modularity );  
+  fprintf( stdout, "Significance: %f\n", significance );
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight within community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightInCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight from community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightFromCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
+  fprintf( stdout, "Edge weight to community\n" );
+  for( j = 0; j <= mxcomm; ++j )
+  {
+    fprintf( stdout, " %.0f", weightToCommunity[j] );
+  }
+
+  fprintf( stdout, "\n\n" );
 #endif
 
   igraph_destroy( &i_graph );

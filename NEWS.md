@@ -1,3 +1,11 @@
+# leidenbase 0.1.4
+
+### Changes
+
+* update leidenalg to most recent code on github
+* test on ARM MacOS
+
+
 # leidenbase 0.1.3
 
 ### Changes

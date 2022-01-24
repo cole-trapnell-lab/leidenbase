@@ -150,14 +150,14 @@ AC_DEFINE(IGRAPH_THREAD_LOCAL, [], [We don't care about thread-local storage in 
 AC_CONFIG_SUBDIRS([src/cigraph])
 
 dnl create output
-AC_CONFIG_FILES([src/Makevars.tmp:src/Makevars.in], [
-    if test -f src/Makevars && cmp -s src/Makevars.tmp src/Makevars; then
-      AC_MSG_NOTICE([creating src/Makevars])
-      AC_MSG_NOTICE([src/Makevars is unchanged])
+AC_CONFIG_FILES([src/Makevars.tmp:src/Makevars.win.in], [
+    if test -f src/Makevars.win && cmp -s src/Makevars.tmp src/Makevars.win; then
+      AC_MSG_NOTICE([creating src/Makevars.win])
+      AC_MSG_NOTICE([src/Makevars.win is unchanged])
       rm src/Makevars.tmp
     else
-      AC_MSG_NOTICE([creating src/Makevars])
-      mv src/Makevars.tmp src/Makevars
+      AC_MSG_NOTICE([creating src/Makevars.win])
+      mv src/Makevars.tmp src/Makevars.win
     fi
   ]
 )

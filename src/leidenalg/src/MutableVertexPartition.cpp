@@ -92,7 +92,7 @@ vector<size_t> MutableVertexPartition::get_community(size_t comm)
 {
   vector<size_t> community;
   community.reserve(this->_cnodes[comm]);
-  for (int i = 0; i < this->graph->vcount(); i++)
+  for (size_t i = 0; i < this->graph->vcount(); i++)
     if (this->_membership[i] == comm)
       community.push_back(i);
   return community;
@@ -238,7 +238,7 @@ void MutableVertexPartition::init_admin()
 void MutableVertexPartition::update_n_communities()
 {
   this->_n_communities = 0;
-  for (int i = 0; i < this->graph->vcount(); i++)
+  for (size_t i = 0; i < this->graph->vcount(); i++)
     if (this->_membership[i] >= this->_n_communities)
       this->_n_communities = this->_membership[i] + 1;
 }
@@ -286,9 +286,10 @@ void MutableVertexPartition::relabel_communities(vector<size_t> const& new_comm_
   vector<size_t> new_csize(nbcomms, 0);
   vector<size_t> new_cnodes(nbcomms, 0);
 
+  // Relabel community admin
   for (size_t c = 0; c < new_comm_id.size(); c++) {
     size_t new_c = new_comm_id[c];
-    if (this->_csize[c] > 0) {
+    if (this->_cnodes[c] > 0) {
       new_total_weight_in_comm[new_c] = this->_total_weight_in_comm[c];
       new_total_weight_from_comm[new_c] = this->_total_weight_from_comm[c];
       new_total_weight_to_comm[new_c] = this->_total_weight_to_comm[c];
@@ -305,7 +306,7 @@ void MutableVertexPartition::relabel_communities(vector<size_t> const& new_comm_
 
   this->_empty_communities.clear();
   for (size_t c = 0; c < nbcomms; c++) {
-    if (this->_csize[c] == 0) {
+    if (this->_cnodes[c] == 0) {
       this->_empty_communities.push_back(c);
     }
   }
@@ -370,10 +371,10 @@ vector<size_t> MutableVertexPartition::rank_order_communities(vector<MutableVert
 {
   size_t nb_layers = partitions.size();
   size_t nb_comms = partitions[0]->n_communities();
-  size_t n = partitions[0]->graph->vcount();
 
   #ifdef DEBUG
-    for (size_t layer; layer < nb_layers; layer++)
+    size_t n = partitions[0]->graph->vcount();
+    for (size_t layer = 0; layer < nb_layers; layer++)
     {
       for (size_t v = 0; v < n; v++)
       {
