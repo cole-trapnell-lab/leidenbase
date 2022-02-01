@@ -7,26 +7,16 @@
 # and freely available.
 #
 CXX_STD=CXX11
-PKG_CFLAGS=-I. \
-        -Icigraph/src  \
-        -Icigraph/include \
-        -Icigraph/src/cs  \
-        -Icigraph/src/glpk \
-        -Icigraph/src/plfit \
-        -Icigraph/src/CHOLMOD/Include \
-        -Icigraph/src/AMD/Include \
-        -Icigraph/src/COLAMD/Include   \
-	-Icigraph/src/SuiteSparse_config \
-	@CPPFLAGS@ @CFLAGS@ -DUSING_R -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT\
-	-DPACKAGE_VERSION=\"@VERSION_IGRAPH@\" -DINTERNAL_ARPACK \
-	-DIGRAPH_THREAD_LOCAL=/**/
-PKG_CXXFLAGS= -DIGRAPH_THREAD_LOCAL=/**/ -DNDEBUG \
-        -I. \
-        -Icigraph/src \
-        -Icigraph/include \
-        -Icigraph/src/prpack \
-        -Ileidenalg/include \
-        -DUSING_R -DPRPACK_IGRAPH_SUPPORT
+PKG_CPPFLAGS=-DUSING_R \
+         -Ileidenalg/include \
+         -Irigraph/src \
+         -Irigraph/src/include \
+         -Irigraph/src/cs \
+         -Irigraph/src/plfit \
+         -Irigraph/src/prpack \
+         -Irigraph/src/SuiteSparse_config \
+         @XML2_CPPFLAGS@ -DNDEBUG -DNPARTITION -DNTIMER -DNCAMD -DNPRINT \
+         -DINTERNAL_ARPACK -DPRPACK_IGRAPH_SUPPORT -DIGRAPH_THREAD_LOCAL=/**/
 PKG_LIBS=@XML2_LIBS@ @GMP_LIBS@ @GLPK_LIBS@ $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
 all: $(SHLIB)

@@ -1,33 +1,38 @@
 Package: leidenbase
 Type: Package
-Title: R and C wrappers to run the Leiden find_partition function
+Title: R and C/C++ Wrappers to Run the Leiden find_partition() Function
+Authors@R: c( person('Brent', 'Ewing', email = 'bge@uw.edu', role = c('aut', 'cre')),
+              person('Vincent', 'Traag', role = 'ctb'),
+              person('Gábor', 'Csárdi', role = 'ctb'),
+              person('Tamás', 'Nepusz', role = 'ctb'),
+              person('Szabolcs', 'Horvat', role = 'ctb'),
+              person('Fabio', 'Zanini', role = 'ctb'))
 Version: @VERSION_LEIDENBASE@
-Authors@R: person( 'Brent', 'Ewing', role = c( 'aut', 'cre' ), email = 'bge@uw.edu' )
-Description: An R to C interface that runs the Leiden community
-    detection algorithm to find a basic partition. It runs the
-    equivalent of the find_partition() function, which is
-    given in the Leidenalg distribution file
+Description: An R to C/C++ interface that runs the Leiden community
+    detection algorithm to find a basic partition (). It runs the
+    equivalent of the 'leidenalg' find_partition() function, which is
+    given in the 'leidenalg' distribution file
     'leiden/src/functions.py'. This package includes the
-    required source code files from the official Leidenalg
-    distribution and several functions from the R igraph
-    package.  The Leidenalg distribution is available from
-    https://github.com/vtraag/leidenalg
-    and the R igraph package is available from
-    https://igraph.org/r/.
-    The Leiden algorithm is described in the article
-    'From Louvain to Leiden: guaranteeing well-connected communities',
-    V. A. Traag and L. Waltman and N. J. van Eck,
-    Scientific Reports (2019),
-    DOI: 10.1038/s41598-019-41695-z.
-Requires: R (>= 3.0.0)
+    required source code files from the official 'leidenalg'
+    distribution and functions from the R 'igraph'
+    package.  The 'leidenalg' distribution is available from
+    <https://github.com/vtraag/leidenalg/>
+    and the R 'igraph' package is available from
+    <https://igraph.org/r/>.
+    The Leiden algorithm is described in the article by
+    Traag et al. (2019) <doi:10.1038/s41598-019-41695-z>.
 Imports:
     igraph (>= 0.8.2)
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.2
+Depends: R (>= 3.5.0)
 Suggests:
     rmarkdown,
     knitr,
-    testthat
+    testthat (>= 3.1.0)
+URL: https://github.com/cole-trapnell-lab/leidenbase
+BugReports: https://github.com/cole-trapnell-lab/leidenbase/issues
+NeedsCompilation: yes
+Maintainer: Brent Ewing <bge@uw.edu>
 VignetteBuilder: knitr

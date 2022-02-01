@@ -50,11 +50,11 @@ run diagnostics.}
 }
 \value{
 A named list consisting of a numeric vector of the node
- memberships (1-based indices), a numeric quality value, a numeric
- modularity, a numeric significance, a numeric vector of edge weights
- within each community, a numeric vector of edge weights from each
- community, a numeric vector of edge weights to each community, and
- total edge weight.
+ community memberships (1-based indices), a numeric quality value,
+ a numeric modularity, a numeric significance, a numeric vector of
+ edge weights within each community, a numeric vector of edge weights
+ from each community, a numeric vector of edge weights to each
+ community, and total edge weight.
 }
 \description{
 R to C wrapper that runs the basic Leiden community detection algorithm,
@@ -103,7 +103,9 @@ Notes excerpted from leidenalg/src/VertexPartition.py
   fpath <- system.file( 'testdata', 'igraph_n1500_edgelist.txt.gz', package = 'leidenbase' )
   zfp <- gzfile(fpath)
   igraph <- read_graph( file = zfp, format='edgelist', n=1500 )
-  res <- leiden_find_partition(igraph=igraph, partition_type='CPMVertexPartition', resolution_parameter=1e-5)
+  res <- leiden_find_partition(igraph=igraph,
+                               partition_type='CPMVertexPartition',
+                               resolution_parameter=1e-5)
 
 }
 \references{

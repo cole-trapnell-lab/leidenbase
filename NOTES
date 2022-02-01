@@ -4,8 +4,9 @@ leidenbase git r:
      for development
 
 ** building (after setup)
-  o  run 'make' in the dev repository to generate an
-     R package for distribution
+  o  run 'make clean' followed by 'make' in the dev
+     repository to generate an R package for
+     distribution
   o  copy the R package contents into the leidenbase
      repository master branch where it is used by
      the devtools::install_github() command
@@ -13,7 +14,6 @@ leidenbase git r:
 
 ** cautions
   o  watch for igraph graph directed/undirected when testing
-  o  Windows testing build using the git bash shell failed because the link line is too long. Use the MS Power Shell.
   o  check igraph definitions: 
        o  types in include/igraph_types.h
        o  igraph_t in include/igraph_datatype.h
@@ -22,60 +22,89 @@ leidenbase git r:
      and are copied to their destinations by the Makefile
      script. It's important to edit the files in templates
      in order to make persistent changes to their children
-     files.
+     files. The Makefile tries to make this evident by
+     reporting some differences between template and
+     destination files, and pausing for a few seconds.
 
 ** setup
 clone leidenbase from git repository
 source: https://github.com/cole-trapnell-lab/leidenbase
 notes:
-  o  cigraph versions > 0.8* use cmake and various subdirectories
-     in igraph/src so I am using cigraph versions 0.8.*.
-  o  cigraph 0.8.* versions are no longer accessible as branches; e.g.,
-     the URL for 0.8.5 is https://github.com/igraph/igraph/tree/0.8.5.
-     I don't understand 'tree's in github and I cannot clone a tree
-     or checkout a tree branch but apparently one can check them out
-     using their SHA strings.
-  o  I found the 0.8.5 tree SHA string as follows
-       o  go to igraph releases on the right side of the repository page
-       o  find the desired release and the SHA string is in the left
-          column, beneath the release version string 'tag', which are
-          to the left of the release title
-  o  I got the version string using <igraph>/tools/getversion.sh
-  o  leidenbase uses git submodule to 'import' the
-     C igraph source code.
-  o  git clone commands
-       git clone <git_repository>
-       cd leidenbase
-       git checkout dev
-       git submodule add https://github.com/igraph/igraph cigraph
-       git submodule init
-       git submodule update
-       git submodule foreach git pull origin master # this updates the modules
-       # for checking out tree (not master)
-       cd cigraph
-       git checkout <SHA string>
-       Note: the Makefile script expects the git submodule in leidenbase/cigraph
-  o  git submodule information URL: https://gist.github.com/gitaarik/8735255
-  o  igraph and leidenbase version numbers are set in/by leidenbase/Makefile 
+##  do not use submodules because the directory structure has
+##  changed substantially and I don't have time to work out a
+##  Makefile. The alternative is simple: use the R igraph tar.gz file
+##  and distribute the files as described below.
+##
+##  o  cigraph versions > 0.8* use cmake and various subdirectories
+##     in igraph/src so I am using cigraph versions 0.8.*.
+##  o  cigraph 0.8.* versions are no longer accessible as branches; e.g.,
+##     the URL for 0.8.5 is https://github.com/igraph/igraph/tree/0.8.5.
+##     I don't understand 'tree's in github and I cannot clone a tree
+##     or checkout a tree branch but apparently one can check them out
+##     using their SHA strings.
+##  o  I found the 0.8.5 tree SHA string as follows
+##       o  go to igraph releases on the right side of the repository page
+##       o  find the desired release and the SHA string is in the left
+##          column, beneath the release version string 'tag', which are
+##          to the left of the release title
+##  o  I got the version string using <igraph>/tools/getversion.sh
+##  o  leidenbase uses git submodule to 'import' the
+##     C igraph source code.
+##  o  git clone commands
+##       git clone <git_repository>
+##       cd leidenbase
+##       git checkout dev
+##       git submodule add https://github.com/igraph/igraph cigraph
+##       git submodule init
+##       git submodule update
+##       git submodule foreach git pull origin master # this updates the modules
+##       # for checking out tree (not master)
+##       cd cigraph
+##       git checkout <SHA string>
+##       Note: the Makefile script expects the git submodule in leidenbase/cigraph
+##  o  git submodule information URL: https://gist.github.com/gitaarik/8735255
+
+  o  set up the R igraph code as follows
+       o  download the R igraph *.tar.gz file
+            URL: https://cran.r-project.org/src/contrib/igraph_1.2.11.tar.gz
+       o  untar igraph in leidenbase, which creates a directory called igraph 
+
+  o  in leidenbase/src/rigraph
+       o  the configure script sets the preprocessor definitions in
+          leidenbase/src/rigraph/src/config.h (from config.h.in)
+       o  there is no Makevars or Makevars.in script in leidenbase/src/rigraph or
+          leidenbase/src/rigraph/src
+  o  in leidenbase
+       o  configure ...
+  o  in leidenbase/src
+       o  Makevars and Makevars.win: define some variables and the OBJECTS required
+          for the shared library. This should force compilation of the c and FORTRAN
+          files in the rigraph subdirectory.
+
+
+  o  leidenbase version numbers are set in/by leidenbase/Makefile.
+     Set this value as required in the Makefile body.
+  o  the Makefile extracts the igraph version from the igraph DESCRIPTION
+     file.
   o  object_files and Makevars.* (where Makevars.* has OBJECTS defined as
-     the object files in object_files) are made/updated by leidenbase/Makefile
-  o  run autoconf in leidenbase dev, if necessary configure.ac is modified.
+     the object files in the file object_files) are made/updated by
+     leidenbase/Makefile
+  o  the Makefile runs autoconf on the configure.ac/configure.win files.
   o  run Make in leidenbase dev
-  o  run 'R CMD Rd2pdf leidenbase'      where leidenbase is the directory
+  o  run 'R CMD Rd2pdf leidenbase' where leidenbase is the directory
      that contains the unpacked package. Move the resulting pdf file to
      leidenbase/inst/doc.
   o  run R: devtools::document() before packaging
   o  check before packaging
-       o  run devtools::check()
+       o  run R CMD check --as-cran
+       o  run R CMD INSTALL
        o  run devtools::test()
        o  check compilation
             o  Windows
             o  MacOS Intel
             o  MacOS ARM
             o  Linux
-       o  add and commit file to be included in the distribution
-          because the Makefile uses the files in the dev branch
-          (for some of the files).
+            o  r-devel using a docker container
        o  check for stray files in the package
   o  re-run Make to create leidenbase tar.gz file
   o  move leidenbase_x.x.x.tar.gz file into parent directory
@@ -88,9 +117,6 @@ notes:
   o  add and commit leidenbase master and push to github
 
 
-destination directory: $top_dir/src/arpack
-source: R igraph distribution $top_dir/tools/arpack
-
 destination file: $top_dir/Makefile
 source: R igraph $top_dir/Makefile
 notes:
@@ -100,12 +126,11 @@ notes:
 destination file: $top_dir/templates/igraph.h.tpl
 source: C igraph package $top_dir/include/igraph.h
 notes:
-  o  remove: #include "igraph_revolver.h"
 
 destination file: $top_dir/templates/configure.ac.igraph.tpl
 source: R igraph package $top_dir/configure.ac
 notes:
-  o  modify the line
+  o  modify the line (this is unnecessary now, apparently)
        AC_CONFIG_SRCDIR(src/rinterface.c)
      to
        AC_CONFIG_SRCDIR(src/igraph_set.c)
@@ -164,7 +189,7 @@ source: generated by devtools::document()
 ** prepare leidenbase release 0.1.4
 
 leidenalg version: 0.8.8 commit (b53366829360e10922a2dbf57eb405a516c23bc9)
-igraph version: 0.8.5
+igraph version: 1.2.11
 various minor improvements in preparation for CRAN submission
 
 ** prepare leidenbase releasde 0.1.3

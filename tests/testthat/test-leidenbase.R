@@ -1,6 +1,3 @@
-library(igraph)
-library( leidenbase )
-
 # Updating
 # 1. compare leidenbase output using the code in leidenbase/tests/cpp_tests
 #      o  check the NOTES file in leidenbase/tests/cpp_tests
