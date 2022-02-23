@@ -69,6 +69,29 @@ notes:
             URL: https://cran.r-project.org/src/contrib/igraph_1.2.11.tar.gz
        o  untar igraph in leidenbase, which creates a directory called igraph 
 
+  o  copy leidenalg source and include files to leidenbase/src/leidenalg/(include|src)
+       o  may need to edit src/Optimiser.cpp an src/MutableVertexPartition.cpp to prevent
+          calls to cerr, which makes devtools::check() emit a note. Pacify devtools::check()
+          with the following edits
+            o  in Optimiser.cpp: make Optimiser::print_settings() look like
+void Optimiser::print_settings()
+{
+#ifndef USING_R
+  cerr << "Consider communities method:\t" << this->consider_comms << endl;
+  cerr << "Refine partition:\t" << this->refine_partition << endl;
+#else
+  ((void)0);
+#endif
+}
+           o  in MutableVertexPartition.cpp make MutableVertexPartition::renumber_communities() look like
+void MutableVertexPartition::renumber_communities(vector<size_t> const& membership)
+{
+#ifndef USING_R
+  cerr << "This function is deprecated, use MutableVertexPartition::set_membership(vector<size_t> const& membership)" << endl;
+#endif
+  this->set_membership(membership);
+}
+
   o  in leidenbase/src/rigraph
        o  the configure script sets the preprocessor definitions in
           leidenbase/src/rigraph/src/config.h (from config.h.in)

@@ -1,3 +1,9 @@
+# leidenbase 0.1.9
+
+* fixes for CRAN submission
+* configure script improvements and fixes
+
+
 # leidenbase 0.1.4
 
 * update leidenalg to most recent code on github

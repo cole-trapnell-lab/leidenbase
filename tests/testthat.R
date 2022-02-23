@@ -1,5 +1,1 @@
-library(testthat)
-library(igraph)
-library(leidenbase)
-
-test_check("leidenbase")
+testthat::test_check("leidenbase")

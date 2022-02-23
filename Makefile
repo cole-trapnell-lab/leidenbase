@@ -23,7 +23,7 @@ all: leidenbase
 # the leidenbase directory. The required igraph files
 # are copied into the leidenbase/src/rigraph directory.
 top_srcdir=igraph
-VERSION_LEIDENBASE=0.1.6
+VERSION_LEIDENBASE=0.1.9
 VERSION_IGRAPH=$(shell cd igraph ; grep Version DESCRIPTION | awk 'BEGIN{FS=" "}{print $$2}')
 
 # We put the version number in a file, so that we can detect
@@ -93,7 +93,7 @@ RGEN = configure \
 # build directory when configure.ac has the macro
 # AC_CONFIG_SUBDIRS(). The script has no function.
 install-sh: templates/install-sh.tpl
-	cp templates/install-sh.tpl install-sh
+	cp templates/install-sh.tpl src/config_aux_dir/install-sh
 
 # configure files
 # $(info make configure files next)
@@ -102,17 +102,17 @@ install-sh: templates/install-sh.tpl
 # are in the leidenbase/templates directory.
 
 # The leidenbase configure files.
-configure: configure.ac install-sh
-	autoconf
+configure: configure.ac src/config_aux_dir/install-sh
+	autoconf -i
 
-configure.win: configure.win.ac install-sh
+configure.win: configure.win.ac src/config_aux_dir/install-sh
 	mkdir -p win_config
 	cp configure.win.ac win_config/configure.ac
-	cd win_config; autoconf; mv configure ../configure.win
+	cd win_config; autoconf -i; mv configure ../configure.win
 
 # Make the R igraph configure file.
 src/rigraph/configure src/rigraph/src/config.h.in: src/rigraph/configure.ac
-	cd src/rigraph; autoheader; autoconf
+	cd src/rigraph; autoheader; autoconf -i
 
 # The template files.
 configure.win.ac: templates/configure.win.ac.leidenbase.tpl check_templates

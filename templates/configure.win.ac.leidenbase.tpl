@@ -20,6 +20,7 @@ dnl and freely available.
 dnl
 AC_INIT([leidenbase], @VERSION@)
 AC_CONFIG_SRCDIR(src/leidenFindPartition.cpp)
+AC_CONFIG_AUX_DIR(src/config_aux_dir)
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -34,10 +35,12 @@ CXX11=`"${R_BIN}" CMD config CXX11`
 CXX11STD=`"${R_BIN}" CMD config CXX11STD`
 CXX="${CXX11} ${CXX11STD}"
 FC=`"${R_BIN}" CMD config FC`
-CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CXXFLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
+CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 FCFLAGS=`"${R_BIN}" CMD config FCFLAGS`
+FLIBS=`"${R_BIN}" CMD config FLIBS`
+LDFLAGS=`"${R_BIN}" CMD config LDFLAGS`
 
 AC_PROG_CC
 AC_LANG(C)
@@ -66,24 +69,25 @@ dnl most of the following is from the R igraph distribution.
 LIBS_SAVE=$LIBS
 LIBS="$LIBS -lm"
 AC_CHECK_FUNCS([rintf finite expm1 rint log2 logbl snprintf log1p round fmin stpcpy])
+AC_CHECK_DECLS(isfinite,,,[#include <math.h>])
 AC_CHECK_DECL([stpcpy],
-        [AC_DEFINE([HAVE_STPCPY_SIGNATURE], [1], [Define to 1 if the stpcpy function has a signature])])
+    [AC_DEFINE([HAVE_STPCPY_SIGNATURE], [1], [Define to 1 if the stpcpy function has a signature])])
 LIBS=$LIBS_SAVE
 
 AC_CHECK_HEADER([sys/times.h],
-      [AC_DEFINE([HAVE_TIMES_H], [1], [Define to 1 if you have the sys/times.h header])])
+    [AC_DEFINE([HAVE_TIMES_H], [1], [Define to 1 if you have the sys/times.h header])])
 
 AC_CHECK_HEADERS([ \
-                   net/if.h \
-                   netinet/in.h \
-                   net/if_dl.h \
-                   sys/sockio.h \
-                   sys/un.h \
-                   sys/socket.h \
-                   sys/ioctl.h \
-                   sys/time.h \
-                   sys/file.h \
-                ])
+           net/if.h \
+           netinet/in.h \
+           net/if_dl.h \
+           sys/sockio.h \
+           sys/un.h \
+           sys/socket.h \
+           sys/ioctl.h \
+           sys/time.h \
+           sys/file.h \
+        ])
 
 AC_CHECK_MEMBER([struct sockaddr.sa_len],
                 AC_DEFINE_UNQUOTED([HAVE_SA_LEN], [1], [Define if struct sockaddr contains sa_len]), [],

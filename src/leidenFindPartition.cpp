@@ -61,14 +61,6 @@
  */
 
 
-/*
-** Set R_INTERFACE to 1 if this file is
-** part of the R interface to the leidenalg.
-** Otherwise, set it to 0.
-*/
-#define R_INTERFACE     1
-
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -87,7 +79,7 @@
 #include "Optimiser.h"
 #include "leidenFindPartition.h"
 
-#if ( R_INTERFACE )
+#ifdef USING_R
 #include <R_ext/Print.h>
 #endif
 
@@ -288,6 +280,7 @@ int leidenFindPartition( igraph_t *pigraph,
 }
 
 
+#ifndef USING_R
 int xdumpParameters( igraph_t *pigraph,
                       std::string const partitionType,
                       std::vector < size_t > const *pinitialMembership,
@@ -337,7 +330,7 @@ int xdumpParameters( igraph_t *pigraph,
 
   return( 0 );
 }
-
+#endif
 
 typedef struct
 {
@@ -383,7 +376,7 @@ int xcheckParameters( std::string const partitionType,
   }
   if( flagValidVertexPartition == 0 )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: invalid partitionType.\n" );
 #else
     std::cout << "Error: leidenFindPartition: invalid partitionType.\n";
@@ -394,7 +387,7 @@ int xcheckParameters( std::string const partitionType,
 
   if( pinitialMembership != NULL && pinitialMembership->size() != numVertex )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: Initial membership vector inconsistent length with the vertex count of the graph.\n");
 #else
     std::cout << "Error: leidenFindPartition: Initial membership vector inconsistent length with the vertex count of the graph.\n";
@@ -405,7 +398,7 @@ int xcheckParameters( std::string const partitionType,
 
   if( pedgeWeights != NULL && pedgeWeights->size() != numEdge )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: Edge weight vector inconsistent length with the edge count of the graph.\n");
 #else
     std::cout << "Error: leidenFindPartition: Edge weight vector inconsistent length with the edge count of the graph.\n";
@@ -416,7 +409,7 @@ int xcheckParameters( std::string const partitionType,
 
   if( pnodeSizes != NULL && pnodeSizes->size() != numVertex )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: Node size vector inconsistent length with the vertex count of the graph.\n");
 #else
     std::cout << "Error: leidenFindPartition: Node size vector inconsistent length with the vertex count of the graph.\n";
@@ -427,7 +420,7 @@ int xcheckParameters( std::string const partitionType,
 
   if( flagResolutionParameter && resolutionParameter <= 0.0 )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: resolution parameter <= 0.0\n");
 #else
     std::cout << "Error: leidenFindPartition: resolution parameter <= 0.0\n";
@@ -438,7 +431,7 @@ int xcheckParameters( std::string const partitionType,
 
   if( numIter <= 0 )
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: Number of iterations <= 0.\n");
 #else
     std::cout << "Error: leidenFindPartition: Number of iterations <= 0.\n";
@@ -567,7 +560,7 @@ xmakePartition( Graph *pGraph, std::string const partitionType,
   }
   else
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "Error: leidenFindPartition: Unrecognized vertex partition type.\n");
 #else
     std::cout << "Error: leidenFindPartition: Unrecognized vertex partition type.\n";
@@ -614,7 +607,7 @@ int xgetQuality( MutableVertexPartition *ppartition, std::string const partition
   }
   else
   {
-#if ( R_INTERFACE )
+#ifdef USING_R
     Rprintf( "");
 #else
     std::cout << "leidenFindPartition: Unrecognized vertex partition type\n";

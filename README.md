@@ -97,7 +97,7 @@ is
 
 ## Issues with leidenbase
 
-For problems with leidenbase, please consider submitting an issue report to the [leidenbase issue page](https://github.com/cole-trapnell-lab/leidenbase/issues) on github.com. We ask that you include some details that may help us with identifying the source of the problem. For problems with installing leidenbase, please see [reporting install issues](doc/issue_report_install.md)  and for problems with running leidenbase, please see [reporting run issues](doc/issue_report_run.md).
+For problems with leidenbase, please consider submitting an issue report to the [leidenbase issue page](https://github.com/cole-trapnell-lab/leidenbase/issues) on github.com. We ask that you include some details that may help us with identifying the source of the problem. For problems with installing leidenbase, please see [reporting install issues](src/doc/issue_report_install.md)  and for problems with running leidenbase, please see [reporting run issues](src/doc/issue_report_run.md).
 
 ## Licenses
 
