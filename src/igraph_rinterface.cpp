@@ -25,7 +25,7 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <igraph.h>
-#include <igraph_rinterface.h>
+#include "igraph_rinterface.h"
 
 
 #define GET_LENGTH(x) Rf_length(x)

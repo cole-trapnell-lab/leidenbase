@@ -41,8 +41,12 @@ Optimiser::~Optimiser()
 
 void Optimiser::print_settings()
 {
+#ifndef USING_R
   cerr << "Consider communities method:\t" << this->consider_comms << endl;
   cerr << "Refine partition:\t" << this->refine_partition << endl;
+#else
+  ((void)0);
+#endif
 }
 
 /*****************************************************************************

@@ -61,14 +61,13 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <igraph.h>
-#include <igraph_rinterface.h>
+#include "igraph_rinterface.h"
 #include "leidenFindPartition.h"
 
 #define DEBUG   0
 
 
 extern igraph_error_handler_t R_igraph_myhandler;
-
 
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus );
 int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, std::int32_t numIter, int *fstatus );

@@ -475,7 +475,9 @@ void MutableVertexPartition::renumber_communities(vector<size_t> const& fixed_no
 
 void MutableVertexPartition::renumber_communities(vector<size_t> const& membership)
 {
+#ifndef USING_R
   cerr << "This function is deprecated, use MutableVertexPartition::set_membership(vector<size_t> const& membership)" << endl;
+#endif
   this->set_membership(membership);
 }
 
