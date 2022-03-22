@@ -19,6 +19,7 @@
 ^Makefile.bck$
 ^mk_repo.sh$
 ^object_files$
+^old_versions$
 ^templates$
 ^templates.20220222$
 ^todo$

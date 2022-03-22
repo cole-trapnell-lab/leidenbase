@@ -16,6 +16,7 @@ config.log
 config.status
 configure
 configure.ac
+old_versions
 R/.Rhistory
 src/.Rhistory
 src/leidenbase.so
