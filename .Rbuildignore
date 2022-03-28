@@ -28,6 +28,7 @@
 ^NOTES$
 ^CHECKLIST
 ^man/.Rd2pdf.*$
+^README.md$
 ^src/.*\.o$
 ^src/Makevars$
 ^src/.Rhistory$
