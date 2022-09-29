@@ -30,6 +30,7 @@ leidenbase git r:
 clone leidenbase from git repository
 source: https://github.com/cole-trapnell-lab/leidenbase
 notes:
+##  The following commented out description is wrong. Skip it.
 ##  do not use submodules because the directory structure has
 ##  changed substantially and I don't have time to work out a
 ##  Makefile. The alternative is simple: use the R igraph tar.gz file
@@ -128,6 +129,18 @@ void MutableVertexPartition::renumber_communities(vector<size_t> const& membersh
             o  MacOS ARM
             o  Linux
             o  r-devel using a docker container
+            o  check using rhub: see https://r-hub.github.io/rhub/articles/rhub.html and https://www.datanovia.com/en/blog/how-to-run-cran-checks-for-a-package-on-r-hub/
+                 o  library(devtools)
+                    library(rhub)
+                    rhub::platforms()
+                    rhub::check_rhub(pkg=".", platforms="<platform or array of platforms?>")
+                    rhub::check_for_cran()
+            o check Macos using devtools
+                 o library(devtools)
+                   devtools::check_mac_release(pkg=".")
+            o check Windows using devtools
+                 o library(devtools)
+                   devtools::check_win_devel or check_win_release
        o  check for stray files in the package
   o  re-run Make to create leidenbase tar.gz file
   o  move leidenbase_x.x.x.tar.gz file into parent directory
