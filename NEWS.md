@@ -1,3 +1,13 @@
+# leidenbase 0.1.14
+
+* fix regression in src/rigraph/src/rinterface_extra.c
+
+
+# leidenbase 0.1.13
+
+* reduce test precision
+
+
 # leidenbase 0.1.9
 
 * fixes for CRAN submission

@@ -70,7 +70,7 @@ testthat::test_that( 'ModularityVertexPartition membership and quality',
   else {
     t02_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t02_v01, t02_v01_expect)))
-    expect_equal(t02_v02, t02_v02_expect, tolerance = 1.0e-4)
+    expect_equal(t02_v02, t02_v02_expect, tolerance = 1.0e-2)
   }
 })
 
@@ -88,7 +88,7 @@ testthat::test_that( 'RBERVertexPartition membership and quality',
   else {
     t03_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t03_v01, t03_v01_expect)))
-    expect_equal(t03_v02, t03_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t03_v02, t03_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -124,7 +124,7 @@ testthat::test_that( 'SurpriseVertexPartition membership and quality',
   else {
     t05_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t05_v01, t05_v01_expect)))
-    expect_equal(t05_v02, t05_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t05_v02, t05_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -146,7 +146,7 @@ testthat::test_that( 'resolution_parameter parameter',
   else {
     t06_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t06_v01, t06_v01_expect)))
-    expect_equal(t06_v02, t06_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t06_v02, t06_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -164,7 +164,7 @@ testthat::test_that( 'num_iter parameter',
   else {
     t07_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t07_v01, t07_v01_expect)))
-    expect_equal(t07_v02, t07_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t07_v02, t07_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -187,7 +187,7 @@ testthat::test_that( 'initial_membership parameter',
   else {
     t08_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t08_v01, t08_v01_expect)))
-    expect_equal(t08_v02, t08_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t08_v02, t08_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -210,7 +210,7 @@ testthat::test_that( 'edge_weights parameter',
   else {
     t09_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t09_v01, t09_v01_expect)))
-    expect_equal(t09_v02, t09_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t09_v02, t09_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -233,7 +233,7 @@ testthat::test_that( 'node_sizes parameter',
   else {
     t10_v01_expect <- read.table(fpath)[['V1']]
     expect_true(isTRUE(all.equal(t10_v01, t10_v01_expect)))
-    expect_equal(t10_v02, t10_v02_expect, tolerance = 1.0e-2)
+    expect_equal(t10_v02, t10_v02_expect, tolerance = 1.0e-0)
   }
 })
 
@@ -250,7 +250,7 @@ testthat::test_that( 'modularity and significance return values',
     cat(sprintf("t11_v02_expect <- %.2f\n", t11_v02), file=evf, append=TRUE)
   }
   else {
-    expect_equal(t11_v01, t11_v01_expect, tolerance = 1.0e-4)
+    expect_equal(t11_v01, t11_v01_expect, tolerance = 1.0e-2)
     expect_equal(t11_v02, t11_v02_expect, tolerance = 1.0e-2)
   }
 })
