@@ -23,7 +23,7 @@ all: leidenbase
 # the leidenbase directory. The required igraph files
 # are copied into the leidenbase/src/rigraph directory.
 top_srcdir=igraph
-VERSION_LEIDENBASE=0.1.11
+VERSION_LEIDENBASE=0.1.14
 VERSION_IGRAPH=$(shell cd igraph ; grep Version DESCRIPTION | awk 'BEGIN{FS=" "}{print $$2}')
 
 # We put the version number in a file, so that we can detect
