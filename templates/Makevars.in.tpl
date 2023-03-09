@@ -20,7 +20,7 @@ PKG_CPPFLAGS=-DUSING_R \
 PKG_LIBS=@XML2_LIBS@ @GMP_LIBS@ @GLPK_LIBS@ $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
 ifneq (,$(filter $(DEB_HOST_ARCH),i386))
-PKG_CPPFLAGS += -ffloat-store
+PKG_CPPFLAGS = $(PKG_CPPFLAGS) -ffloat-store
 endif
 
 all: $(SHLIB)
