@@ -19,9 +19,10 @@ PKG_CPPFLAGS=-DUSING_R \
          -DINTERNAL_ARPACK -DPRPACK_IGRAPH_SUPPORT -DIGRAPH_THREAD_LOCAL=/**/
 PKG_LIBS=@XML2_LIBS@ @GMP_LIBS@ @GLPK_LIBS@ $(FLIBS) $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
-ifneq (,$(filter $(DEB_HOST_ARCH),i386))
-PKG_CPPFLAGS = $(PKG_CPPFLAGS) -ffloat-store
-endif
+# For Debian
+#ifneq (,$(filter $(DEB_HOST_ARCH),i386))
+#PKG_CPPFLAGS=$(PKG_CPPFLAGS) -ffloat-store
+#endif
 
 all: $(SHLIB)
 
