@@ -23,7 +23,7 @@ all: leidenbase
 # the leidenbase directory. The required igraph files
 # are copied into the leidenbase/src/rigraph directory.
 top_srcdir=igraph
-VERSION_LEIDENBASE=0.1.15
+VERSION_LEIDENBASE=0.1.16
 VERSION_IGRAPH=$(shell cd igraph ; grep Version DESCRIPTION | awk 'BEGIN{FS=" "}{print $$2}')
 
 # We put the version number in a file, so that we can detect
@@ -92,7 +92,8 @@ RGEN = configure \
 # configure apparently wants to find install-sh in the
 # build directory when configure.ac has the macro
 # AC_CONFIG_SUBDIRS(). The script has no function.
-install-sh: templates/install-sh.tpl
+ src/config_aux_dir/install-sh: templates/install-sh.tpl src/config_aux_dir/install-sh
+	mkdir -p src/config_aux_dir
 	cp templates/install-sh.tpl src/config_aux_dir/install-sh
 
 # configure files

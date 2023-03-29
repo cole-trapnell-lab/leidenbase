@@ -15,6 +15,14 @@ leidenbase git r:
 
 ** cautions
   o  make changes to igraph in leidenbase/igraph (not leidenbase/src/rigraph!)
+     including
+       o  remove R interface code from igraph: remove the following
+            o  leidenbase/igraph/src/rinterface.h
+            o  leidenbase/igraph/src/rinterface.cpp
+            o  leidenbase/igraph/src/rinterface_extra.cpp
+            o  leidenbase/igraph/src/init.c
+       o  comment out line 'AC_CONFIG_SRCDIR(src/rinterface.c)' in
+          leidenbase/templates/configure.ac.igraph.tpl
   o  watch for igraph graph directed/undirected when testing
   o  check igraph definitions: 
        o  types in include/igraph_types.h

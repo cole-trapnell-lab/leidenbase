@@ -6,7 +6,6 @@ dnl distributions and for making the source code publicly
 dnl and freely available.
 dnl
 AC_INIT(igraph, 1.2.11, ntamas@gmail.com)
-AC_CONFIG_SRCDIR(src/rinterface.c)
 AC_CONFIG_HEADERS(src/config.h)
 
 : ${R_HOME=`R RHOME`}
