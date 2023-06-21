@@ -41,6 +41,12 @@ VENDORSRC := $(shell cd $(top_srcdir) ; git ls-files --full-name vendor | \
 CINC := $(shell cd $(top_srcdir) ; git ls-files --full-name include)
 CINC := $(patsubst include/%, src/include/%, $(CINC))
 
+# Leidenalg source files.
+LEIDENALGSRC := $(shell git ls-files --full-name src/leidenalg)
+
+# Leidenbase source files.
+LEIDENBASESRC := $(shell git ls-files --full-name src/leidenbase)
+
 # Transform CORESRC and VENDORSRC to their target folders in src/
 CORESRC := $(patsubst src/%, src/core/%, $(CORESRC))
 VENDORSRC := $(patsubst vendor/%, src/vendor/%, $(VENDORSRC))
@@ -194,7 +200,7 @@ configure src/config.h.in: configure.ac
 # 		sed 's,^src/,,' \
 # 		) rinterface_extra.o rrandom.o lazyeval.o init.o cpp11.o cpprinterface.o
 
-OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) | \
+OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) $(LEIDENALGSRC) $(LEIDENBASESRC) | \
 		tr ' ' '\n' | \
         grep -E '\.(c|cpp|cc|f|l|y)$$' | \
 		sed 's/\.[^\.][^\.]*$$/.o/' | \
@@ -202,7 +208,6 @@ OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) | \
 		) rinterface_extra.o rrandom.o lazyeval.o init.o cpprinterface.o
 
 object_files: force
-	echo "ARPACK: $(ARPACK)"
 	@echo '$(OBJECTS)' | cmp -s - $@ || echo '$(OBJECTS)' > $@
 
 src/Makevars.win src/Makevars.ucrt src/Makevars.in: src/%: tools/stimulus/% \
