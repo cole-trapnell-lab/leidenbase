@@ -63,7 +63,7 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <igraph.h>
-#include "igraph_rinterface.h"
+#include "rinterface.h"
 #include "leidenFindPartition.h"
 
 #define DEBUG   0
