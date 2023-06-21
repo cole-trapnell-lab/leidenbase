@@ -196,7 +196,7 @@ leidenbase: leidenbase_$(VERSION_LEIDENBASE).tar.gz
 leidenbase_$(VERSION_LEIDENBASE).tar.gz: $(GSRC2) $(RGEN)
 	chmod 700 configure
 	chmod 700 src/rigraph/configure
-	Rscript -e 'devtools::build(path = ".", vignettes=FALSE)'
+	Rscript -e 'devtools::build(path = ".", vignettes=TRUE)'
 
 clean:
 	rm -f \
