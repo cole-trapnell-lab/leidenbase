@@ -23,7 +23,7 @@ all: leidenbase
 # the leidenbase directory. The required igraph files
 # are copied into the leidenbase/src/rigraph directory.
 top_srcdir=igraph
-VERSION_LEIDENBASE=0.1.16
+VERSION_LEIDENBASE=0.1.18
 VERSION_IGRAPH=$(shell cd igraph ; grep Version DESCRIPTION | awk 'BEGIN{FS=" "}{print $$2}')
 
 # We put the version number in a file, so that we can detect
@@ -196,7 +196,7 @@ leidenbase: leidenbase_$(VERSION_LEIDENBASE).tar.gz
 leidenbase_$(VERSION_LEIDENBASE).tar.gz: $(GSRC2) $(RGEN)
 	chmod 700 configure
 	chmod 700 src/rigraph/configure
-	Rscript -e 'devtools::build(path = ".")'
+	Rscript -e 'devtools::build(path = ".", vignettes=TRUE)'
 
 clean:
 	rm -f \

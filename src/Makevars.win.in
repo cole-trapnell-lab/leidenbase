@@ -1,0 +1,50 @@
+#
+# This file is a lightly modified copy of the Gabor Csardi's
+# R igraph Makevars.win file.
+# R igraph is distributed under the GPL-2+ license.
+# We acknowledge Gabor Csardi's work on the R/C igraph
+# distributions and for making the source code publicly
+# and freely available.
+#
+
+LIB_XML ?= $(MINGW_PREFIX)
+GLPK_HOME ?= $(MINGW_PREFIX)
+LIB_GMP ?= $(MINGW_PREFIX)
+
+PKG_CPPFLAGS= -DUSING_R \
+              -DHAVE_FMEMOPEN=0 \
+              -DHAVE_OPEN_MEMSTREAM=0 \
+              -DHAVE_RINTF \
+              -DWin32 \
+              -DHAVE_UNISTD_H \
+              -Wall \
+              -DHAVE_FMIN=1 \
+              -DHAVE_LOG2=1 \
+              -DHAVE_SNPRINTF \
+              -DHAVE_GFORTRAN \
+              -DIGRAPH_THREAD_LOCAL= \
+              -DPRPACK_IGRAPH_SUPPORT \
+              -Ileidenalg/include \
+              -Irigraph/src \
+              -Irigraph/src/include \
+              -Irigraph/src/cs \
+              -Irigraph/src/plfit \
+              -Irigraph/src/prpack \
+              -Irigraph/src/SuiteSparse_config \
+              -I${GLPK_HOME}/include \
+              -DNDEBUG \
+              -DNPARTITION \
+              -DNTIMER \
+              -DNCAMD \
+              -DNPRINT \
+              -I${LIB_GMP}/include \
+              -DINTERNAL_SUITESPARSE \
+              -DINTERNAL_ARPACK \
+              @XML2_CPPFLAGS@
+
+PKG_LIBS = @XML2_LIBS@ -liconv -lz -lws2_32 @GLPK_LIBS@ $(BLAS_LIBS) $(LAPACK_LIBS) -lgfortran -lquadmath @GMP_LIBS@
+
+all: $(SHLIB)
+
+
+OBJECTS=rigraph/src/forestfire.o rigraph/src/vector.o rigraph/src/zeroin.o rigraph/src/distances.o rigraph/src/foreign-pajek-lexer.o rigraph/src/igraph_set.o rigraph/src/paths.o rigraph/src/decomposition.o rigraph/src/other.o rigraph/src/igraph_marked_queue.o rigraph/src/structural_properties.o rigraph/src/spanning_trees.o rigraph/src/memory.o rigraph/src/igraph_hashtable.o rigraph/src/fortran_intrinsics.o rigraph/src/layout_gem.o rigraph/src/operators.o rigraph/src/igraph_heap.o rigraph/src/cliquer/reorder.o rigraph/src/cliquer/cliquer_graph.o rigraph/src/cliquer/cliquer.o rigraph/src/cs/cs_spsolve.o rigraph/src/cs/cs_ereach.o rigraph/src/cs/cs_multiply.o rigraph/src/cs/cs_updown.o rigraph/src/cs/cs_print.o rigraph/src/cs/cs_lusol.o rigraph/src/cs/cs_post.o rigraph/src/cs/cs_compress.o rigraph/src/cs/cs_symperm.o rigraph/src/cs/cs_counts.o rigraph/src/cs/cs_dmperm.o rigraph/src/cs/cs_entry.o rigraph/src/cs/cs_cholsol.o rigraph/src/cs/cs_randperm.o rigraph/src/cs/cs_scc.o rigraph/src/cs/cs_transpose.o rigraph/src/cs/cs_load.o rigraph/src/cs/cs_pvec.o rigraph/src/cs/cs_qrsol.o rigraph/src/cs/cs_malloc.o rigraph/src/cs/cs_usolve.o rigraph/src/cs/cs_reach.o rigraph/src/cs/cs_droptol.o rigraph/src/cs/cs_scatter.o rigraph/src/cs/cs_norm.o rigraph/src/cs/cs_dupl.o rigraph/src/cs/cs_house.o rigraph/src/cs/cs_fkeep.o rigraph/src/cs/cs_add.o rigraph/src/cs/cs_ipvec.o rigraph/src/cs/cs_etree.o rigraph/src/cs/cs_sqr.o rigraph/src/cs/cs_maxtrans.o rigraph/src/cs/cs_lsolve.o rigraph/src/cs/cs_dropzeros.o rigraph/src/cs/cs_lu.o rigraph/src/cs/cs_cumsum.o rigraph/src/cs/cs_happly.o rigraph/src/cs/cs_permute.o rigraph/src/cs/cs_chol.o rigraph/src/cs/cs_pinv.o rigraph/src/cs/cs_ltsolve.o rigraph/src/cs/cs_leaf.o rigraph/src/cs/cs_tdfs.o rigraph/src/cs/cs_amd.o rigraph/src/cs/cs_utsolve.o rigraph/src/cs/cs_qr.o rigraph/src/cs/cs_gaxpy.o rigraph/src/cs/cs_util.o rigraph/src/cs/cs_dfs.o rigraph/src/cs/cs_schol.o rigraph/src/visitors.o rigraph/src/glet.o rigraph/src/igraph_fixed_vectorlist.o rigraph/src/gml_tree.o rigraph/src/qsort_r.o rigraph/src/foreign-lgl-parser.o rigraph/src/maximal_cliques.o rigraph/src/type_indexededgelist.o rigraph/src/scg_optimal_method.o rigraph/src/igraph_grid.o rigraph/src/foreign-dl-lexer.o rigraph/src/lapack.o rigraph/src/foreign.o rigraph/src/sparsemat.o rigraph/src/SuiteSparse_config/SuiteSparse_config.o rigraph/src/scg_approximate_methods.o rigraph/src/glpk_support.o rigraph/src/scg_exact_scg.o rigraph/src/foreign-graphml.o rigraph/src/embedding.o rigraph/src/matrix.o rigraph/src/community.o rigraph/src/complex.o rigraph/src/foreign-gml-parser.o rigraph/src/heap.o rigraph/src/cores.o rigraph/src/feedback_arc_set.o rigraph/src/igraph_stack.o rigraph/src/fast_community.o rigraph/src/progress.o rigraph/src/vector_ptr.o rigraph/src/random.o rigraph/src/foreign-dl-parser.o rigraph/src/igraph_psumtree.o rigraph/src/layout_dh.o rigraph/src/eigen.o rigraph/src/array.o rigraph/src/bipartite.o rigraph/src/statusbar.o rigraph/src/mixing.o rigraph/src/matching.o rigraph/src/scan.o rigraph/src/igraph_buckets.o rigraph/src/cocitation.o rigraph/src/scg.o rigraph/src/version.o rigraph/src/foreign-pajek-parser.o rigraph/src/arpack.o rigraph/src/cohesive_blocks.o rigraph/src/structure_generators.o rigraph/src/qsort.o rigraph/src/foreign-lgl-lexer.o rigraph/src/types.o rigraph/src/hacks.o rigraph/src/foreign-ncol-lexer.o rigraph/src/bignum.o rigraph/src/math.o rigraph/src/igraph_strvector.o rigraph/src/attributes.o rigraph/src/components.o rigraph/src/st-cuts.o rigraph/src/plfit/options.o rigraph/src/plfit/mt.o rigraph/src/plfit/lbfgs.o rigraph/src/plfit/platform.o rigraph/src/plfit/plfit.o rigraph/src/plfit/error.o rigraph/src/plfit/rbinom.o rigraph/src/plfit/kolmogorov.o rigraph/src/plfit/gss.o rigraph/src/plfit/sampling.o rigraph/src/plfit/hzeta.o rigraph/src/lsap.o rigraph/src/foreign-gml-lexer.o rigraph/src/bfgs.o rigraph/src/layout.o rigraph/src/separators.o rigraph/src/flow.o rigraph/src/igraph_error.o rigraph/src/games.o rigraph/src/triangles.o rigraph/src/interrupt.o rigraph/src/blas.o rigraph/src/scg_kmeans.o rigraph/src/igraph_trie.o rigraph/src/lazyeval.o rigraph/src/sir.o rigraph/src/motifs.o rigraph/src/basic_query.o rigraph/src/bigint.o rigraph/src/optimal_modularity.o rigraph/src/random_walk.o rigraph/src/cattributes.o rigraph/src/layout_kk.o rigraph/src/foreign-ncol-parser.o rigraph/src/igraph_estack.o rigraph/src/centrality.o rigraph/src/layout_fr.o rigraph/src/lad.o rigraph/src/dotproduct.o rigraph/src/topology.o rigraph/src/microscopic_update.o rigraph/src/conversion.o rigraph/src/scg_utils.o rigraph/src/iterators.o rigraph/src/sugiyama.o rigraph/src/spectral_properties.o rigraph/src/community_leiden.o rigraph/src/igraph_cliquer.o rigraph/src/spmatrix.o rigraph/src/dqueue.o rigraph/src/atlas.o rigraph/src/coloring.o rigraph/src/cliques.o rigraph/src/adjlist.o rigraph/src/uuid/compare.o rigraph/src/uuid/pack.o rigraph/src/uuid/gen_uuid.o rigraph/src/uuid/unparse.o rigraph/src/uuid/isnull.o rigraph/src/uuid/R.o rigraph/src/uuid/parse.o rigraph/src/uuid/clear.o rigraph/src/uuid/unpack.o rigraph/src/uuid/copy.o rigraph/src/sbm.o rigraph/src/dsaupd.o rigraph/src/dsesrt.o rigraph/src/ivout.o rigraph/src/dsaup2.o rigraph/src/dsapps.o rigraph/src/dnaup2.o rigraph/src/dseupd.o rigraph/src/dsortr.o rigraph/src/dmout.o rigraph/src/dstatn.o rigraph/src/dvout.o rigraph/src/dstqrb.o rigraph/src/dsaitr.o rigraph/src/dsgets.o rigraph/src/dneupd.o rigraph/src/dseigt.o rigraph/src/dsortc.o rigraph/src/dneigh.o rigraph/src/dsconv.o rigraph/src/dstats.o rigraph/src/second.o rigraph/src/dnaitr.o rigraph/src/dnaupd.o rigraph/src/dnapps.o rigraph/src/dgetv0.o rigraph/src/dngets.o rigraph/src/dnconv.o rigraph/src/wrap.o rigraph/src/dlaqrb.o rigraph/src/drl_parse.o rigraph/src/NetDataTypes.o rigraph/src/walktrap.o rigraph/src/gengraph_graph_molloy_hash.o rigraph/src/drl_layout_3d.o rigraph/src/gengraph_degree_sequence.o rigraph/src/walktrap_graph.o rigraph/src/simpleraytracer/Light.o rigraph/src/simpleraytracer/unit_limiter.o rigraph/src/simpleraytracer/Ray.o rigraph/src/simpleraytracer/Sphere.o rigraph/src/simpleraytracer/RayVector.o rigraph/src/simpleraytracer/RIgraphRay.o rigraph/src/simpleraytracer/Color.o rigraph/src/simpleraytracer/RayTracer.o rigraph/src/simpleraytracer/Shape.o rigraph/src/simpleraytracer/Triangle.o rigraph/src/simpleraytracer/Point.o rigraph/src/prpack.o rigraph/src/prpack/prpack_result.o rigraph/src/prpack/prpack_igraph_graph.o rigraph/src/prpack/prpack_preprocessed_schur_graph.o rigraph/src/prpack/prpack_base_graph.o rigraph/src/prpack/prpack_preprocessed_ge_graph.o rigraph/src/prpack/prpack_preprocessed_scc_graph.o rigraph/src/prpack/prpack_utils.o rigraph/src/prpack/prpack_solver.o rigraph/src/prpack/prpack_preprocessed_gs_graph.o rigraph/src/pottsmodel_2.o rigraph/src/degree_sequence.o rigraph/src/DensityGrid_3d.o rigraph/src/gengraph_box_list.o rigraph/src/NetRoutines.o rigraph/src/gengraph_graph_molloy_optimized.o rigraph/src/gengraph_mr-connected.o rigraph/src/drl_layout.o rigraph/src/walktrap_heap.o rigraph/src/walktrap_communities.o rigraph/src/gengraph_powerlaw.o rigraph/src/drl_graph_3d.o rigraph/src/clustertool.o rigraph/src/drl_graph.o rigraph/src/gengraph_random.o rigraph/src/DensityGrid.o rigraph/src/bliss/orbit.o rigraph/src/bliss/graph.o rigraph/src/bliss/partition.o rigraph/src/bliss/uintseqhash.o rigraph/src/bliss/utils.o rigraph/src/bliss/bliss_heap.o rigraph/src/bliss/defs.o rigraph/src/infomap.o rigraph/src/infomap_Greedy.o rigraph/src/infomap_Node.o rigraph/src/bliss.o rigraph/src/igraph_hrg_types.o rigraph/src/infomap_FlowGraph.o rigraph/src/igraph_hrg.o leidenFindPartition.o leidenFindPartitionR2C.o igraph_rinterface.o leidenalg/src/LinearResolutionParameterVertexPartition.o leidenalg/src/CPMVertexPartition.o leidenalg/src/MutableVertexPartition.o leidenalg/src/GraphHelper.o leidenalg/src/SignificanceVertexPartition.o leidenalg/src/RBConfigurationVertexPartition.o leidenalg/src/Optimiser.o leidenalg/src/ModularityVertexPartition.o leidenalg/src/RBERVertexPartition.o leidenalg/src/SurpriseVertexPartition.o leidenalg/src/ResolutionParameterVertexPartition.o
