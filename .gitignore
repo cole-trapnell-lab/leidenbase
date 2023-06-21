@@ -18,6 +18,7 @@ configure
 configure.ac
 cran
 old_versions
+old_save
 R/.Rhistory
 src/.Rhistory
 src/leidenbase.so
