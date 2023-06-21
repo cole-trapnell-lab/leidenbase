@@ -53,7 +53,6 @@
  *  @note This function does not support community detection in multiplex graphs.
  */
 
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -68,8 +67,6 @@
 
 #define DEBUG   0
 
-int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
-
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus );
 int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, std::int32_t numIter, int *fstatus );
 std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t numVertex, int *fstatus );
@@ -82,6 +79,7 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
  */
 extern "C"
 {
+int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
 void R_igraph_error_handler(const char *reason, const char *file, int line, int igraph_errno);
 
 SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
