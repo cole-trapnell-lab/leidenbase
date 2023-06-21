@@ -63,12 +63,12 @@
 #include <Rinternals.h>
 #include <R_ext/Rdynload.h>
 #include <igraph.h>
-#include "rinterface.h"
+#include <rinterface.h>
 #include "leidenFindPartition.h"
 
 #define DEBUG   0
 
-extern igraph_error_handler_t R_igraph_myhandler;
+int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
 
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus );
 int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, std::int32_t numIter, int *fstatus );
@@ -82,6 +82,8 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
  */
 extern "C"
 {
+void R_igraph_error_handler(const char *reason, const char *file, int line, int igraph_errno);
+
 SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
 {
   int status;
@@ -106,45 +108,35 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
 
   igraph_t igraphGraph;
 
-fprintf(stderr, "bge: _leiden_find_partition: start\n");
-
   xcheckParametersRValues( initial_membership, edge_weights, node_sizes, &status );
 
   /*
    * Enable attribute handling as instructed in leiden/src/Optimiser.cpp.
    */
-fprintf(stderr, "bge: _leiden_find_partition: 1\n");
   igraph_i_set_attribute_table( &igraph_cattribute_table );
 
   /*
    * Print error message and return on igraph error. (Default is to
    * abort on error.)
    */
-fprintf(stderr, "bge: _leiden_find_partition: 2\n");
-  igraph_set_error_handler( R_igraph_myhandler );
+  igraph_set_error_handler( R_igraph_error_handler );
 
   /*
    * Convert R igraph object to an igraph graph using the igraph internal functions.
    */
-fprintf(stderr, "bge: _leiden_find_partition: 3\n");
-fprintf(stderr, "bge: _leiden_find_partition: R_SEXP_to_igraph: next\n");
   R_SEXP_to_igraph( igraph, &igraphGraph );
-fprintf(stderr, "bge: _leiden_find_partition: R_SEXP_to_igraph: done\n");
   numVertex = (size_t)igraph_vcount( &igraphGraph );
   numEdge   = (size_t)igraph_ecount( &igraphGraph );
 
   /*
    * Extract partition type string.
    */
-fprintf(stderr, "bge: _leiden_find_partition: 4\n");
   pcpartitionType = (char *)CHAR( STRING_ELT( partition_type, 0 ) );
 
   /*
    * Convert additional parameters.
    */
-fprintf(stderr, "bge: asReal 1: start");
   cresolutionParameter = asReal( resolution_parameter );
-fprintf(stderr, "bge: asReal 1: end");
 
   cnumIter = asInteger( num_iter );
 
@@ -256,9 +248,7 @@ fprintf(stderr, "bge: asReal 1: end");
 #endif
     rmembership = PROTECT( allocVector( REALSXP, numVertex ) );
     double *pdval;
-fprintf(stderr, "bge real 1: start\n");
     pdval = REAL( rmembership );
-fprintf(stderr, "bge real 1: end\n");
     for( i = 0; i < numVertex; ++i )
     {
       pdval[i] = (double)( cmembership[i] + 1 );
@@ -270,27 +260,21 @@ fprintf(stderr, "bge real 1: end\n");
   double *pdval;
 
   SEXP rweightInCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
-fprintf(stderr, "bge real 2: start\n");
   pdval = REAL( rweightInCommunity );
-fprintf(stderr, "bge real 2: end\n");
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = cweightInCommunity[i];
   }
 
   SEXP rweightFromCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
-fprintf(stderr, "bge real 3: start\n");
   pdval = REAL( rweightFromCommunity );
-fprintf(stderr, "bge real 3: end\n");
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = cweightFromCommunity[i];
   }
 
   SEXP rweightToCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
-fprintf(stderr, "bge real 4: start\n");
   pdval = REAL( rweightToCommunity );
-fprintf(stderr, "bge real 4: end\n");
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = cweightToCommunity[i];
@@ -320,25 +304,20 @@ fprintf(stderr, "bge real 4: end\n");
 
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus )
 {
-fprintf(stderr, "xcheckParametersRValues: start\n");
-fprintf(stderr, "xcheckParametersRValues: 1\n");
   if( initial_membership != R_NilValue && ( !isVectorAtomic( initial_membership ) || xlength( initial_membership ) < 1 ) )
   {
     error( "_leiden_find_partition: initial_membership is not a vector" );
   }
 
-fprintf(stderr, "xcheckParametersRValues: 2\n");
   if( edge_weights != R_NilValue && ( !isVectorAtomic( edge_weights ) || xlength( edge_weights ) < 1 ) )
   {
     error( "_leiden_find_partition: edge_weights is not a vector" );
   }
 
-fprintf(stderr, "xcheckParametersRValues: 2\n");
   if( node_sizes != R_NilValue && ( !isVectorAtomic( node_sizes ) || xlength( node_sizes ) < 1 ) )
   {
     error( "_leiden_find_partition: node_sizes is not a vector" );
   }
-fprintf(stderr, "xcheckParametersRValues: end\n");
 
   *fstatus = -1;
 
@@ -454,9 +433,7 @@ std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t n
   std::cout << "Debug: _leiden_find_partition: initial_membership is an atomic vector of reals\n";
 #endif
       double *pval;
-fprintf(stderr, "bge real 5: start\n");
       pval = REAL( initial_membership );
-fprintf(stderr, "bge real 5: end\n");
       pinitialMembership = new std::vector < size_t >( n );
       for( i = 0; i < n; ++i )
       {
@@ -520,9 +497,7 @@ std::vector < double >* xsetEdgeWeights( SEXP edge_weights, size_t numEdge,int *
   std::cout << "Debug: _leiden_find_partition: edge_weights is an atomic vector of reals\n";
 #endif
       double *pval;
-fprintf(stderr, "bge real 6: start\n");
       pval = REAL( edge_weights );
-fprintf(stderr, "bge real 6: end\n");
       pedgeWeights = new std::vector < double >( n );
       for( i = 0; i < n; ++i )
       {
@@ -584,9 +559,7 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
   std::cout << "Debug: _leiden_find_partition: node_sizes is an atomic vector of reals\n";
 #endif
       double *pval;
-fprintf(stderr, "bge real 7: start\n");
       pval = REAL( node_sizes );
-fprintf(stderr, "bge real 7: end\n");
       pnodeSizes = new std::vector < size_t >( n );
       for( i = 0; i < n; ++i )
       {
