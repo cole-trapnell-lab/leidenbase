@@ -6,7 +6,6 @@
 # distributions and for making the source code publicly
 # and freely available.
 #
-CXX_STD=CXX11
 PKG_CPPFLAGS=-DUSING_R \
          -Ileidenalg/include \
          -Irigraph/src \
