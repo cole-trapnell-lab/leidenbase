@@ -1,7 +1,6 @@
 autom4te.cache/
 clean.sh
 .cproject
-DESCRIPTION
 install-sh
 leidenbase_0.1.0.tar.gz
 leidenbase
@@ -28,8 +27,6 @@ src/cigraph
 src/cigraph/autom4te.cache
 src/cigraph/configure
 src/cigraph/configure.ac
-src/leidenalg/src/*.o
-src/leidenalg/src/.Rhistory
 src/Makevars
 src/Makevars.in
 src/Makevars.win
