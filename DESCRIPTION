@@ -23,8 +23,6 @@ Description: An R to C/C++ interface that runs the Leiden community
     Traag et al. (2019) <doi:10.1038/s41598-019-41695-z>.
 Imports:
     igraph (>= 0.8.2)
-LinkingTo:
-    cpp11 (>= 0.2.0)
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3

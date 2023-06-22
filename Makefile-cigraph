@@ -45,7 +45,7 @@ CINC := $(patsubst include/%, src/include/%, $(CINC))
 LEIDENALGSRC := $(shell git ls-files --full-name src/leidenalg)
 
 # Leidenbase source files.
-# LEIDENBASESRC := $(shell git ls-files --full-name src)
+LEIDENBASESRC := $(shell git ls-files --full-name src/leidenbase)
 
 # Transform CORESRC and VENDORSRC to their target folders in src/
 CORESRC := $(patsubst src/%, src/core/%, $(CORESRC))
@@ -200,12 +200,12 @@ configure src/config.h.in: configure.ac
 # 		sed 's,^src/,,' \
 # 		) rinterface_extra.o rrandom.o lazyeval.o init.o cpp11.o cpprinterface.o
 
-OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) $(LEIDENALGSRC) | \
+OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) $(LEIDENALGSRC) $(LEIDENBASESRC) | \
 		tr ' ' '\n' | \
         grep -E '\.(c|cpp|cc|f|l|y)$$' | \
 		sed 's/\.[^\.][^\.]*$$/.o/' | \
 		sed 's,^src/,,' \
-		) rinterface_extra.o rrandom.o lazyeval.o init.o cpprinterface.o leidenFindPartition.o leidenFindPartitionR2C.o
+		) rinterface_extra.o rrandom.o lazyeval.o
 
 object_files: force
 	@echo '$(OBJECTS)' | cmp -s - $@ || echo '$(OBJECTS)' > $@
