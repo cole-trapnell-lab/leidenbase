@@ -7,7 +7,7 @@ Authors@R: c( person('Brent', 'Ewing', email = 'bge@uw.edu', role = c('aut', 'cr
               person('Tamás', 'Nepusz', role = 'ctb'),
               person('Szabolcs', 'Horvat', role = 'ctb'),
               person('Fabio', 'Zanini', role = 'ctb'))
-Version: 0.1.18
+Version: 0.1.19
 Description: An R to C/C++ interface that runs the Leiden community
     detection algorithm to find a basic partition (). It runs the
     equivalent of the 'leidenalg' find_partition() function, which is
@@ -27,7 +27,7 @@ LinkingTo:
     cpp11 (>= 0.2.0)
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: R (>= 3.5.0)
 Suggests:
     rmarkdown,

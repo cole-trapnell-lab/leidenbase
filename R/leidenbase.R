@@ -107,9 +107,8 @@
 #'                                partition_type='CPMVertexPartition',
 #'                                resolution_parameter=1e-5)
 #'
-#'@useDynLib leidenbase _leiden_find_partition
-#'@import igraph
-#'@export
+#' @import igraph
+#' @export
 leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartition', 'ModularityVertexPartition', 'RBConfigurationVertexPartition', 'RBERVertexPartition', 'SignificanceVertexPartition', 'SurpriseVertexPartition' ), initial_membership = NULL, edge_weights = NULL, node_sizes = NULL, seed = NULL, resolution_parameter = 0.1, num_iter = 2, verbose = FALSE )
 {
   partition_type <- match.arg( partition_type )
