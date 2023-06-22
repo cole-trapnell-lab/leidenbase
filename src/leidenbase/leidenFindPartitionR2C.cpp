@@ -53,12 +53,6 @@
  *  @note This function does not support community detection in multiplex graphs.
  */
 
-#include <cpp11.hpp>
-using namespace cpp11;
-
-[[cpp11::register]]
-void fun() {}
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -82,8 +76,8 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
 extern "C" int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
 extern "C" void R_igraph_error_handler(const char *reason, const char *file, int line, int igraph_errno);
 extern "C" igraph_attribute_table_t * igraph_i_set_attribute_table(const igraph_attribute_table_t * table);
+extern "C" _leiden_find_partition;
 
-[[cpp11::init]]
 SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
 {
   int status;
