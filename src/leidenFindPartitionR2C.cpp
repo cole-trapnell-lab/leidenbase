@@ -577,6 +577,7 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
   return ( pnodeSizes );
 }
 
+/*
 static const R_CallMethodDef CallMethods[] = {
     {"_leiden_find_partition", (DL_FUNC) &_leiden_find_partition, 8},
     {NULL, NULL, 0}
@@ -587,4 +588,4 @@ void R_init_leidenbase(DllInfo *info)
    R_registerRoutines(info, NULL, CallMethods, NULL, NULL);
    R_useDynamicSymbols(info, FALSE);
 }
-
+*/
