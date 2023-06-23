@@ -57,10 +57,8 @@
 #include <string>
 #include <iostream>
 #include <cstdint>
-#include <cstdio>
 #include <R.h>
 #include <Rinternals.h>
-#include <R_ext/Rdynload.h>
 #include <igraph.h>
 #include <rinterface.h>
 #include "leidenFindPartition.h"
@@ -73,11 +71,13 @@ std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t n
 std::vector < double >* xsetEdgeWeights( SEXP edge_weights, size_t numEdge, int *fstatus );
 std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *fstatus );
 
+
 extern "C" int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
 extern "C" void R_igraph_error_handler(const char *reason, const char *file, int line, int igraph_errno);
-extern "C" igraph_attribute_table_t * igraph_i_set_attribute_table(const igraph_attribute_table_t * table);
+
 extern "C"
 {
+__attribute__((visibility("default")))
 SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
 {
   int status;
@@ -107,7 +107,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   /*
    * Enable attribute handling as instructed in leiden/src/Optimiser.cpp.
    */
-  igraph_i_set_attribute_table( &igraph_cattribute_table );
+  igraph_set_attribute_table( &igraph_cattribute_table );
 
   /*
    * Print error message and return on igraph error. (Default is to
@@ -583,4 +583,3 @@ void R_init_leidenbase(DllInfo *info)
    R_registerRoutines(info, NULL, CallMethods, NULL, NULL);
    R_useDynamicSymbols(info, FALSE);
 }
-
