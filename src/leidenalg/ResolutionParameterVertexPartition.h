@@ -1,7 +1,7 @@
 #ifndef RESOLUTIONPARAMETERVERTEXPARTITION_H
 #define RESOLUTIONPARAMETERVERTEXPARTITION_H
 
-#include <MutableVertexPartition.h>
+#include "MutableVertexPartition.h"
 
 class ResolutionParameterVertexPartition : public MutableVertexPartition
 {

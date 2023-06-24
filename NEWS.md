@@ -1,3 +1,8 @@
+# leidenbase 0.1.19
+
+* update C igraph to 0.9.10
+* update leidenalg to 0.8.9
+
 # leidenbase 0.1.14
 
 * fix regression in src/rigraph/src/rinterface_extra.c

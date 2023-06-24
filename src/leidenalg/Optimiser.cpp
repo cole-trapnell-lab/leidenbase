@@ -39,12 +39,6 @@ Optimiser::~Optimiser()
   igraph_rng_destroy(&rng);
 }
 
-void Optimiser::print_settings()
-{
-  cerr << "Consider communities method:\t" << this->consider_comms << endl;
-  cerr << "Refine partition:\t" << this->refine_partition << endl;
-}
-
 /*****************************************************************************
   optimise the provided partition.
 *****************************************************************************/

@@ -1,7 +1,7 @@
 #ifndef CPMVERTEXPARTITION_H
 #define CPMVERTEXPARTITION_H
 
-#include <LinearResolutionParameterVertexPartition.h>
+#include "LinearResolutionParameterVertexPartition.h"
 
 class CPMVertexPartition : public LinearResolutionParameterVertexPartition
 {

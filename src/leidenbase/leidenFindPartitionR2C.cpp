@@ -77,7 +77,6 @@ extern "C" void R_igraph_error_handler(const char *reason, const char *file, int
 
 extern "C"
 {
-__attribute__((visibility("default")))
 SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
 {
   int status;
@@ -289,7 +288,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   SET_VECTOR_ELT( rresult, 6, rweightToCommunity );
   SET_VECTOR_ELT( rresult, 7, ScalarReal( cweightTotal ) );
 
-  UNPROTECT( 6 );
+  UNPROTECT( 5 );
 
   return ( rresult );
 }
@@ -578,7 +577,7 @@ static const R_CallMethodDef CallMethods[] = {
     {NULL, NULL, 0}
 };
 
-void R_init_leidenbase(DllInfo *info)
+extern "C" attribute_visible void R_init_leidenbase(DllInfo *info)
 {
    R_registerRoutines(info, NULL, CallMethods, NULL, NULL);
    R_useDynamicSymbols(info, FALSE);

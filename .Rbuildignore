@@ -17,6 +17,7 @@
 ^LICENSE$
 ^Makefile$
 ^Makefile.bck$
+^Makefile-cigraph$
 ^mk_repo.sh$
 ^object_files$
 ^old_save$
@@ -27,9 +28,12 @@
 ^version_number$
 ^win_config$
 ^NOTES$
+^NOTES.new_igraph$
 ^CHECKLIST
 ^man/.Rd2pdf.*$
+^patches$
 ^README.md$
+^tools$
 ^src/.*\.o$
 ^src/Makevars$
 ^src/.Rhistory$
@@ -74,3 +78,5 @@
 ^src/leidenbase.so$
 ^tests/cpp_tests/test$
 ^tmp$
+^tmp_test$
+^vendor$
