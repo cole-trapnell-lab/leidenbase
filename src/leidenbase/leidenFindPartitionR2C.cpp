@@ -61,6 +61,8 @@
 #include <Rinternals.h>
 #include <igraph.h>
 #include <rinterface.h>
+#include <R_ext/Visibility.h>
+
 #include "leidenFindPartition.h"
 
 #define DEBUG   0
