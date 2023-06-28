@@ -1,0 +1,173 @@
+Checklist
+  o  update leidenalg source files are required. Check that the leidenalg
+     version is compatible with the C igraph version used in rigraph.
+  o  update cigraph submodule as required. The cigraph submodule must be
+     compatible with the rigraph version.
+  o  update rigraph/Makefile-cigraph as required
+  o  update rigraph files in leidenbase/src as required
+  o  remove the rigraph source files (from src) related to cpp11.cpp/cpp11.h
+     These (include) cpp11.cpp, cpprinterface.cpp, igraph_types.hpp,
+     igraph_vector.hpp, igraph-win.def, init.cpp.
+     This includes removing igraphhcass2 from rinterface_extra.c
+  o  remove src/rinterface.c, which exposes the igraph functions to R.
+     (These are used by rigraph.)
+  o  check that tools/* and src/<rigraph files> are compatible with the
+     versions in the rigraph version to be used.
+  o  add -Ileidenalg -Ileidenbase to the PKG_CPPFLAGS variable in
+     tools/stimulus/Makevars.* files
+
+  o  check that leidenalg and leidenbase function parameter types match
+  o  check that leidenbase and rigraph function parameter types match
+
+  o  check for changes in rigraph Makefile-cigraph, and configure.ac
+  o  check for updates to rigraph tools/stimulus (e.g., Makevars.*)
+
+  o  check for spurious files in package tar file
+
+  o  run tests consisting of comparisons of R leidenbase and Python leidenalg
+
+  o  run 'R CMD check' and 'R CMD check --as-cran' on the source file.
+
+  o  check that leidenbase installs on supported/CRAN-tested platforms
+  o  push modified dev branch to github
+  o  push modified main branch to github
+
+  o  update leidenalg and cigraph versions in DESCRIPTION
+  o  update NEWS.md
+
+1. update cigraph git submodule
+     o  I believe that the submodule commit should be the same as the commit
+        used in the current rigraph package, which may not be the most recent
+        cigraph release branch.
+
+     o  update a submodule with the commands
+          cd cigraph
+          git checkout master
+          git pull
+          cd ..
+          git commit
+     o  set cigraph submodule to the required commit version for
+        consistency with rigraph.
+     o  update leidenbase/patches/ contents
+     o  run in leidenbase/  'make -f Makefile-cigraph clean' and 'make -f Makefile-cigraph'
+        to update cigraph files in leidenbase. This may not be required.
+     o  Makefile-cigraph replaces/updates leidenbase/vendor/, leidenbase/src/core/, and
+        leidenbase/src/include/.
+
+2. modify rigraph files
+     o  use rigraph commit that's compatible with leidenalg
+     o  compare rigraph/Makefile-cigraph to leidenbase/Makefile-cigraph
+        notes:
+          o  confirm these notes by comparing leidenbase/Makefile-cigraph to
+             rigraph/Makefile-cigraph
+          o  remove lines related
+               o  stimulus and related code
+               o  python and virtual environment
+               o  rinterface.c related lines
+               o  RSRC
+          o  add
+               o  LEIDENALGSRC := $(shell git ls-files --full-name src/leidenalg)
+               o  LEIDENBASESRC := $(shell git ls-files --full-name src/leidenbase) 
+          o  edit
+               o  OBJECTS
+               o  RGEN
+               o  pre_build
+               o  clean: rm ...
+     o  compare rigraph/configure.ac to leidenbase/configure.ac
+          o  change AC_CONFIG_SRCDIR(src/rinterface.c) to AC_CONFIG_SRCDIR(src/rinterface_extra.c)
+             because I drop rinterface.c.
+     o  update as required
+           o  tools/stimulus/(Makevars.in|Makevars.ucrt|Makevars.win)
+              Need to have paths to leidenalg and leidenbase include files.
+     o  remove the function int igraphhcass2() from leidenbase/src/rinterface_extra.c.
+        It's unused and is related to stimulus code. (It may be possible to leave it
+        if rinterface_extra.c but I'm removing it.)
+     o  compare leidenbase/src/(lazyeval.c|rinterface_extra.c|rrandom.c) to the versions
+        in rigraph/src and update if differences.
+     o  compare leidenbase/vendor/ to rigraph/vendor/ and update as necessary
+     o  leidenbase/src/config.h.in is copied from leidenbase/cigraph/src by the
+        Makefile-cigraph script so it should get update automatically
+     o  update files in leidenbase/src/vendor/ using rigraph/src/vendor/, as
+        required.
+3. modify leidenalg files
+     o  update leidenalg source files to a version compatible with the cigraph
+        version that's compatible with rigraph.
+     o  note: I had a problem with the windows compiler finding the leidenalg
+        include files so I needed to change some '#include <>' to '#include ""'
+        It may make sense to put the include files in a separate include directory
+        and modify the leidenbase/tools/stimulus/Makevars.* files as required.
+     o  potentially edit the files
+          ==== MutableVertexPartition.cpp ====
+          
+          3,4d2
+          < #undef DEBUG
+          <
+          479a478
+          >   cerr << "This function is deprecated, use MutableVertexPartition::set_membership(vector<size_t> const& membership)" << endl;
+          904a904
+          >   vector<bool> comm_added(this->n_communities(), false);
+          910c910,914
+          <       neigh_comms.push_back(comm);
+          ---
+          >       if (!comm_added[comm])
+          >       {
+          >         neigh_comms.push_back(comm);
+          >         comm_added[comm];
+          >       }
+          
+          
+          ==== Optimiser.cpp ====
+          
+          41a42,47
+          > void Optimiser::print_settings()
+          > {
+          >   cerr << "Consider communities method:\t" << this->consider_comms << endl;
+          >   cerr << "Refine partition:\t" << this->refine_partition << endl;
+          > }
+          >
+
+        That is, remove the cerr usage (print_settings is unused). And the modifications to
+        MutableVertexPartition.cpp at line 910 should be made in future commits to the
+        leidenalg repository. That is, the conditional block of statements should have been
+        replaced by the single line 'neigh_comms.push_back(comm);'.
+     o  do not use any leidenalg *.py files in leidenbase
+
+4. Leidenbase compiles now with the C compiler attribute 'visibility' set to 'hidden'.
+   There is some GCC documentation on visibility at
+     https://gcc.gnu.org/wiki/Visibility
+   and the R documentation can be found at
+     https://cran.r-project.org/doc/manuals/R-exts.html#Controlling-visibility.
+   The compilation visibility is set in the leidenbase/tools/stimulus/Makevars.*
+   files. For example,
+
+     PKG_CFLAGS=$(C_VISIBILITY)
+     PKG_CXXFLAGS=$(CXX_VISIBILITY)
+     PKG_FFLAGS=$(F_VISIBILITY)
+
+   When visibility is set to 'hidden', the '_leiden_find_partition()' cpp functions
+   must have visibility set to 'global' so that R can find it for the .Call()
+   function in the leidenbase/R/leidenbase.R function. This is done at this time in
+   the function
+
+     extern "C" attribute_visible void R_init_leidenbase(DllInfo *info)
+     {
+        R_registerRoutines(info, NULL, CallMethods, NULL, NULL);
+        R_useDynamicSymbols(info, FALSE);
+     }
+
+   in the file leidenbase/src/leidenbase/leidenFindPartitionR2C.cpp. The visibility
+   of the functions in the leidenbase/src/leidenbase.so object file can be found
+   using the Linux utilities 'nm' and 'readelf'.
+
+5. There may be other changes that I've forgotten or need to be made in the future.
+
+6. The script leidenbase/tests/cpp_tests/leidenalg_ref.py is meant to simplify testing
+   in which leidenbase output is compared to the corresponding leidenalg python
+   interface output. leidenalg_ref.py runs the python leidenalg functions and writes
+   a file that can be 'source'ed in R and, using the R function
+   'cmp_comms(leidenalg_part)', compares the outputs of leidenalg and leidenbase. The
+   function 'make_ref()' can be called multiple times to make multiple output files
+   made using different leidenalg partition conditions. This program can be expanded
+   and improved in the future.
+
+

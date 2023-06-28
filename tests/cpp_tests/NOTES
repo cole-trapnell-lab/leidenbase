@@ -39,7 +39,7 @@ notes:
      graph.
 
 
-== file: leidenal.py
+== file: leidenalg.py
 description: run the leidenalg package.
 notes:
   o  install leidenalg as a python package from
@@ -57,6 +57,17 @@ notes:
 
             python3 setup.py install --user
 
+  o  in order to use consistent version of igraph,
+     python-igraph, and leidenalg igraph, I used
+     pipx to create a python virtual environment in
+     which I installed python-igraph. The python-igraph
+     installed from source and I edited the setup.py to
+     point to igraph libraries that I installed in a
+     non-conventional place. In order to install the
+     desired python-igraph version in the virtual environment
+     called python-igraph, I used the command
+
+       $HOME/.local/pipx/venvs/python-igraph/bin/python3 -m pip install "leidenalg==0.8.10"
 
 == test in R
 description: test membership using the leidenbase R interface
@@ -80,4 +91,6 @@ notes:
      is the community to which node 1 belongs, etc.
   o  the R nodes and communities are 1-based whereas the python
      and C++ values are 0-based.
-
+  o  the res$total_weight is the weight of all edges in the graph,
+     which is not the same as the total weight in all communities
+     reported in leidenalg.

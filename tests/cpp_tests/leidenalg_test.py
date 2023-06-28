@@ -28,7 +28,7 @@ edge_wghts = read_edge_weights()
 init_members = read_initial_memberships()
 
 print('python version info: %s' % ( platform.python_version() ) )
-#print('leidenalg version: %s' % ( leidenalg.__version__ ) )
+print('leidenalg version: %s' % ( leidenalg.version ) )
 print('igraph version: %s' % ( ig.__version__ ) )
 
 g = ig.read( filename='edgelist.edg', format='edgelist', directed=False)
@@ -38,7 +38,7 @@ g = ig.read( filename='edgelist.edg', format='edgelist', directed=False)
 
 
 # part = leidenalg.find_partition(g, partition_type=leidenalg.CPMVertexPartition, n_iterations=2, resolution_parameter=0.5, seed=2016)
-# part = leidenalg.find_partition(g, partition_type=leidenalg.RBConfigurationVertexPartition, n_iterations=2, resolution_parameter=0.5, seed=2016)
+part = leidenalg.find_partition(g, partition_type=leidenalg.RBConfigurationVertexPartition, n_iterations=2, resolution_parameter=0.5, seed=2016)
 # part = leidenalg.find_partition(g, partition_type=leidenalg.RBERVertexPartition, n_iterations=2, resolution_parameter=0.5, seed=2016)
 # part = leidenalg.find_partition(g, partition_type=leidenalg.SignificanceVertexPartition, n_iterations=2, seed=2016)
 # part = leidenalg.find_partition(g, partition_type=leidenalg.SurpriseVertexPartition, n_iterations=2, seed=2016)
@@ -49,9 +49,11 @@ print(part)
 ncomm = len(part)
 
 print()
-print('Quality: %f ' % (part.quality()))
-print('Total weight in all communities: %f' % (part.total_weight_in_all_comms()))
-print('Significance: %f ' % (leidenalg.SignificanceVertexPartition.FromPartition(part).quality()))
+print('Quality: %.0f ' % (part.quality()))
+print('Significance: %.0f ' % (leidenalg.SignificanceVertexPartition.FromPartition(part).quality()))
+print('Total weight in all communities: %.0f' % (part.total_weight_in_all_comms()))
+print('Apparently the total weight in all communities is the sum of the edge')
+print('weights in communities.')
 print()
 
 print('Edge weight within community')
@@ -70,3 +72,5 @@ print('Edge weight to community')
 for i in range(ncomm):
   print('%.0f' % part.total_weight_to_comm(i), end=' ')
 print()
+
+

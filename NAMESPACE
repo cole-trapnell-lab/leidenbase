@@ -2,4 +2,4 @@
 
 export(leiden_find_partition)
 import(igraph)
-useDynLib(leidenbase, "_leiden_find_partition", .registration=TRUE)
+useDynLib(leidenbase,"_leiden_find_partition")

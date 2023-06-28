@@ -1,7 +1,8 @@
 # leidenbase 0.1.19
 
 * update C igraph to 0.9.10
-* update leidenalg to 0.8.9
+* update rigraph to 1.5.0
+* update leidenalg to 0.8.10
 
 # leidenbase 0.1.14
 

@@ -85,7 +85,7 @@
 #'  a numeric modularity, a numeric significance, a numeric vector of
 #'  edge weights within each community, a numeric vector of edge weights
 #'  from each community, a numeric vector of edge weights to each
-#'  community, and total edge weight.
+#'  community, and total edge weight in the graph.
 #'
 #'@references
 #' V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
