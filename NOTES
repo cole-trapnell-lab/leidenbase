@@ -29,6 +29,7 @@ Checklist
   o  run 'R CMD check' and 'R CMD check --as-cran' on the source file.
 
   o  check that leidenbase installs on supported/CRAN-tested platforms
+     using rhub (win-builder too)
   o  push modified dev branch to github
   o  push modified main branch to github
 
