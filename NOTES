@@ -2,17 +2,10 @@ Checklist
   o  update leidenalg source files are required. Check that the leidenalg
      version is compatible with the C igraph version used in rigraph.
   o  update cigraph submodule as required. The cigraph submodule must be
-     compatible with the rigraph version.
-  o  update rigraph/Makefile-cigraph as required
-  o  update rigraph files in leidenbase/src as required
-  o  remove the rigraph source files (from src) related to cpp11.cpp/cpp11.h
-     These (include) cpp11.cpp, cpprinterface.cpp, igraph_types.hpp,
-     igraph_vector.hpp, igraph-win.def, init.cpp.
-     This includes removing igraphhcass2 from rinterface_extra.c
-  o  remove src/rinterface.c, which exposes the igraph functions to R.
-     (These are used by rigraph.)
-  o  check that tools/* and src/<rigraph files> are compatible with the
-     versions in the rigraph version to be used.
+     compatible with the leidenalg version.
+  o  update Makefile-cigraph as required (Makefile-cigraph is from rigraph)
+  o  check that tools/* are compatible with the versions in the igraph
+     version to be used.
   o  add -Ileidenalg -Ileidenbase to the PKG_CPPFLAGS variable in
      tools/stimulus/Makevars.* files
 
@@ -39,7 +32,7 @@ Checklist
 
 1. update cigraph git submodule
      o  I believe that the submodule commit should be the same as the commit
-        used in the current rigraph package, which may not be the most recent
+        used in the current leidenalg package, which may not be the most recent
         cigraph release branch.
 
      o  update a submodule with the commands
@@ -56,42 +49,7 @@ Checklist
      o  Makefile-cigraph replaces/updates leidenbase/vendor/, leidenbase/src/core/, and
         leidenbase/src/include/.
 
-2. modify rigraph files
-     o  use rigraph commit that's compatible with leidenalg
-     o  compare rigraph/Makefile-cigraph to leidenbase/Makefile-cigraph
-        notes:
-          o  confirm these notes by comparing leidenbase/Makefile-cigraph to
-             rigraph/Makefile-cigraph
-          o  remove lines related
-               o  stimulus and related code
-               o  python and virtual environment
-               o  rinterface.c related lines
-               o  RSRC
-          o  add
-               o  LEIDENALGSRC := $(shell git ls-files --full-name src/leidenalg)
-               o  LEIDENBASESRC := $(shell git ls-files --full-name src/leidenbase) 
-          o  edit
-               o  OBJECTS
-               o  RGEN
-               o  pre_build
-               o  clean: rm ...
-     o  compare rigraph/configure.ac to leidenbase/configure.ac
-          o  change AC_CONFIG_SRCDIR(src/rinterface.c) to AC_CONFIG_SRCDIR(src/rinterface_extra.c)
-             because I drop rinterface.c.
-     o  update as required
-           o  tools/stimulus/(Makevars.in|Makevars.ucrt|Makevars.win)
-              Need to have paths to leidenalg and leidenbase include files.
-     o  remove the function int igraphhcass2() from leidenbase/src/rinterface_extra.c.
-        It's unused and is related to stimulus code. (It may be possible to leave it
-        if rinterface_extra.c but I'm removing it.)
-     o  compare leidenbase/src/(lazyeval.c|rinterface_extra.c|rrandom.c) to the versions
-        in rigraph/src and update if differences.
-     o  compare leidenbase/vendor/ to rigraph/vendor/ and update as necessary
-     o  leidenbase/src/config.h.in is copied from leidenbase/cigraph/src by the
-        Makefile-cigraph script so it should get update automatically
-     o  update files in leidenbase/src/vendor/ using rigraph/src/vendor/, as
-        required.
-3. modify leidenalg files
+2. modify leidenalg files
      o  update leidenalg source files to a version compatible with the cigraph
         version that's compatible with rigraph.
      o  note: I had a problem with the windows compiler finding the leidenalg
@@ -134,7 +92,7 @@ Checklist
         replaced by the single line 'neigh_comms.push_back(comm);'.
      o  do not use any leidenalg *.py files in leidenbase
 
-4. Leidenbase compiles now with the C compiler attribute 'visibility' set to 'hidden'.
+3. Leidenbase compiles now with the C compiler attribute 'visibility' set to 'hidden'.
    There is some GCC documentation on visibility at
      https://gcc.gnu.org/wiki/Visibility
    and the R documentation can be found at
@@ -161,9 +119,9 @@ Checklist
    of the functions in the leidenbase/src/leidenbase.so object file can be found
    using the Linux utilities 'nm' and 'readelf'.
 
-5. There may be other changes that I've forgotten or need to be made in the future.
+4. There may be other changes that I've forgotten or need to be made in the future.
 
-6. The script leidenbase/tests/cpp_tests/leidenalg_ref.py is meant to simplify testing
+5. The script leidenbase/tests/cpp_tests/leidenalg_ref.py is meant to simplify testing
    in which leidenbase output is compared to the corresponding leidenalg python
    interface output. leidenalg_ref.py runs the python leidenalg functions and writes
    a file that can be 'source'ed in R and, using the R function
