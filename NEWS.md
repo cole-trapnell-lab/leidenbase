@@ -1,7 +1,7 @@
 # leidenbase 0.1.19
 
-* update C igraph to 0.9.10
-* update rigraph to 1.5.0
+* use edgelist to pass graph to C
+* update C igraph to 0.9.0
 * update leidenalg to 0.8.10
 
 # leidenbase 0.1.14

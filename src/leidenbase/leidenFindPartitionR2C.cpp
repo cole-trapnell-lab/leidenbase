@@ -26,7 +26,8 @@
  *  Scientific Reports (2019)
  *  DOI: 10.1038/s41598-019-41695-z
  *
- *  @param[in]   igraph                 R igraph graph
+ *  @param[in]   igraph_edgelist        a numeric edgelist vector
+ *  @param[in]   igraph_directed        an integer logical indicating whether or not the graph is directed
  *  @param[in]   partition_type         partition type
  *  @param[in]   initial_membership     Numeric vector of initial membership assignments of nodes (NULL for default of one community per node)
  *  @param[in]   edge_weights           Numeric vector of edge weights (NULL for default of 1.0 for all edges)
@@ -60,8 +61,9 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <igraph.h>
-#include <rinterface.h>
 #include <R_ext/Visibility.h>
+
+#include <cstdio>
 
 #include "leidenFindPartition.h"
 
@@ -73,18 +75,26 @@ std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t n
 std::vector < double >* xsetEdgeWeights( SEXP edge_weights, size_t numEdge, int *fstatus );
 std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *fstatus );
 
-
-extern "C" int R_SEXP_to_igraph(SEXP graph, igraph_t *res);
-extern "C" void R_igraph_error_handler(const char *reason, const char *file, int line, int igraph_errno);
+#define LEN_ERROR_STRING	1024
+void R_leidenbase_error_handler(const char *reason, const char *file, int line, int igraph_errno)
+{
+  char error_string[LEN_ERROR_STRING];
+  snprintf(error_string, LEN_ERROR_STRING, "Error at %s:%i : %s - %s.\n",
+           file, line, reason, igraph_strerror(igraph_errno));
+  IGRAPH_FINALLY_FREE();
+  error(error_string);
+}
 
 extern "C"
 {
-SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
+SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sdirected, SEXP partition_type, SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, SEXP seed, SEXP resolution_parameter, SEXP num_iter )
 {
   int status;
+  int cdirected;
   std::int32_t cnumIter;
   size_t cseed;
   size_t i;
+  size_t ir, ic;
   size_t numVertex, numEdge;
   double cresolutionParameter;
   double cweightTotal;
@@ -92,6 +102,8 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   double cmodularity;
   double csignificance;
   char *pcpartitionType;
+
+  igraph_vector_t cedgelist;
 
   std::vector < size_t > *pcinitialMembership;
   std::vector < double > *pcedgeWeights;
@@ -101,7 +113,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
   std::vector < double >  cweightFromCommunity;
   std::vector < double >  cweightToCommunity;
 
-  igraph_t igraphGraph;
+  igraph_t cigraph;
 
   xcheckParametersRValues( initial_membership, edge_weights, node_sizes, &status );
 
@@ -114,14 +126,40 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Print error message and return on igraph error. (Default is to
    * abort on error.)
    */
-  igraph_set_error_handler( R_igraph_error_handler );
+  igraph_set_error_handler( R_leidenbase_error_handler );
 
   /*
-   * Convert R igraph object to an igraph graph using the igraph internal functions.
+   * Some graph characteristics.
    */
-  R_SEXP_to_igraph( igraph, &igraphGraph );
-  numVertex = (size_t)igraph_vcount( &igraphGraph );
-  numEdge   = (size_t)igraph_ecount( &igraphGraph );
+  cdirected = (int)REAL(sdirected)[0];
+  numVertex = (size_t)REAL(snvertex)[0];
+  numEdge   = (size_t)REAL(snedge)[0];
+
+  /*
+   * Convert R igraph object to an C igraph graph using an edgelist.
+   */
+  if(igraph_vector_init(&cedgelist, (int long)(2 * numEdge)) == IGRAPH_ENOMEM)
+  {
+    error("_leiden_find_partition: unable to allocate memory\n");
+    return( R_NilValue );
+  }
+
+  for( ic = 0; ic < 2; ++ic )
+  {
+    for(ir = 0; ir < numEdge; ++ir)
+    {
+      VECTOR(cedgelist)[2*ir+ic] = (igraph_real_t)REAL(sedgelist)[ir + numEdge * ic] - 1;
+    }
+  }
+
+  status = igraph_create(&cigraph, &cedgelist, (igraph_integer_t)numVertex, (igraph_bool_t)cdirected);
+  if(status != IGRAPH_SUCCESS)
+  {
+    error("_leiden_find_partition: unable to convert graph\n");
+    return( R_NilValue );
+  }
+
+  igraph_vector_destroy( &cedgelist );
 
   /*
    * Extract partition type string.
@@ -178,7 +216,7 @@ SEXP _leiden_find_partition( SEXP igraph, SEXP partition_type, SEXP initial_memb
    * Partition nodes into communities.
    */
    std::string partitionType( pcpartitionType );
-   leidenFindPartition( &igraphGraph, partitionType,
+   leidenFindPartition( &cigraph, partitionType,
                         pcinitialMembership, pcedgeWeights, pcnodeSizes,
                         (size_t)cseed, cresolutionParameter, cnumIter,
                         &cmembership,
@@ -575,7 +613,7 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
 }
 
 static const R_CallMethodDef CallMethods[] = {
-    {"_leiden_find_partition", (DL_FUNC) &_leiden_find_partition, 8},
+    {"_leiden_find_partition", (DL_FUNC) &_leiden_find_partition, 11},
     {NULL, NULL, 0}
 };
 

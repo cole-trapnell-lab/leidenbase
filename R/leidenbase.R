@@ -184,8 +184,13 @@ leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartiti
     message( 'leiden_find_partition: number vertices      ', num_vertex )
     message( 'leiden_find_partition: number edges         ', num_edge )
   }
-  
-  result = .Call( '_leiden_find_partition', igraph, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )
+
+  igraph_edgelist  <- as_edgelist(igraph) 
+  igraph_numvertex <- as.numeric(vcount(igraph))
+  igraph_numedge   <- as.numeric(ecount(igraph))
+  igraph_directed  <- if(is_directed(igraph) == TRUE) 1 else 0
+
+  result = .Call( '_leiden_find_partition', igraph_edgelist, igraph_numvertex, igraph_numedge, igraph_directed, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )
 
   return( result )
 }
