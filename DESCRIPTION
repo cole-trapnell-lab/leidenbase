@@ -24,8 +24,6 @@ Description: An R to C/C++ interface that runs the Leiden community
     Leidenbase includes code from the packages:
        igraph version 0.9.8 with license GPL (>= 2),
        leidenalg version 0.8.10 with license GPL 3.
-Imports:
-    igraph (>= 1.5.0)
 License: GPL-3
 Encoding: UTF-8
 RoxygenNote: 7.2.3
