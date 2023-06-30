@@ -41,6 +41,10 @@ Checklist
           git pull
           cd ..
           git commit
+     o  clone repository with submodules
+          git clone git clone --recurse-submodules https://github.com/cole-trapnell-lab/leidenbase
+          git submodule init
+          git submodule update
      o  set cigraph submodule to the required commit version for
         consistency with rigraph.
      o  update leidenbase/patches/ contents
