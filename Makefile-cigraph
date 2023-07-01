@@ -205,7 +205,7 @@ OBJECTS := $(shell echo $(CORESRC) $(VENDORSRC) $(ARPACK) $(RAY) $(UUID) $(LEIDE
         grep -E '\.(c|cpp|cc|f|l|y)$$' | \
 		sed 's/\.[^\.][^\.]*$$/.o/' | \
 		sed 's,^src/,,' \
-		) rinterface_extra.o rrandom.o lazyeval.o
+		)
 
 object_files: force
 	@echo '$(OBJECTS)' | cmp -s - $@ || echo '$(OBJECTS)' > $@
