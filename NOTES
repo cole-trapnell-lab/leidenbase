@@ -15,6 +15,14 @@ Checklist
   o  check for changes in rigraph Makefile-cigraph, and configure.ac
   o  check for updates to rigraph tools/stimulus (e.g., Makevars.*)
 
+  o  check for memory issues using sanitizers and valgrind
+       See
+         o https://cran.r-project.org/doc/manuals/R-exts.html#Checking-memory-access
+         o https://cran.r-project.org/doc/manuals/R-exts.html#Using-valgrind
+         o https://github.com/rocker-org/r-devel-san
+       Try
+         R -d "valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --log-file='valgrind.log'" --vanilla
+
   o  check for spurious files in package tar file
 
   o  run tests consisting of comparisons of R leidenbase and Python leidenalg

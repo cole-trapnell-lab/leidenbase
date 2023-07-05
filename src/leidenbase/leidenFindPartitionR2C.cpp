@@ -96,6 +96,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   size_t i;
   size_t ir, ic;
   size_t numVertex, numEdge;
+  size_t max_size;
   double cresolutionParameter;
   double cweightTotal;
   double cquality;
@@ -115,6 +116,8 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
 
   igraph_t cigraph;
 
+  max_size = (size_t)-1;
+
   xcheckParametersRValues( initial_membership, edge_weights, node_sizes, &status );
 
   /*
@@ -132,13 +135,24 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
    * Some graph characteristics.
    */
   cdirected = (int)REAL(sdirected)[0];
+  if(REAL(snvertex)[0] > (double)max_size)
+  {
+    error("_leiden_find_partition: too many vertices.\n");
+    return( R_NilValue );
+  }
   numVertex = (size_t)REAL(snvertex)[0];
+  if(REAL(snedge)[0] > (double)max_size)
+  {
+    error("_leiden_find_partition: too many edges.\n");
+    return( R_NilValue );
+  }
   numEdge   = (size_t)REAL(snedge)[0];
 
   /*
    * Convert R igraph object to an C igraph graph using an edgelist.
    */
-  if(igraph_vector_init(&cedgelist, (int long)(2 * numEdge)) == IGRAPH_ENOMEM)
+  status = igraph_vector_init(&cedgelist, (int long)(2 * numEdge));
+  if(status == IGRAPH_ENOMEM)
   {
     error("_leiden_find_partition: unable to allocate memory\n");
     return( R_NilValue );
@@ -148,7 +162,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   {
     for(ir = 0; ir < numEdge; ++ir)
     {
-      VECTOR(cedgelist)[2*ir+ic] = (igraph_real_t)REAL(sedgelist)[ir + numEdge * ic] - 1;
+      VECTOR(cedgelist)[2*ir+ic] = (igraph_real_t)REAL(sedgelist)[ir+numEdge*ic] - 1;
     }
   }
 
@@ -237,6 +251,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
     if( pcnodeSizes != NULL )
       delete pcnodeSizes;
     error( "_leiden_find_partition: bad status: leiden_find_partition" );
+    igraph_destroy(&cigraph);
     return ( R_NilValue );
   }
 
@@ -246,6 +261,8 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
     delete pcedgeWeights;
   if( pcnodeSizes != NULL )
     delete pcnodeSizes;
+
+  igraph_destroy(&cigraph);
 
   /*
    * Set up to return community membership vector and community quality and
