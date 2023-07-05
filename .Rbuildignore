@@ -29,6 +29,7 @@
 ^win_config$
 ^NOTES$
 ^NOTES.new_igraph$
+^notes.gap_16.txt$
 ^CHECKLIST
 ^man/.Rd2pdf.*$
 ^patches$
