@@ -1,0 +1,78 @@
+test_start
+test_name = 'test_3_1'
+edgelist_file = 'edgelist.edg'
+weights_file:'edge_weights.txt'
+membership_file:'initial_memberships.txt'
+directed = True
+partition_type_name = 'CPMVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_1'
+test_end
+
+test_start
+test_name = 'test_3_2'
+edgelist_file = 'edgelist.edg'
+weights_file:'edge_weights.txt'
+membership_file = 'initial_memberships.txt'
+directed = True
+partition_type_name = 'ModularityVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_2'
+test_end
+
+test_start
+test_name = 'test_3_3'
+edgelist_file = 'edgelist.edg'
+weights_file = 'edge_weights.txt'
+membership_file = 'initial_memberships.txt'
+directed = True
+partition_type_name = 'RBConfigurationVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_3'
+test_end
+
+test_start
+test_name = 'test_3_4'
+edgelist_file = 'edgelist.edg'
+weights_file = 'edge_weights.txt'
+membership_file = 'initial_memberships.txt'
+directed = True
+partition_type_name = 'RBERVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_4'
+test_end
+
+test_start
+test_name = 'test_3_5'
+edgelist_file = 'edgelist.edg'
+weights_file = 'edge_weights.txt'
+membership_file = 'initial_memberships.txt'
+directed = True
+partition_type_name = 'SignificanceVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_5'
+test_end
+
+test_start
+test_name = 'test_3_6'
+edgelist_file = 'edgelist.edg'
+weights_file = 'edge_weights.txt'
+membership_file = 'initial_memberships.txt'
+directed = True
+partition_type_name = 'SurpriseVertexPartition'
+resolution_parameter = 0.5
+n_iterations = 2
+seed = 2016
+outname_root = 'test_3_6'
+test_end
+

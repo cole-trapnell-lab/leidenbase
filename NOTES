@@ -140,6 +140,7 @@ Checklist
    'cmp_comms(leidenalg_part)', compares the outputs of leidenalg and leidenbase. The
    function 'make_ref()' can be called multiple times to make multiple output files
    made using different leidenalg partition conditions. This program can be expanded
-   and improved in the future.
+   and improved in the future. Consider using pipx to create a python virtual
+   environment and install the required Python packages: igraph and leidenalg.
 
 
