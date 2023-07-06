@@ -135,12 +135,14 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
    * Some graph characteristics.
    */
   cdirected = (int)REAL(sdirected)[0];
+
   if(REAL(snvertex)[0] > (double)max_size)
   {
     error("_leiden_find_partition: too many vertices.\n");
     return( R_NilValue );
   }
   numVertex = (size_t)REAL(snvertex)[0];
+
   if(REAL(snedge)[0] > (double)max_size)
   {
     error("_leiden_find_partition: too many edges.\n");

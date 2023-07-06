@@ -185,7 +185,7 @@ leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartiti
     message( 'leiden_find_partition: number edges         ', num_edge )
   }
 
-  igraph_edgelist  <- as_edgelist(igraph) 
+  igraph_edgelist  <- as_edgelist(igraph, names=FALSE) 
   igraph_numvertex <- as.numeric(vcount(igraph))
   igraph_numedge   <- as.numeric(ecount(igraph))
   igraph_directed  <- if(is_directed(igraph) == TRUE) 1 else 0

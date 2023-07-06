@@ -146,7 +146,15 @@ def write_call_leidenbase(fp):
   print('  library(igraph)', file=fp)
   print('  library(leidenbase)', file=fp)
   print('  graph <- read_graph(part$edgelist_file, format=\'edgelist\', directed=part$graph_directed)', file=fp)
-  print('  comm <- leiden_find_partition(graph, partition_type=part$partition_type, seed=part$seed, resolution_parameter=part$resolution_parameter, num_iter=part$n_iterations)', file=fp)
+  print('  if(!is.null(part$membership_file))', file=fp)
+  print('    initial_membership <- as.numeric(read.table(part$membership_file)$V1)', file=fp)
+  print('  else', file=fp)
+  print('    initial_membership <- NULL', file=fp)
+  print('  if(!is.null(part$weights_file))', file=fp)
+  print('    edge_weights <- as.numeric(read.table(part$weights_file)$V1)', file=fp)
+  print('  else', file=fp)
+  print('    edge_weights <- NULL', file=fp)
+  print('  comm <- leiden_find_partition(graph, partition_type=part$partition_type, initial_membership=initial_membership, edge_weights=edge_weights, seed=part$seed, resolution_parameter=part$resolution_parameter, num_iter=part$n_iterations)', file=fp)
   print('}', file=fp)
   print(file=fp)
 
@@ -157,11 +165,13 @@ def write_cmp_comms(fp):
 
   print('  message(\'Test if community attributes are the same\')', file=fp)
   print('  message(\'  comm memberships: \', setequal(leidenbase_part$membership, leidenalg_part$membership))', file=fp)
-  print('  message(\'  compare comm edge weight in community: \', setequal(leidenbase_part$edge_weight_within_community, leidenalg_part$edge_weight_in_comm))', file=fp)
-  print('  message(\'  compare comm edge weight from community: \', setequal(leidenbase_part$edge_weight_from_community, leidenalg_part$edge_weight_from_comm))', file=fp)
-  print('  message(\'  compare comm edge weight to community: \', setequal(leidenbase_part$edge_weight_to_community, leidenalg_part$edge_weight_to_comm))', file=fp)
+  print('  message(\'  compare comm edge weight in community: \', setequal(round(leidenbase_part$edge_weight_within_community), leidenalg_part$edge_weight_in_comm))', file=fp)
+  print('  message(\'  compare comm edge weight from community: \', setequal(round(leidenbase_part$edge_weight_from_community), leidenalg_part$edge_weight_from_comm))', file=fp)
+  print('  message(\'  compare comm edge weight to community: \', setequal(round(leidenbase_part$edge_weight_to_community), leidenalg_part$edge_weight_to_comm))', file=fp)
   print('  message(\'Quality values: leidenalg: \', leidenalg_part$quality, \'  leidenbase: \', leidenbase_part$quality)', file=fp)
-  print('  message(\'Significance values: leidenalg: \', leidenalg_part$significance, \'  leidenbase: \', leidenbase_part$significance)', file=fp)
+  # the significance is defined only for unweighted graphs according to leidenalg
+  print('  if(is.null(leidenalg_part$weights_file))', file=fp)
+  print('    message(\'Significance values: leidenalg: \', leidenalg_part$significance, \'  leidenbase: \', leidenbase_part$significance)', file=fp)
   print('  message(\'Modularity values: leidenalg: \', leidenalg_part$modularity, \'  leidenbase: \', leidenbase_part$modularity)', file=fp)
   print('}', file=fp)
 
@@ -181,9 +191,14 @@ def write_comm_file_as_list(edgelist_file=None, weights_file=None, membership_fi
   print('version=\'%s\',' % (leidenalg.version), file=fp)
 
   print('edgelist_file=\'%s\',' % (edgelist_file), file=fp)
-  print('weights_file=\'%s\',' % (weights_file if(weights_file != None) else 'NULL'), file=fp)
-  print('membership_file=\'%s\',' % (membership_file if(membership_file != None) else 'NULL'), file=fp)
-
+  if(weights_file != None):
+    print('weights_file=\'%s\',' % (weights_file if(weights_file != None) else 'NULL'), file=fp)
+  else:
+    print('weights_file=NULL,', file=fp)
+  if(membership_file != None):
+    print('membership_file=\'%s\',' % (membership_file if(membership_file != None) else 'NULL'), file=fp)
+  else:
+    print('membership_file=NULL,', file=fp)
   print('graph_directed=%s,' % ('TRUE' if(directed == True) else 'FALSE'), file=fp)
   print('partition_type=\'%s\',' % (partition_type_name), file=fp)
   print('resolution_parameter=%f,' % (resolution_parameter), file=fp)
@@ -250,9 +265,11 @@ def make_ref(edgelist_file=None,
   partition_type = get_partition_type(partition_type_name)
 #  part = leidenalg.find_partition(graph, partition_type=partition_type, initial_membership=init_members, weights=edge_wghts, n_iterations=n_iterations, resolution_parameter=resolution_parameter, seed=seed)
   if(partition_type_name != 'SignificanceVertexPartition' and partition_type_name != 'SurpriseVertexPartition' and partition_type_name != 'ModularityVertexPartition'):
-    part = leidenalg.find_partition(graph, partition_type=partition_type, n_iterations=n_iterations, resolution_parameter=resolution_parameter, seed=seed)
+    part = leidenalg.find_partition(graph, partition_type=partition_type, initial_membership=init_members, weights=edge_wghts, n_iterations=n_iterations, resolution_parameter=resolution_parameter, seed=seed)
+  elif(partition_type_name == 'SignificanceVertexPartition'):
+    part = leidenalg.find_partition(graph, partition_type=partition_type, initial_membership=init_members, n_iterations=n_iterations, seed=seed)
   else:
-    part = leidenalg.find_partition(graph, partition_type=partition_type, n_iterations=n_iterations, seed=seed)
+    part = leidenalg.find_partition(graph, partition_type=partition_type, initial_membership=init_members, weights=edge_wghts, n_iterations=n_iterations, seed=seed)
 
 #  print_comm_info(partition_type_name, part)
   write_comm_file_as_list(edgelist_file=edgelist_file, weights_file=weights_file, membership_file=membership_file, partition_type_name=partition_type_name, directed=directed, resolution_parameter=resolution_parameter, n_iterations=n_iterations, seed=seed, part=part, outname_root=outname_root)
@@ -422,7 +439,7 @@ make_ref(edgelist_file=edgelist_file, weights_file=weights_file, membership_file
 #test_start
 test_name = 'test_2_5'
 edgelist_file = 'edgelist.edg'
-weights_file = 'edge_weights.txt'
+weights_file = None
 membership_file = 'initial_memberships.txt'
 directed = False
 partition_type_name = 'SignificanceVertexPartition'
@@ -507,7 +524,7 @@ make_ref(edgelist_file=edgelist_file, weights_file=weights_file, membership_file
 #test_start
 test_name = 'test_3_5'
 edgelist_file = 'edgelist.edg'
-weights_file = 'edge_weights.txt'
+weights_file = None
 membership_file = 'initial_memberships.txt'
 directed = True
 partition_type_name = 'SignificanceVertexPartition'
