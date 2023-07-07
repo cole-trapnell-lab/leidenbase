@@ -15,6 +15,7 @@
 ^configure
 ^configure.ac
 ^cran
+^notes.gap_16.txt
 ^old_versions
 ^old_save
 ^R/.Rhistory
