@@ -143,4 +143,5 @@ Checklist
    and improved in the future. Consider using pipx to create a python virtual
    environment and install the required Python packages: igraph and leidenalg.
 
+== CRAN todo list
 
