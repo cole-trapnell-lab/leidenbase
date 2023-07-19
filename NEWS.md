@@ -1,3 +1,19 @@
+# leidenbase 0.1.25
+
+* use edgelist to pass graph to C
+* update C igraph to 0.9.8
+* update leidenalg to 0.8.10
+
+# leidenbase 0.1.14
+
+* fix regression in src/rigraph/src/rinterface_extra.c
+
+
+# leidenbase 0.1.13
+
+* reduce test precision
+
+
 # leidenbase 0.1.9
 
 * fixes for CRAN submission

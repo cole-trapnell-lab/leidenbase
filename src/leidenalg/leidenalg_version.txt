@@ -1,4 +1,0 @@
-leidenalg
-commit b53366829360e10922a2dbf57eb405a516c23bc9 (HEAD -> master, origin/master, origin/HEAD)
-Author: Vincent Traag <vincent@traag.net>
-Date:   Thu Nov 11 22:49:57 2021 +0100

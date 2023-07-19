@@ -85,7 +85,7 @@
 #'  a numeric modularity, a numeric significance, a numeric vector of
 #'  edge weights within each community, a numeric vector of edge weights
 #'  from each community, a numeric vector of edge weights to each
-#'  community, and total edge weight.
+#'  community, and total edge weight in the graph.
 #'
 #'@references
 #' V. A. Traag, L. Waltman, N. J. van Eck (2019). From Louvain
@@ -107,8 +107,8 @@
 #'                                partition_type='CPMVertexPartition',
 #'                                resolution_parameter=1e-5)
 #'
-#'@useDynLib leidenbase _leiden_find_partition
 #'@import igraph
+#'@useDynLib leidenbase _leiden_find_partition
 #'@export
 leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartition', 'ModularityVertexPartition', 'RBConfigurationVertexPartition', 'RBERVertexPartition', 'SignificanceVertexPartition', 'SurpriseVertexPartition' ), initial_membership = NULL, edge_weights = NULL, node_sizes = NULL, seed = NULL, resolution_parameter = 0.1, num_iter = 2, verbose = FALSE )
 {
@@ -184,8 +184,13 @@ leiden_find_partition <- function( igraph, partition_type = c( 'CPMVertexPartiti
     message( 'leiden_find_partition: number vertices      ', num_vertex )
     message( 'leiden_find_partition: number edges         ', num_edge )
   }
-  
-  result = .Call( '_leiden_find_partition', igraph, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )
+
+  igraph_edgelist  <- as_edgelist(igraph, names=FALSE) 
+  igraph_numvertex <- as.numeric(vcount(igraph))
+  igraph_numedge   <- as.numeric(ecount(igraph))
+  igraph_directed  <- if(is_directed(igraph) == TRUE) 1 else 0
+
+  result = .Call( '_leiden_find_partition', igraph_edgelist, igraph_numvertex, igraph_numedge, igraph_directed, partition_type, initial_membership, edge_weights, node_sizes, seed, resolution_parameter, num_iter )
 
   return( result )
 }
