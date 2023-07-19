@@ -1,4 +1,4 @@
-# leidenbase 0.1.19
+# leidenbase 0.1.25
 
 * use edgelist to pass graph to C
 * update C igraph to 0.9.8
