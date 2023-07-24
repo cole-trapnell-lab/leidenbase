@@ -12,3 +12,10 @@ PKG_CPPFLAGS = -I${LIB_XML}/include/libxml2 -I${LIB_XML}/include -DLIBXML_STATIC
 PKG_LIBS = -L${LIB_XML}/lib -lxml2 -liconv -lz -lws2_32 -lstdc++ -L${GLPK_HOME}/lib \
   -lglpk -lgmp -lgfortran -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) -llzma
 
+#
+# Debian i386 fix.
+#
+# ifneq (,$(filter $(DEB_HOST_ARCH),i386))
+# PKG_CPPFLAGS += -ffloat-store
+# endif
+
