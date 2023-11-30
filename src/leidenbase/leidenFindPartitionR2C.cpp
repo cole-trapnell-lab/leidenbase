@@ -82,7 +82,7 @@ void R_leidenbase_error_handler(const char *reason, const char *file, int line, 
   snprintf(error_string, LEN_ERROR_STRING, "Error at %s:%i : %s - %s.\n",
            file, line, reason, igraph_strerror(igraph_errno));
   IGRAPH_FINALLY_FREE();
-  error(error_string);
+  error("%s\n", error_string);
 }
 
 extern "C"

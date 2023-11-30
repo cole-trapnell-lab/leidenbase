@@ -608,7 +608,7 @@ int xgetQuality( MutableVertexPartition *ppartition, std::string const partition
   else
   {
 #ifdef USING_R
-    Rprintf( "");
+    Rprintf( "Error: leidenFindPartition: Unrecognized vertex partition type\n");
 #else
     std::cout << "leidenFindPartition: Unrecognized vertex partition type\n";
 #endif

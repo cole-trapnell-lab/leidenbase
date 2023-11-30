@@ -1,3 +1,7 @@
+# leidenbase 0.1.26
+
+* placate compilers
+
 # leidenbase 0.1.25
 
 * use edgelist to pass graph to C

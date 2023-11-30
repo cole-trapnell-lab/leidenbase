@@ -27,6 +27,10 @@ Checklist
 
   o  run tests consisting of comparisons of R leidenbase and Python leidenalg
 
+  o  update documentation using in R, devtools::document()
+
+  o  make package tar file using R CMD build, or, in R, devtools::build()
+
   o  run 'R CMD check' and 'R CMD check --as-cran' on the source file.
 
   o  check that leidenbase installs on supported/CRAN-tested platforms
