@@ -9,7 +9,7 @@ SEXP UUID_gen(SEXP sTime) {
 
     uuid_t u;
     char c[40];
-    int use_time = asInteger(sTime);
+    int use_time = Rf_asInteger(sTime);
     if (use_time == TRUE)
 	uuid_generate_time(u);
     else if (use_time == FALSE)
@@ -20,6 +20,6 @@ SEXP UUID_gen(SEXP sTime) {
 
     RNG_END();
 
-    return mkString(c);
+    return Rf_mkString(c);
 }
 

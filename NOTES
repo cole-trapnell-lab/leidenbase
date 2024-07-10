@@ -33,9 +33,11 @@ Checklist
 
   o  run 'R CMD check' and 'R CMD check --as-cran' on the source file.
 
+  o  see also https://github.com/ThinkR-open/prepare-for-cran
+
   o  check that leidenbase installs on supported/CRAN-tested platforms
      using rhub (win-builder too), e.g. R:
-       > rhub::check_for_cran(path=<package gzip file>, email=<email address)
+       > rhub::rc_submit(path=<package gzip file>, email=<email address)  # rhubv2
   o  push modified dev branch to github
   o  push modified main branch to github
 

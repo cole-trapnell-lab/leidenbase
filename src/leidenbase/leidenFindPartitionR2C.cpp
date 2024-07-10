@@ -82,7 +82,7 @@ void R_leidenbase_error_handler(const char *reason, const char *file, int line, 
   snprintf(error_string, LEN_ERROR_STRING, "Error at %s:%i : %s - %s.\n",
            file, line, reason, igraph_strerror(igraph_errno));
   IGRAPH_FINALLY_FREE();
-  error("%s\n", error_string);
+  Rf_error("%s\n", error_string);
 }
 
 extern "C"
@@ -138,14 +138,14 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
 
   if(REAL(snvertex)[0] > (double)max_size)
   {
-    error("_leiden_find_partition: too many vertices.\n");
+    Rf_error("_leiden_find_partition: too many vertices.\n");
     return( R_NilValue );
   }
   numVertex = (size_t)REAL(snvertex)[0];
 
   if(REAL(snedge)[0] > (double)max_size)
   {
-    error("_leiden_find_partition: too many edges.\n");
+    Rf_error("_leiden_find_partition: too many edges.\n");
     return( R_NilValue );
   }
   numEdge   = (size_t)REAL(snedge)[0];
@@ -156,7 +156,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   status = igraph_vector_init(&cedgelist, (int long)(2 * numEdge));
   if(status == IGRAPH_ENOMEM)
   {
-    error("_leiden_find_partition: unable to allocate memory\n");
+    Rf_error("_leiden_find_partition: unable to allocate memory\n");
     return( R_NilValue );
   }
 
@@ -171,7 +171,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   status = igraph_create(&cigraph, &cedgelist, (igraph_integer_t)numVertex, (igraph_bool_t)cdirected);
   if(status != IGRAPH_SUCCESS)
   {
-    error("_leiden_find_partition: unable to convert graph\n");
+    Rf_error("_leiden_find_partition: unable to convert graph\n");
     return( R_NilValue );
   }
 
@@ -185,9 +185,9 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   /*
    * Convert additional parameters.
    */
-  cresolutionParameter = asReal( resolution_parameter );
+  cresolutionParameter = Rf_asReal( resolution_parameter );
 
-  cnumIter = asInteger( num_iter );
+  cnumIter = Rf_asInteger( num_iter );
 
   if( seed == R_NilValue )
   {
@@ -195,7 +195,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   }
   else
   {
-    cseed = asInteger( seed ) >= 0 ? asInteger( seed ) : 0;
+    cseed = Rf_asInteger( seed ) >= 0 ? Rf_asInteger( seed ) : 0;
   }
 
   xcheckParametersCValues( pcpartitionType, cresolutionParameter, cnumIter, &status );
@@ -252,7 +252,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
       delete pcedgeWeights;
     if( pcnodeSizes != NULL )
       delete pcnodeSizes;
-    error( "_leiden_find_partition: bad status: leiden_find_partition" );
+    Rf_error( "_leiden_find_partition: bad status: leiden_find_partition" );
     igraph_destroy(&cigraph);
     return ( R_NilValue );
   }
@@ -285,7 +285,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
 #if ( DEBUG )
   std::cout << "Debug: _leiden_find_partition: return membership as integer vector\n";
 #endif
-    rmembership = PROTECT( allocVector( INTSXP, numVertex ) );
+    rmembership = PROTECT( Rf_allocVector( INTSXP, numVertex ) );
     std::int32_t *pival;
     pival = INTEGER( rmembership );
     for( i = 0; i < numVertex; ++i )
@@ -298,7 +298,7 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
 #if ( DEBUG )
   std::cout << "Debug: _leiden_find_partition: return membership as real vector\n";
 #endif
-    rmembership = PROTECT( allocVector( REALSXP, numVertex ) );
+    rmembership = PROTECT( Rf_allocVector( REALSXP, numVertex ) );
     double *pdval;
     pdval = REAL( rmembership );
     for( i = 0; i < numVertex; ++i )
@@ -311,21 +311,21 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
   numCommunity = cweightInCommunity.size();
   double *pdval;
 
-  SEXP rweightInCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  SEXP rweightInCommunity = PROTECT( Rf_allocVector( REALSXP, numCommunity ) );
   pdval = REAL( rweightInCommunity );
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = cweightInCommunity[i];
   }
 
-  SEXP rweightFromCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  SEXP rweightFromCommunity = PROTECT( Rf_allocVector( REALSXP, numCommunity ) );
   pdval = REAL( rweightFromCommunity );
   for( i = 0; i < numCommunity; ++i )
   {
     pdval[i] = cweightFromCommunity[i];
   }
 
-  SEXP rweightToCommunity = PROTECT( allocVector( REALSXP, numCommunity ) );
+  SEXP rweightToCommunity = PROTECT( Rf_allocVector( REALSXP, numCommunity ) );
   pdval = REAL( rweightToCommunity );
   for( i = 0; i < numCommunity; ++i )
   {
@@ -337,15 +337,15 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
    *   o  notice the terminating empty string in lstNames.
    */
   const char *lstNames[] = { "membership", "quality", "modularity", "significance", "edge_weight_within_community", "edge_weight_from_community", "edge_weight_to_community", "total_edge_weight", "" };
-  SEXP rresult = PROTECT( mkNamed( VECSXP, lstNames ) );
+  SEXP rresult = PROTECT( Rf_mkNamed( VECSXP, lstNames ) );
   SET_VECTOR_ELT( rresult, 0, rmembership );
-  SET_VECTOR_ELT( rresult, 1, ScalarReal( cquality ) );
-  SET_VECTOR_ELT( rresult, 2, ScalarReal( cmodularity ) );
-  SET_VECTOR_ELT( rresult, 3, ScalarReal( csignificance ) );
+  SET_VECTOR_ELT( rresult, 1, Rf_ScalarReal( cquality ) );
+  SET_VECTOR_ELT( rresult, 2, Rf_ScalarReal( cmodularity ) );
+  SET_VECTOR_ELT( rresult, 3, Rf_ScalarReal( csignificance ) );
   SET_VECTOR_ELT( rresult, 4, rweightInCommunity );
   SET_VECTOR_ELT( rresult, 5, rweightFromCommunity );
   SET_VECTOR_ELT( rresult, 6, rweightToCommunity );
-  SET_VECTOR_ELT( rresult, 7, ScalarReal( cweightTotal ) );
+  SET_VECTOR_ELT( rresult, 7, Rf_ScalarReal( cweightTotal ) );
 
   UNPROTECT( 5 );
 
@@ -356,19 +356,19 @@ SEXP _leiden_find_partition( SEXP sedgelist, SEXP snvertex, SEXP snedge, SEXP sd
 
 int xcheckParametersRValues( SEXP initial_membership, SEXP edge_weights, SEXP node_sizes, int *fstatus )
 {
-  if( initial_membership != R_NilValue && ( !isVectorAtomic( initial_membership ) || xlength( initial_membership ) < 1 ) )
+  if( initial_membership != R_NilValue && ( !Rf_isVectorAtomic( initial_membership ) || Rf_xlength( initial_membership ) < 1 ) )
   {
-    error( "_leiden_find_partition: initial_membership is not a vector" );
+    Rf_error( "_leiden_find_partition: initial_membership is not a vector" );
   }
 
-  if( edge_weights != R_NilValue && ( !isVectorAtomic( edge_weights ) || xlength( edge_weights ) < 1 ) )
+  if( edge_weights != R_NilValue && ( !Rf_isVectorAtomic( edge_weights ) || Rf_xlength( edge_weights ) < 1 ) )
   {
-    error( "_leiden_find_partition: edge_weights is not a vector" );
+    Rf_error( "_leiden_find_partition: edge_weights is not a vector" );
   }
 
-  if( node_sizes != R_NilValue && ( !isVectorAtomic( node_sizes ) || xlength( node_sizes ) < 1 ) )
+  if( node_sizes != R_NilValue && ( !Rf_isVectorAtomic( node_sizes ) || Rf_xlength( node_sizes ) < 1 ) )
   {
-    error( "_leiden_find_partition: node_sizes is not a vector" );
+    Rf_error( "_leiden_find_partition: node_sizes is not a vector" );
   }
 
   *fstatus = -1;
@@ -416,21 +416,21 @@ int xcheckParametersCValues( char *ppartitionType, double resolutionParameter, s
   }
   if( flagValidVertexPartition == 0 )
   {
-    error( "_leiden_find_partition: invalid partition_type" );
+    Rf_error( "_leiden_find_partition: invalid partition_type" );
     *fstatus = -1;
     return ( 0 );
   }
 
   if( numIter <= 0 )
   {
-    error( "_leiden_find_partition: invalid num_iter: value must be > 0" );
+    Rf_error( "_leiden_find_partition: invalid num_iter: value must be > 0" );
     *fstatus = -1;
     return ( 0 );
   }
 
   if( flagResolutionParameter && resolutionParameter < 0.0 )
   {
-    error( "_leiden_find_partition: invalid resolution_parameter: value must be > 0.0" );
+    Rf_error( "_leiden_find_partition: invalid resolution_parameter: value must be > 0.0" );
     *fstatus = -1;
     return ( 0 );
   }
@@ -453,10 +453,10 @@ std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t n
   {
     size_t i, n;
 
-    n = (size_t)xlength( initial_membership );
+    n = (size_t)Rf_xlength( initial_membership );
     if( n != numVertex )
     {
-      error( "_leiden_find_partition: initial_membership and matrix dimension mismatch" );
+      Rf_error( "_leiden_find_partition: initial_membership and matrix dimension mismatch" );
       *fstatus = -1;
       return ( NULL );
     }
@@ -497,7 +497,7 @@ std::vector < size_t >* xsetInitialMembership( SEXP initial_membership, size_t n
     }
     else
     {
-      error( "_leiden_find_partition: invalid initial_membership type" );
+      Rf_error( "_leiden_find_partition: invalid initial_membership type" );
       *fstatus = -1;
       return( NULL );
     }
@@ -521,10 +521,10 @@ std::vector < double >* xsetEdgeWeights( SEXP edge_weights, size_t numEdge,int *
   {
     size_t i, n;
 
-    n = (size_t)xlength( edge_weights );
+    n = (size_t)Rf_xlength( edge_weights );
     if( n != numEdge )
     {
-      error( "_leiden_find_partition: edge_weights and matrix dimension mismatch" );
+      Rf_error( "_leiden_find_partition: edge_weights and matrix dimension mismatch" );
       *fstatus = -1;
       return ( NULL );
     }
@@ -558,7 +558,7 @@ std::vector < double >* xsetEdgeWeights( SEXP edge_weights, size_t numEdge,int *
     }
     else
     {
-      error( "_leiden_find_partition: invalid edge_weights type" );
+      Rf_error( "_leiden_find_partition: invalid edge_weights type" );
       *fstatus = -1;
       return( NULL );
     }
@@ -583,10 +583,10 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
   {
     size_t i, n;
 
-    n = (size_t)xlength( node_sizes );
+    n = (size_t)Rf_xlength( node_sizes );
     if( n != numVertex )
     {
-      error( "_leiden_find_partition: node_sizes and matrix dimension mismatch" );
+      Rf_error( "_leiden_find_partition: node_sizes and matrix dimension mismatch" );
       *fstatus = -1;
       return ( NULL );
     }
@@ -620,7 +620,7 @@ std::vector < size_t >* xsetNodeSizes( SEXP node_sizes, size_t numVertex, int *f
     }
     else
     {
-      error( "_leiden_find_partition: invalid node_sizes type" );
+      Rf_error( "_leiden_find_partition: invalid node_sizes type" );
       *fstatus = -1;
       return( NULL );
     }

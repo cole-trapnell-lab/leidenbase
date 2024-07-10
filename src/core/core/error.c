@@ -71,7 +71,7 @@ static IGRAPH_NORETURN void igraph_abort(void) {
     abort();
 #else
     /* R's error() function is declared 'noreturn'. We use it here to satisfy the compiler that igraph_abort() does indeed not return. */
-    error("igraph_abort() was called. This should never happen. Please report this as an igraph bug, along with steps to reproduce it.");
+    Rf_error("igraph_abort() was called. This should never happen. Please report this as an igraph bug, along with steps to reproduce it.");
 #endif
 }
 

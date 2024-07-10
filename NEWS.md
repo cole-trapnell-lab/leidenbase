@@ -1,3 +1,7 @@
+# leidenbase 0.1.28
+
+* edit Makevars.ucrt to use FLIBS
+
 # leidenbase 0.1.26
 
 * placate compilers

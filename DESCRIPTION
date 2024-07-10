@@ -7,7 +7,7 @@ Authors@R: c( person('Brent', 'Ewing', email = 'bge@uw.edu', role = c('aut', 'cr
               person('Tamás', 'Nepusz', role = 'ctb'),
               person('Szabolcs', 'Horvat', role = 'ctb'),
               person('Fabio', 'Zanini', role = 'ctb'))
-Version: 0.1.27
+Version: 0.1.29
 Description: An R to C/C++ interface that runs the Leiden community
     detection algorithm to find a basic partition (). It runs the
     equivalent of the 'leidenalg' find_partition() function, which is
@@ -27,12 +27,13 @@ Description: An R to C/C++ interface that runs the Leiden community
 Imports: igraph (>= 0.9.0)
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends: R (>= 3.5.0)
 Suggests:
     rmarkdown,
     knitr,
-    testthat (>= 3.1.0)
+    testthat (>= 3.1.0),
+    pandoc
 URL: https://github.com/cole-trapnell-lab/leidenbase
 BugReports: https://github.com/cole-trapnell-lab/leidenbase/issues
 NeedsCompilation: yes

@@ -10,7 +10,7 @@ PKG_CPPFLAGS = -I${LIB_XML}/include/libxml2 -I${LIB_XML}/include -DLIBXML_STATIC
   -I${LIB_GMP}/include -Ileidenalg -Ileidenbase
 
 PKG_LIBS = -L${LIB_XML}/lib -lxml2 -liconv -lz -lws2_32 -lstdc++ -L${GLPK_HOME}/lib \
-  -lglpk -lgmp -lgfortran -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) -llzma
+  -lglpk -lgmp -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS) -llzma
 
 #
 # Debian i386 fix.

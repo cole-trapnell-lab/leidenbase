@@ -6,6 +6,7 @@ PKG_CPPFLAGS=-DUSING_R -I. -Icore -Iinclude -Ivendor \
 	-I. -Ileidenalg -Ileidenbase \
 	-I/usr/include/libxml2 -DNDEBUG -DNTIMER -DNPRINT \
 	-DINTERNAL_ARPACK \
+	-DR_NO_REMAP \
 	-DPRPACK_IGRAPH_SUPPORT -DIGRAPH_THREAD_LOCAL=/**/
 PKG_LIBS=-lxml2 -lgmp  $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
