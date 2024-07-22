@@ -1,4 +1,5 @@
 ^.git$
+^.github$
 ^.gitmodules$
 ^autom4te.cache$
 ^build_old$
