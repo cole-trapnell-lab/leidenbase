@@ -1,16 +1,43 @@
-LIB_XML ?= $(R_TOOLS_SOFT)
-GLPK_HOME ?= $(R_TOOLS_SOFT)
-LIB_GMP ?= $(R_TOOLS_SOFT)
+ifeq (,$(shell pkg-config --version 2>/dev/null))
+  LIB_XML ?= $(R_TOOLS_SOFT)
+  GLPK_HOME ?= $(R_TOOLS_SOFT)
+  LIB_GMP ?= $(R_TOOLS_SOFT)
 
-PKG_CPPFLAGS = -I${LIB_XML}/include/libxml2 -I${LIB_XML}/include -DLIBXML_STATIC -DUSING_R \
+  PKG_CPPFLAGS = -I${LIB_XML}/include/libxml2 -I${LIB_XML}/include -DLIBXML_STATIC \
+    -I${GLPK_HOME}/include -I${LIB_GMP}/include
+
+  PKG_LIBS = -L${LIB_XML}/lib -lxml2 -lbcrypt -liconv -lz -lws2_32 -lstdc++ \
+    -L${GLPK_HOME}/lib -lglpk \
+    -L$(LIB_GMP)/lib -lgmp \
+    -llzma
+else
+  PKG_CPPFLAGS = $(shell pkg-config --cflags libxml-2.0 glpk gmp)
+  PKG_LIBS = $(shell pkg-config --libs libxml-2.0 glpk gmp)
+endif
+
+PKG_CPPFLAGS += -DUSING_R \
   -DHAVE_FMEMOPEN=0 -DHAVE_OPEN_MEMSTREAM=0 -DHAVE_RINTF -DHAVE_STRCASECMP -DWin32 \
   -DHAVE_LIBXML=1 -DHAVE_UNISTD_H -Wall -DHAVE_FMIN=1 -DHAVE_LOG2=1 -DHAVE_GFORTRAN \
-  -DINTERNAL_ARPACK -I${GLPK_HOME}/include -DHAVE_GLPK=1 -DIGRAPH_THREAD_LOCAL= \
+  -DINTERNAL_ARPACK -DHAVE_GLPK=1 -DIGRAPH_THREAD_LOCAL= \
   -DPRPACK_IGRAPH_SUPPORT -I. -Icore -Iinclude -Ivendor -DNDEBUG -DNTIMER -DNPRINT \
-  -I${LIB_GMP}/include -Ileidenalg -Ileidenbase
+  -Ileidenalg -Ileidenbase
 
-PKG_LIBS = -L${LIB_XML}/lib -lxml2 -liconv -lz -lws2_32 -lstdc++ -L${GLPK_HOME}/lib \
-  -lglpk -lgmp -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS) -llzma
+PKG_LIBS += $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS)
+
+# LIB_XML ?= $(R_TOOLS_SOFT)
+# GLPK_HOME ?= $(R_TOOLS_SOFT)
+# LIB_GMP ?= $(R_TOOLS_SOFT)
+#
+# PKG_CPPFLAGS = -I${LIB_XML}/include/libxml2 -I${LIB_XML}/include -DLIBXML_STATIC -DUSING_R \
+#   -DHAVE_FMEMOPEN=0 -DHAVE_OPEN_MEMSTREAM=0 -DHAVE_RINTF -DHAVE_STRCASECMP -DWin32 \
+#   -DHAVE_LIBXML=1 -DHAVE_UNISTD_H -Wall -DHAVE_FMIN=1 -DHAVE_LOG2=1 -DHAVE_GFORTRAN \
+#   -DINTERNAL_ARPACK -I${GLPK_HOME}/include -DHAVE_GLPK=1 -DIGRAPH_THREAD_LOCAL= \
+#   -DPRPACK_IGRAPH_SUPPORT -I. -Icore -Iinclude -Ivendor -DNDEBUG -DNTIMER -DNPRINT \
+#   -I${LIB_GMP}/include -Ileidenalg -Ileidenbase
+#
+# PKG_LIBS = -L${LIB_XML}/lib -lxml2 -liconv -lz -lws2_32 -lstdc++ -L${GLPK_HOME}/lib \
+#   -lglpk -lgmp -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS) -llzma
+
 
 #
 # Debian i386 fix.
