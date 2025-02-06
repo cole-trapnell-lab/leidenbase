@@ -37,7 +37,9 @@ Checklist
 
   o  check that leidenbase installs on supported/CRAN-tested platforms
      using rhub (win-builder too), e.g. R:
+       > rc_new_token() # note: copy the token from the email sent by rhub
        > rhub::rc_submit(path=<package gzip file>, email=<email address)  # rhubv2
+     Note: the github PAT is in my github.txt labelled as token.
   o  push modified dev branch to github
   o  push modified main branch to github
 
