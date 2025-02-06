@@ -38,7 +38,6 @@ PKG_LIBS += $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS)
 # PKG_LIBS = -L${LIB_XML}/lib -lxml2 -liconv -lz -lws2_32 -lstdc++ -L${GLPK_HOME}/lib \
 #   -lglpk -lgmp -L$(LIB_GMP)/lib $(BLAS_LIBS) $(LAPACK_LIBS) $(FLIBS) -llzma
 
-
 #
 # Debian i386 fix.
 #
