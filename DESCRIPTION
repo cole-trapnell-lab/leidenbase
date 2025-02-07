@@ -6,8 +6,7 @@ Authors@R: c( person('Brent', 'Ewing', email = 'bge@uw.edu', role = c('aut', 'cr
               person('Gábor', 'Csárdi', role = 'ctb'),
               person('Tamás', 'Nepusz', role = 'ctb'),
               person('Szabolcs', 'Horvat', role = 'ctb'),
-              person('Fabio', 'Zanini', role = 'ctb'),
-              person('Tomas', 'Kalibera', role = 'ctb'))
+              person('Fabio', 'Zanini', role = 'ctb'))
 Version: 0.1.32
 Description: An R to C/C++ interface that runs the Leiden community
     detection algorithm to find a basic partition (). It runs the
