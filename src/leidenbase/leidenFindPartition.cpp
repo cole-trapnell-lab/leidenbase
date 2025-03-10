@@ -135,7 +135,7 @@ int leidenFindPartition( igraph_t *pigraph,
 {
   int correctSelfLoops;
   int status;
-  std::int32_t iiter;
+  std::int32_t iiter = 0;
 
   size_t numVertex;
   size_t numEdge;
@@ -207,9 +207,11 @@ int leidenFindPartition( igraph_t *pigraph,
   /*
    * Run optimiser.
    */
-  for( iiter = 0; iiter < numIter; ++iiter )
+  double update = 1;
+  while (iiter < numIter && update > 0)
   {
-    optimiser.optimise_partition( ppartition );
+    update = optimiser.optimise_partition( ppartition );
+    iiter++;
   }
 
   /*
