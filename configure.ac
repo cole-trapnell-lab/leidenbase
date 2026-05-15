@@ -8,15 +8,13 @@ if test -z "${R_HOME}"; then
    exit 1
 fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
-CXX=`"${R_HOME}/bin/R" CMD config CXX11`
+CXX=`"${R_HOME}/bin/R" CMD config CXX`
 if test -z "$CXX"; then
   AC_MSG_ERROR([No C++11 compiler is available])
 fi
-CXX11STD=`"${R_HOME}/bin/R" CMD config CXX11STD`
-CXX="${CXX} ${CXX11STD}"
 FC=`"${R_HOME}/bin/R" CMD config FC`
 CFLAGS=`"${R_HOME}/bin/R" CMD config CFLAGS`
-CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX11FLAGS`
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXXFLAGS`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 FCFLAGS=`"${R_HOME}/bin/R" CMD config FCFLAGS`
 FLIBS=`"${R_HOME}/bin/R" CMD config FLIBS`

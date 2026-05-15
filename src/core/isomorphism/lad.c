@@ -64,14 +64,8 @@
 
 
 /* define boolean type as char */
-/*
-** Try to avoid problems with system-level definitions.
-*/
-#undef true
-#undef false
-#define true 1
-#define false 0
-
+#define lad_true_t 1
+#define lad_false_t 0
 #define lad_bool_t char
 
 /* helper to allocate an array of given size and free it using IGRAPH_FINALLY
@@ -203,7 +197,7 @@ static int igraph_i_lad_nextToFilter(Tdomain* D, int size) {
        remove a node from toFilter (FIFO)
        unmark this node and return it */
     int u = VECTOR(D->toFilter)[D->nextOutToFilter];
-    VECTOR(D->markedToFilter)[u] = false;
+    VECTOR(D->markedToFilter)[u] = lad_false_t;
     if (D->nextOutToFilter == D->lastInToFilter) {
         /* u was the last node in tofilter */
         D->nextOutToFilter = -1;
@@ -220,7 +214,7 @@ static void igraph_i_lad_addToFilter(int u, Tdomain* D, int size) {
     if (VECTOR(D->markedToFilter)[u]) {
         return;
     }
-    VECTOR(D->markedToFilter)[u] = true;
+    VECTOR(D->markedToFilter)[u] = lad_true_t;
     if (D->nextOutToFilter < 0) {
         D->lastInToFilter = 0;
         D->nextOutToFilter = 0;
@@ -250,7 +244,7 @@ static int igraph_i_lad_augmentingPath(int u, Tdomain* D, int nbV, lad_bool_t* r
     int nextOut = 0;
     int i, v, v2, u2;
 
-    *result = false;
+    *result = lad_false_t;
 
     /* Allocate memory */
     ALLOC_ARRAY(fifo, nbV, int);
@@ -263,13 +257,13 @@ static int igraph_i_lad_augmentingPath(int u, Tdomain* D, int nbV, lad_bool_t* r
             /* v is free => augmenting path found */
             VECTOR(D->globalMatchingP)[u] = v;
             VECTOR(D->globalMatchingT)[v] = u;
-            *result = true;
+            *result = lad_true_t;
             goto cleanup;
         }
         /* v is not free => add it to fifo */
         pred[v] = u;
         fifo[nextIn++] = v;
-        marked[v] = true;
+        marked[v] = lad_true_t;
     }
     while (nextOut < nextIn) {
         u2 = VECTOR(D->globalMatchingT)[fifo[nextOut++]];
@@ -286,13 +280,13 @@ static int igraph_i_lad_augmentingPath(int u, Tdomain* D, int nbV, lad_bool_t* r
                 }
                 VECTOR(D->globalMatchingP)[u] = v;
                 VECTOR(D->globalMatchingT)[v] = u;
-                *result = true;
+                *result = lad_true_t;
                 goto cleanup;
             }
             if (!marked[v]) { /* v is not free and not marked => add it to fifo */
                 pred[v] = u2;
                 fifo[nextIn++] = v;
-                marked[v] = true;
+                marked[v] = lad_true_t;
             }
         }
     }
@@ -334,7 +328,7 @@ static int igraph_i_lad_removeAllValuesButOne(int u, int v, Tdomain* D, Tgraph* 
         VECTOR(D->globalMatchingP)[u] = -1;
         IGRAPH_CHECK(igraph_i_lad_augmentingPath(u, D, (int) (Gt->nbVertices), result));
     } else {
-        *result = true;
+        *result = lad_true_t;
     }
     return 0;
 }
@@ -369,7 +363,7 @@ static int igraph_i_lad_removeValue(int u, int v, Tdomain* D, Tgraph* Gp,
         VECTOR(D->globalMatchingT)[v] = -1;
         IGRAPH_CHECK(igraph_i_lad_augmentingPath(u, D, (int) (Gt->nbVertices), result));
     } else {
-        *result = true;
+        *result = lad_true_t;
     }
     return 0;
 }
@@ -387,7 +381,7 @@ static int igraph_i_lad_matchVertices(int nb, igraph_vector_int_t* toBeMatched,
        FC(diff); true otherwise; */
     int j, u, v, u2, oldNbVal;
     igraph_vector_int_t *vneis;
-    lad_bool_t result = false;
+    lad_bool_t result = lad_false_t;
 
     while (nb > 0) {
         u = VECTOR(*toBeMatched)[--nb];
@@ -474,7 +468,7 @@ static lad_bool_t igraph_i_lad_matchVertex(int u, lad_bool_t induced, Tdomain* D
     igraph_vector_int_destroy(&toBeMatched);
     IGRAPH_FINALLY_CLEAN(1);
 
-    return invalid ? false : true;
+    return invalid ? lad_false_t : lad_true_t;
 }
 
 
@@ -494,11 +488,11 @@ static lad_bool_t igraph_i_lad_compare(int size_mu, int* mu, int size_mv, int* m
     i = size_mv - 1;
     for (j = size_mu - 1; j >= 0; j--) {
         if (mu[j] > mv[i]) {
-            return false;
+            return lad_false_t;
         }
         i--;
     }
-    return true;
+    return lad_true_t;
 }
 
 static int igraph_i_lad_initDomains(lad_bool_t initialDomains,
@@ -552,13 +546,13 @@ static int igraph_i_lad_initDomains(lad_bool_t initialDomains,
             /* read the list of target vertices which are compatible with u */
             vec = VECTOR(*domains)[u];
             i = (int) igraph_vector_size(vec);
-            memset(dom, false, sizeof(lad_bool_t) * (size_t)(Gt->nbVertices));
+            memset(dom, lad_false_t, sizeof(lad_bool_t) * (size_t)(Gt->nbVertices));
             for (j = 0; j < i; j++) {
                 v = (int) VECTOR(*vec)[j];
-                dom[v] = true;
+                dom[v] = lad_true_t;
             }
         }
-        VECTOR(D->markedToFilter)[u] = true;
+        VECTOR(D->markedToFilter)[u] = lad_true_t;
         VECTOR(D->toFilter)[u] = u;
         VECTOR(D->nbVal)[u] = 0;
         VECTOR(D->firstVal)[u] = D->valSize;
@@ -939,7 +933,7 @@ static void igraph_i_lad_DFS(int nbU, int nbV, int u, lad_bool_t* marked, int* n
        the vertices discovered by the DFS */
     int i;
     int v = VECTOR(*matchedWithU)[u]; /* the only one predecessor of v is u */
-    marked[u] = true;
+    marked[u] = lad_true_t;
     if (v >= 0) {
         for (i = 0; i < nbSucc[v]; i++) {
             if (!marked[succ[v * nbU + i]]) {
@@ -1068,7 +1062,7 @@ static int igraph_i_lad_ensureGACallDiff(lad_bool_t induced, Tgraph* Gp, Tgraph*
     for (u = 0; u < Gp->nbVertices; u++) {
         for (i = 0; i < VECTOR(D->nbVal)[u]; i++) {
             v = VECTOR(D->val)[ VECTOR(D->firstVal)[u] + i ]; /* v in D(u) */
-            used[u * Gt->nbVertices + v] = false;
+            used[u * Gt->nbVertices + v] = lad_false_t;
             if (v != VECTOR(D->globalMatchingP)[u]) {
                 pred[u * Gt->nbVertices + (nbPred[u]++)] = v;
                 succ[v * Gp->nbVertices + (nbSucc[v]++)] = u;
@@ -1080,21 +1074,21 @@ static int igraph_i_lad_ensureGACallDiff(lad_bool_t induced, Tgraph* Gp, Tgraph*
     for (v = 0; v < Gt->nbVertices; v++) {
         if (VECTOR(D->globalMatchingT)[v] < 0) { /* v is free */
             list[nb++] = v;
-            numV[v] = true;
+            numV[v] = lad_true_t;
         }
     }
     while (nb > 0) {
         v = list[--nb];
         for (i = 0; i < nbSucc[v]; i++) {
             u = succ[v * Gp->nbVertices + i];
-            used[u * Gt->nbVertices + v] = true;
-            if (numU[u] == false) {
-                numU[u] = true;
+            used[u * Gt->nbVertices + v] = lad_true_t;
+            if (numU[u] == lad_false_t) {
+                numU[u] = lad_true_t;
                 w = VECTOR(D->globalMatchingP)[u];
-                used[u * Gt->nbVertices + w] = true;
-                if (numV[w] == false) {
+                used[u * Gt->nbVertices + w] = lad_true_t;
+                if (numV[w] == lad_false_t) {
                     list[nb++] = w;
-                    numV[w] = true;
+                    numV[w] = lad_true_t;
                 }
             }
         }
@@ -1177,7 +1171,7 @@ static int igraph_i_lad_checkLAD(int u, int v, Tdomain* D, Tgraph* Gp, Tgraph* G
         u2 = (int) VECTOR(*Gp_uneis)[0]; /* u2 is the only node adjacent to u */
         v2 = VECTOR(D->matching)[ MATRIX(D->firstMatch, u, v) ];
         if ((v2 != -1) && (igraph_i_lad_isInD(u2, v2, D))) {
-            *result = true;
+            *result = lad_true_t;
             return 0;
         }
         /* look for a support of edge (u, u2) for v */
@@ -1186,11 +1180,11 @@ static int igraph_i_lad_checkLAD(int u, int v, Tdomain* D, Tgraph* Gp, Tgraph* G
             if (MATRIX(Gt->isEdge, v, VECTOR(D->val)[i])) {
                 VECTOR(D->matching)[ MATRIX(D->firstMatch, u, v) ] =
                     VECTOR(D->val)[i];
-                *result = true;
+                *result = lad_true_t;
                 return 0;
             }
         }
-        *result = false;
+        *result = lad_false_t;
         return 0;
     }
 
@@ -1205,7 +1199,7 @@ static int igraph_i_lad_checkLAD(int u, int v, Tdomain* D, Tgraph* Gp, Tgraph* G
         }
     }
     if (nbMatched == VECTOR(Gp->nbSucc)[u]) {
-        *result = true;
+        *result = lad_true_t;
         return 0;
     } /* The matching still covers adj(u) */
 
@@ -1263,7 +1257,7 @@ static int igraph_i_lad_checkLAD(int u, int v, Tdomain* D, Tgraph* Gp, Tgraph* G
             }
         }
         if (VECTOR(nbComp)[i] == 0) {
-            *result = false; /* u2 has no compatible vertex in succ[v] */
+            *result = lad_false_t; /* u2 has no compatible vertex in succ[v] */
             goto cleanup;
         }
         /* u2 is matched to v2 in the matching that supports (u, v) */
@@ -1280,14 +1274,14 @@ static int igraph_i_lad_checkLAD(int u, int v, Tdomain* D, Tgraph* Gp, Tgraph* G
                                     &firstComp, &comp, &matchedWithU, &invalid)
     );
     if (invalid) {
-        *result = false;
+        *result = lad_false_t;
         goto cleanup;
     }
     for (i = 0; i < VECTOR(Gp->nbSucc)[u]; i++) {
         VECTOR(D->matching)[ MATRIX(D->firstMatch, u, v) + i] =
             numInv[ VECTOR(matchedWithU)[i] ];
     }
-    *result = true;
+    *result = lad_true_t;
 
 cleanup:
     igraph_free(numInv);
@@ -1328,27 +1322,27 @@ static int igraph_i_lad_filter(lad_bool_t induced, Tdomain* D, Tgraph* Gp, Tgrap
                 } else {
                     IGRAPH_CHECK(igraph_i_lad_removeValue(u, v, D, Gp, Gt, &result2));
                     if (!result2) {
-                        *result = false;
+                        *result = lad_false_t;
                         return 0;
                     }
                 }
             }
             if ((VECTOR(D->nbVal)[u] == 1) && (oldNbVal > 1) &&
                 (!igraph_i_lad_matchVertex(u, induced, D, Gp, Gt))) {
-                *result = false; return 0;
+                *result = lad_false_t; return 0;
             }
             if (VECTOR(D->nbVal)[u] == 0) {
-                *result = false;
+                *result = lad_false_t;
                 return 0;
             }
         }
         igraph_i_lad_ensureGACallDiff(induced, Gp, Gt, D, &invalid);
         if (invalid) {
-            *result = false;
+            *result = lad_false_t;
             return 0;
         }
     }
-    *result = true;
+    *result = lad_true_t;
     return 0;
 }
 
